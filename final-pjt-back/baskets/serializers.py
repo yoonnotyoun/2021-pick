@@ -1,15 +1,14 @@
 from rest_framework import serializers
 
-from accounts.serializers import UserSerializer
-from movies.serializers import MovieListSerializer
 from .models import Basket, Comment, BasketTag
+from movies.models import Movie
 from django.contrib.auth import get_user_model
 
 # accounts: author_nickname, author_img
 # content, spoiler, created_at
 class CommentListSerializer(serializers.ModelSerializer):
 
-    class UserSerializer(serializers.ModelSerialzier):
+    class UserSerializer(serializers.ModelSerializer):
         class Meta:
             models = get_user_model()
             fields = ('nickname', 'image',)
@@ -61,8 +60,13 @@ class BasketTagSerializer(serializers.ModelSerializer):
 #(title, author, tags, like_users개수, img)
 class BasketListSerializer(serializers.ModelSerializer):
 
-    like_users = UserSerializer(many=True)
-    basket_tags = BasketTagListSerializer(many=True)
+    class UserSerializer(serializers.ModelSerializer):
+        class Meta:
+            models = get_user_model()
+            fields = ('id', 'nickname', 'image',)
+
+    like_users = UserSerializer(many=True, required=False)
+    basket_tags = BasketTagListSerializer(many=True, required=False)
 
     class Meta:
         model = Basket
@@ -84,11 +88,16 @@ class BasketSerializer(serializers.ModelSerializer):
             model = BasketTag
             fields = ('id', 'name',)
 
-    author = UserSerializer()
-    basket_tags = BasketTagListSerializer(many=True)
-    movies = MovieListSerializer(many=True)
-    like_users = UserSerializer(many=True)
-    participants = UserSerializer(many=True)
+    class MovieListSerializer(serializers.ModelSerializer):
+        class Meta:
+            models = Movie
+            fields = ('id', 'title',)
+
+    author = UserSerializer(required=False)
+    basket_tags = BasketTagListSerializer(many=True, required=False)
+    movies = MovieListSerializer(many=True, required=False)
+    like_users = UserSerializer(many=True, required=False)
+    participants = UserSerializer(many=True, required=False)
 
     class Meta:
         model = Basket

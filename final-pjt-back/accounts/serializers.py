@@ -1,10 +1,11 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user, get_user_model
-from baskets.serializers import BasketListSerializer, BasketTagListSerializer, CommentListSerializer
 
-from movies.serializers import MovieListSerializer
-from tastingrooms.serializers import TastingroomListSerializer
 from .models import Group, Relationship
+from movies.models import Movie
+from baskets.models import Basket, BasketTag, Comment
+from tastingrooms.models import Tastingroom
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,6 +13,33 @@ class UserSerializer(serializers.ModelSerializer):
 
     # stars = 
     # fans = 
+
+    class MovieListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Movie
+            fields = '__all__'
+
+    class BasketListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Basket
+            fields = '__all__'
+
+    class CommentListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Comment
+            fields = '__all__'
+
+    class BasketTagListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = BasketTag
+            fields = '__all__'
+
+    class TastingroomListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Tastingroom
+            fields = '__all__'
+
+
     like_movies = MovieListSerializer(many=True)
     author_baskets = BasketListSerializer(many=True)
     like_baskets = BasketListSerializer(many=True)

@@ -1,8 +1,9 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
+
 from .models import Actor, Genre, Movie
-from accounts.serializers import UserSerializer
-from tastingrooms.serializers import TastingroomListSerializer
-from baskets.serializers import BasketListSerializer
+from baskets.models import Basket
+from tastingrooms.models import Tastingroom
 
 
 # MovieSerializer
@@ -20,6 +21,17 @@ class MovieDetailSerializer(serializers.ModelSerializer):
         class Meta:
             model = Genre
             fields = '__all__'
+    
+    class TastingroomListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Tastingroom
+            fields = '__all__'
+
+    class BasketListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Basket
+            fields = '__all__'
+        
 
     actors = ActorListSerializer(many=True)
     genres = GenreListSerializer(many=True)
@@ -38,6 +50,11 @@ class MovieDetailSerializer(serializers.ModelSerializer):
 
 # poster_path, title, release_date, vote_average
 class MovieListSerializer(serializers.ModelSerializer):
+
+    class UserSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = get_user_model()
+            fields = '__all__'
 
     like_users = UserSerializer(many=True)
 
