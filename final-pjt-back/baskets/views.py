@@ -1,7 +1,16 @@
+from datetime import timedelta
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.auth import get_user_model
 
 from movies.models import Movie
+
+# REST framework
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+
+# orm
+from django.db.models import Q
 
 from .models import Basket, Comment, BasketTag
 from .serializers import BasketListSerializer, BasketSerializer, CommentSerializer
@@ -10,13 +19,15 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
+# 추천 로직
 import random
 
 
 @api_view(['POST'])
 def basket_create(request):
     movies = get_list_or_404(Movie)
-    author = get_object_or_404(get_user_model(), pk=request.user.pk)
+    # author = get_object_or_404(get_user_model(), pk=request.user.pk)
+    author = get_object_or_404(get_user_model(), pk=1)
 
     serializer = BasketSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
@@ -87,8 +98,22 @@ def comment_delete(request, comment_pk):
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
-def basket_recommend_myself(request):
-    pass
+# 성별, 연령
+@api_view(['GET'])
+def basket_recommend_myinfo(request):
+    start_date = request.user.birthdate - timedelta(years=5)
+    end_date = request.user.birthdate + timedelta(years=5)
+
+    filtered_basket_ids = list(Basket.objects.all().filter(
+        like_users__birthdate__range=(start_date, end_date),
+        like_users__gender=request.user.gender
+        ).distinct().order_by('-vote_average').values('id'))
+
+    picked_basket_ids = random.sample(filtered_basket_ids, 3)
+    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids)    
+
+    serializer = BasketSerializer(picked_baskets, many=True)
+    return Response(serializer.data)
 
 
 def basket_recommend_movies(request):
