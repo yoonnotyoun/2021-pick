@@ -9,10 +9,20 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     authToken: localStorage.getItem('jwt'),
-
+    userInfo: {},
     movies: [],
     baskets: [],
     tastingrooms: [],
+  },
+  getters: {
+    isLoggedIn: function (state) {
+      return state.authToken ? true: false
+    },
+    config: function (state) {
+      return {
+        Authorization: `JWT ${state.authToken}`
+      }
+    },
   },
   mutations: {
     SET_TOKEN: function (state, token) {
@@ -23,6 +33,10 @@ export default new Vuex.Store({
       localStorage.removeItem('jwt')
       state.authToken = ''
     },
+    GET_PROFILE: function (state, userData) {
+      state.userInfo = userData
+      console.log(state.userInfo)
+    }
   },
   actions: {
     login: function ({ commit }, credentials) {
@@ -33,7 +47,7 @@ export default new Vuex.Store({
       })
       .then((res) => {
         commit('SET_TOKEN', res.data.token)
-        router.push({ name: 'TodoList' })
+        router.push({ name: 'Main' })
       })
       .catch((err) => {
         console.log(err)
@@ -57,6 +71,20 @@ export default new Vuex.Store({
         console.log(err)
       })
     },
+    getProfile: function ({ commit, getters }) {
+      axios({
+        method: 'get',
+        url: `${SERVER.URL}/api/v1/accounts/profile/`,
+        headers: getters.config
+      })
+      .then((res) => {
+        const userData = res.data
+        commit('GET_PROFILE', userData)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    }
   },
   modules: {
   }

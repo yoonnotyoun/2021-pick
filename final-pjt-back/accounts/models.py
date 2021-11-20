@@ -3,38 +3,6 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.conf import settings
 
 
-
-# class UserManager(BaseUserManager):    
-    
-#     use_in_migrations = True
-
-#     def create_user(self, username, password):        
-         
-#         user = self.model(            
-#             username = username,
-#             password = password,
-#             nickname = '기본',
-#             birthdate = '2000-01-01'
-#         )        
-#         user.set_password(password)        
-#         user.save(using=self._db)        
-#         return user
-      
-#     def create_superuser(self, username, password):        
-       
-#         user = self.create_user(   
-#             username = username,            
-#             password = password,
-#             nickname = '기본',
-#             birthdate = '2000-01-01'     
-#         )        
-#         user.is_admin = True        
-#         user.is_superuser = True        
-#         user.is_staff = True        
-#         user.save(using=self._db)        
-#         return user
-
-
 class User(AbstractUser):
     GENDER_CHOICES = [
         (1, '남'),
@@ -43,7 +11,7 @@ class User(AbstractUser):
 
     stars = models.ManyToManyField('self', symmetrical=False, related_name='fans', through='Relationship')
     nickname = models.CharField(max_length=20, null=False, default='nickname')
-    birthdate = models.DateField(null=False, auto_now_add=True)
+    birthdate = models.DateField(null=False)
     gender = models.IntegerField(choices=GENDER_CHOICES, default=1)
     image = models.ImageField(blank=True)
 

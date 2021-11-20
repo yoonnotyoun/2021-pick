@@ -4,8 +4,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import UserSerializer
 
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-# profile에서 유저와 관련된 데이터 다 가져와야됨
+from django.contrib.auth import get_user_model
+
 
 # 회원가입 가져오기
 @api_view(['POST'])
@@ -25,6 +29,28 @@ def signup(request):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+
+# profile에서 유저와 관련된 데이터 다 가져와야됨
+@api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def profile(request):
+    if request.method == 'GET':
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        image = request.data.get('image') # 필수인지 확인
+        serializer = UserSerializer(request.user, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(image=image)
+            return Response(serializer.data)
+    elif request.method == 'DELETE':
+        user_pk = request.user.pk
+        request.user.delete()
+        return Response({ 'delete': f'{user_pk} 회원이 탈퇴했습니다.' }, status=status.HTTP_204_NO_CONTENT)
+
+
+
 # Follow
 # '기본' 그룹으로 들어가게 relationship serializer??? 모르겠솨
 
@@ -35,5 +61,4 @@ def signup(request):
 
 
 # Relationship (RU)# 새 그룹 생성 없이 팔로잉 그룹 관리 (해당 유저의 relationship)
-# 추가
 # 그룹 이동

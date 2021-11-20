@@ -5,13 +5,37 @@
       <router-link :to="{ name: 'Movie' }">Movie</router-link> |
       <router-link :to="{ name: 'Basket' }">Basket</router-link> |
       <router-link :to="{ name: 'Tastingroom' }">Tastingroom</router-link> |
-      <router-link :to="{ name: 'Signup' }">Signup</router-link> |
-      <router-link :to="{ name: 'Profile' }">Profile</router-link> |
-      <router-link :to="{ name: 'Login' }">Login</router-link>
+      <span v-if="isLoggedIn">
+        <router-link :to="{ name: 'Profile' }">Profile</router-link> |
+        <router-link @click.native="logout" to="#">Logout</router-link>
+      </span>
+      <span v-else>
+        <router-link :to="{ name: 'Signup' }">Signup</router-link> |
+        <router-link :to="{ name: 'Login' }">Login</router-link>
+      </span>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  name: 'App',
+  methods: {
+    ...mapActions([
+      'logout',
+      ])
+  },
+  computed: {
+    ...mapGetters([
+      'isLoggedIn',
+    ])
+  }
+}
+</script>
+
 
 <style>
 #app {

@@ -12,7 +12,7 @@
     <div>
       <label for="passwordConfirmation">비밀번호 확인: </label>
       <input 
-        type="password" 
+        type="password"
         id="passwordConfirmation" 
         v-model="credentials.passwordConfirmation"
         @keypress.enter="signup(credentials)"
@@ -25,12 +25,12 @@
     <div>
       <label for="gender">성별: </label>
       <div>
-        <input type="radio" id="male" name="gender" value="남">
         <label for="male">남</label>
+        <input type="radio" id="male" name="gender" v-model="credentials.gender" value=1>
       </div>
       <div>
-        <input type="radio" id="female" name="gender" value="여">
         <label for="female">여</label>
+        <input type="radio" id="female" name="gender" v-model="credentials.gender" value=2>
       </div>
     </div>
     <button @click="signup(credentials)">가입하기</button>
