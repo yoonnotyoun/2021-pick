@@ -157,3 +157,5 @@ import datetime
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
 }
+
+CORS_ALLOW_ALL_ORIGINS = True

@@ -7,22 +7,18 @@ from baskets.models import Basket, BasketTag, Comment
 from tastingrooms.models import Tastingroom
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-
-    # stars = 
-    # fans = 
 
     class MovieListSerializer(serializers.ModelSerializer):
         class Meta:
             model = Movie
-            fields = '__all__'
+            fields = ('id', 'poster_path', 'title', 'release_date', 'vote_average',)
 
     class BasketListSerializer(serializers.ModelSerializer):
         class Meta:
             model = Basket
-            fields = '__all__'
+            fields = ('id', 'image', 'title', 'author', 'basket_tags',)
 
     class CommentListSerializer(serializers.ModelSerializer):
         class Meta:
@@ -37,17 +33,16 @@ class UserSerializer(serializers.ModelSerializer):
     class TastingroomListSerializer(serializers.ModelSerializer):
         class Meta:
             model = Tastingroom
-            fields = '__all__'
+            fields = ('id', 'name',)
 
-
-    like_movies = MovieListSerializer(many=True)
-    author_baskets = BasketListSerializer(many=True)
-    like_baskets = BasketListSerializer(many=True)
-    participating_baskets = BasketListSerializer(many=True)
-    author_comments = CommentListSerializer(many=True)
-    users_basket_tags = BasketTagListSerializer(many=True)
-    author_tastingrooms = TastingroomListSerializer(many=True)
-    participating_tastingrooms = TastingroomListSerializer(many=True)
+    like_movies = MovieListSerializer(many=True, required=False)
+    author_baskets = BasketListSerializer(many=True, required=False)
+    like_baskets = BasketListSerializer(many=True, required=False)
+    participating_baskets = BasketListSerializer(many=True, required=False)
+    author_comments = CommentListSerializer(many=True, required=False)
+    users_basket_tags = BasketTagListSerializer(many=True, required=False)
+    author_tastingrooms = TastingroomListSerializer(many=True, required=False)
+    participating_tastingrooms = TastingroomListSerializer(many=True, required=False)
     
     class Meta:
         model = get_user_model()

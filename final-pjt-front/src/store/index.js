@@ -15,6 +15,14 @@ export default new Vuex.Store({
     tastingrooms: [],
   },
   mutations: {
+    SET_TOKEN: function (state, token) {
+      state.authToken = token
+      localStorage.setItem('jwt', token)
+    },
+    REMOVE_TOKEN: function (state) {
+      localStorage.removeItem('jwt')
+      state.authToken = ''
+    },
   },
   actions: {
     login: function ({ commit }, credentials) {
@@ -42,6 +50,7 @@ export default new Vuex.Store({
         data: credentials,
       })
       .then(() => {
+        console.log(SERVER.URL + SERVER.ROUTES.signup)
         router.push({ name: 'Login' })
       })
       .catch((err) => {

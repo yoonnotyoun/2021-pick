@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Login</h1>
-    <!-- <div>
+    <div>
       <label for="username">사용자 이름: </label>
       <input type="text" id="username" v-model="credentials.username">
     </div>
@@ -14,27 +14,27 @@
         @keypress.enter="login(credentials)"
       >
     </div>
-    <button @click="login(credentials)">로그인</button> -->
+    <button @click="login(credentials)">로그인</button>
   </div>
 </template>
 
 <script>
-// import { mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
-// export default {
-//   name: 'Login',
-//   data: function () {
-//     return {
-//       credentials: {
-//         username: '',
-//         password: '',
-//       }
-//     }
-//   },
-//   methods: {
-//     ...mapActions([
-//       'login',
-//     ])
-//   }
-// }
+export default {
+  name: 'Login',
+  data: function () {
+    return {
+      credentials: {
+        username: '',
+        password: '',
+      }
+    }
+  },
+  methods: {
+    ...mapActions([
+      'login',
+    ])
+  }
+}
 </script>

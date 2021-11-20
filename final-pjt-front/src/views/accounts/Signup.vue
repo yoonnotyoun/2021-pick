@@ -17,8 +17,23 @@
         v-model="credentials.passwordConfirmation"
         @keypress.enter="signup(credentials)"
       >
+    </div> 
+    <div>
+      <label for="birthdate">생년월일: </label>
+      <input type="date" id="birthdate" v-model="credentials.birthdate">
     </div>
-    <button @click="signup(credentials)">회원가입</button>
+    <div>
+      <label for="gender">성별: </label>
+      <div>
+        <input type="radio" id="male" name="gender" value="남">
+        <label for="male">남</label>
+      </div>
+      <div>
+        <input type="radio" id="female" name="gender" value="여">
+        <label for="female">여</label>
+      </div>
+    </div>
+    <button @click="signup(credentials)">가입하기</button>
   </div>
 </template>
 
@@ -33,6 +48,8 @@ export default {
         username: '',
         password: '',
         passwordConfirmation: '',
+        birthdate: '',
+        gender: '',
       }
     }
   },
