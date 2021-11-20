@@ -1,4 +1,4 @@
-# client
+# final-pjt-front
 
 ## Project setup
 ```
