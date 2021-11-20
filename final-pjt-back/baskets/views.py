@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 
 # orm
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from .models import Basket, Comment, BasketTag
 from .serializers import BasketListSerializer, BasketSerializer, CommentSerializer
@@ -107,40 +107,86 @@ def basket_recommend_myinfo(request):
     filtered_basket_ids = list(Basket.objects.all().filter(
         like_users__birthdate__range=(start_date, end_date),
         like_users__gender=request.user.gender
-        ).distinct().order_by('-vote_average').values('id'))
+        ).distinct().order_by('-vote_average').values('id')) # 생각해보니까 어차피 랜덤 할 건데 orderby 필요한가?
 
-    picked_basket_ids = random.sample(filtered_basket_ids, 3)
+    if len(filtered_basket_ids) >= 3:
+        picked_basket_ids = random.sample(filtered_basket_ids, 3)
+    else: # 3개 이하일때는 그냥 전체 랜덤으로
+        picked_basket_ids = random.sample(list(Basket.objects.all(), 3))
+    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids)    
+
+    serializer = BasketSerializer(picked_baskets, many=True) # 여기 BasketListSerializer 아닌가 싶음!
+    return Response(serializer.data)
+
+
+# 선호 영화가 들어있는
+def basket_recommend_movies(request):
+    # random_movie_id = random.choice(request.user.like_movies) # 이거랑 아래 중에 뭔지 잘 모르겠음
+    random_movie_id = random.choice(list(request.user.like_movies.values('id')))
+
+    filtered_basket_ids = list(Basket.objects.all().filter(
+        movies__id=random_movie_id
+    ).distinct().order_by('-vote_average').values('id'))
+
+    if len(filtered_basket_ids) >= 3:
+        picked_basket_ids = random.sample(filtered_basket_ids, 3)
+    else: # 3개 이하일때는 그냥 전체 랜덤으로
+        picked_basket_ids = random.sample(list(Basket.objects.all(), 3))
     picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids)    
 
     serializer = BasketSerializer(picked_baskets, many=True)
     return Response(serializer.data)
 
 
-def basket_recommend_movies(request):
-    pass
-
-
+# 좋아하는 태그가 들어있는 -> 좋아하는 태그 로직부터 구현해야할 것 같지만
 def basket_recommend_tags(request):
-    random_tags = random(request.user.users_basket_tags)
+    random_tag = random(request.user.users_basket_tags)
 
+    filtered_basket_ids = list(Basket.objects.all().filter(
+        basket_tags__icontains=random_tag
+    ).distinct().order_by('-vote_average').values('id'))
+
+    if len(filtered_basket_ids) >= 3:
+        picked_basket_ids = random.sample(filtered_basket_ids, 3)
+    else: # 3개 이하일때는 그냥 전체 랜덤으로
+        picked_basket_ids = random.sample(list(Basket.objects.all(), 3))
+    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids)    
+
+    serializer = BasketSerializer(picked_baskets, many=True)
+    return Response(serializer.data)
 
 
 def basket_recommend_friends(request):
-    random_stars = random.sample(list(request.user.stars.values('id')))
-    baskets = Basket.objects.filter() #random_star가 좋아요를 누른 거
-    serializers = BasketListSerializer(baskets, many=True)
+    random_star = random.sample(list(request.user.stars.values('id')))
+
+    filtered_basket_ids = list(Basket.objects.all().filter(
+        like_users__id=random_star
+    ).distinct().order_by('-vote_average').values('id'))
+
+    if len(filtered_basket_ids) >= 3:
+        picked_basket_ids = random.sample(filtered_basket_ids, 3)
+    else: # 3개 이하일때는 그냥 전체 랜덤으로
+        picked_basket_ids = random.sample(list(Basket.objects.all(), 3))
+    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids)    
+
+    serializer = BasketSerializer(picked_baskets, many=True)
+    return Response(serializer.data)
 
 
-
-
-
-# 추천기준 6가지 반영해서 데이터 넘기기 (함수각각) (index, basket섹션용)
-
-# 연령성별
-# 선호영화(가 들어있는 다른 바스켓)
-# 좋아요한 태그 기반
-# 팔로한 사람이 좋아한 바스켓
-
-# search
-
-# detail
+# basket search (index, 영화섹션용)
+def basket_search(request, query):
+    q = Q()
+    q.add(
+        Q(title__icontains=query)|
+        Q(basket_tags__name__icontains=query)|
+        Q(participants__nickname__icontains=query),
+        q.OR
+    )
+    q.add(
+        Q(public=True)|
+        Q(participants__nickname__icontains=request.user.nickname),
+        q.AND
+    )
+    tastingrooms = Basket.objects.filter(q).distinct().annotate(participants_count=Count('participants')).order_by('-participants_count')
+    serializer = BasketListSerializer(tastingrooms, many=True)
+    return Response(serializer.data)

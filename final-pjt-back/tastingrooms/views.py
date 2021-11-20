@@ -19,6 +19,11 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
+# logic
+import random
+from datetime import timedelta
+
+
 # 추천기준 정해야함 (화면 표시 데이터만 넘기기)
 # basket을 작성해보고 복붙
 
@@ -83,6 +88,78 @@ def tastingroom_search(request, query):
     )
     tastingrooms = Tastingroom.objects.filter(q).distinct().annotate(participants_count=Count('participants')).order_by('-participants_count')
     serializer = TastingroomListSerializer(tastingrooms, many=True)
+    return Response(serializer.data)
+
+
+def tastingroom_recommend_myinfo(request):
+    start_date = request.user.birthdate - timedelta(years=5)
+    end_date = request.user.birthdate + timedelta(years=5)
+
+    filtered_tastingroom_ids = list(Tastingroom.objects.all().filter(
+        participants__birthdate__range=(start_date, end_date),
+        participants__gender=request.user.gender,
+        public=True
+        ).distinct().values('id'))
+
+    if len(filtered_tastingroom_ids) >= 6:
+        picked_tastingroom_ids = random.sample(filtered_tastingroom_ids, 6)
+    else: # 6개 미만일때는 그냥 전체 랜덤으로
+        picked_tastingroom_ids = random.sample(list(Tastingroom.objects.all(), 6))
+    picked_tastingrooms = Tastingroom.objects.filter(pk__in=picked_tastingroom_ids)    
+
+    serializer = TastingroomListSerializer(picked_tastingrooms, many=True)
+    return Response(serializer.data)
+
+
+def tastingroom_recommend_movies(request):
+    random_movie = random(request.user.like_movies)
+
+    filtered_tastingroom_ids = list(Tastingroom.objects.all().filter(
+        movie__id=random_movie
+    ).distinct().values('id'))
+
+    if len(filtered_tastingroom_ids) >= 6:
+        picked_tastingroom_ids = random.sample(filtered_tastingroom_ids, 6)
+    else: # 6개 이하일때는 그냥 전체 랜덤으로
+        picked_tastingroom_ids = random.sample(list(Tastingroom.objects.all(), 6))
+    picked_tastingroom = Tastingroom.objects.filter(pk__in=picked_tastingroom_ids)    
+
+    serializer = TastingroomListSerializer(picked_tastingroom, many=True)
+    return Response(serializer.data)
+
+
+def tastingroom_recommend_tags(request):
+    random_tag = random(request.user.users_basket_tags)
+
+    filtered_tastingroom_ids = list(Tastingroom.objects.all().filter(
+        tags__icontains=random_tag
+    ).distinct().values('id'))
+
+    if len(filtered_tastingroom_ids) >= 6:
+        picked_tastingroom_ids = random.sample(filtered_tastingroom_ids, 6)
+    else: # 6개 이하일때는 그냥 전체 랜덤으로
+        picked_tastingroom_ids = random.sample(list(Tastingroom.objects.all(), 6))
+    picked_tastingroom = Tastingroom.objects.filter(pk__in=picked_tastingroom_ids)    
+
+    serializer = TastingroomListSerializer(picked_tastingroom, many=True)
+    return Response(serializer.data)
+
+
+def tastingroom_recommend_friends(request):
+    friends = list(request.user.stars.values('id')) # 랜덤으로 1명 뽑는 거 말고 전체 친구로 해도 괜찮을듯
+
+    filtered_tastingroom_ids = list(Tastingroom.objects.all().filter(
+        participants__id__in=[friend for friend in friends],
+        public=True 
+    ).distinct().values('id'))
+
+    if len(filtered_tastingroom_ids) >= 6:
+        picked_tastingroom_ids = random.sample(filtered_tastingroom_ids, 6)
+    else: # 6개 이하일때는 그냥 전체 랜덤으로
+        picked_tastingroom_ids = random.sample(list(Tastingroom.objects.all(), 6))
+    picked_tastingroom = Tastingroom.objects.filter(pk__in=picked_tastingroom_ids)    
+
+    serializer = TastingroomListSerializer(picked_tastingroom, many=True)
     return Response(serializer.data)
 
 
