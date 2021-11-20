@@ -95,6 +95,7 @@ class BasketSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'image', 'public', 'title', 'explanation', 'movies', 'created_at', 'updated_at',
             'author', 'like_users', 'participants', 'baskets_tags',
+            'basket_tags_names', 'participants_ids', 'movies_ids',
         )
         read_only_fields = ('author', 'like_users',)
 
