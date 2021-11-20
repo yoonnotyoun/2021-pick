@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from pprint import pprint
 
 from rest_framework.response import Response
@@ -41,7 +41,7 @@ def movies_search(request, query):
 # movie detail
 @api_view(['GET'])
 def movie_detail(request, movie_pk):
-    movie = Movie.objects.get(pk=movie_pk)
+    movie = get_object_or_404(Movie, pk=movie_pk)
     serializer = MovieDetailSerializer(movie)
     return Response(serializer.data)
     
@@ -74,7 +74,7 @@ def tmdb_movies(request):
             # 장르 처리
             for genre_name in detail_result.get('genres'):
                 if Genre.objects.filter(name=genre_name.get('name')).exists():
-                    genre = Genre.objects.get(name=genre_name.get('name'))
+                    genre = get_object_or_404(Genre, name=genre_name.get('name'))
                 else:
                     genre = Genre.objects.create(name=genre_name.get('name'))
                 # genre = Genre.objects.get(name=genre_name.get('name')) ### create로 하면 중복데이터 저장됨
@@ -83,7 +83,7 @@ def tmdb_movies(request):
             for cast in credit_result.get('cast'):
                 if cast.get('known_for_department') == 'Acting':
                     if Actor.objects.filter(name=cast.get('name')).exists():
-                        actor = Actor.objects.get(name=cast.get('name'))
+                        actor = get_object_or_404(Actor, name=cast.get('name'))
                     else:
                         actor = Actor.objects.create(name=cast.get('name'))
                     movie.actors.add(actor)

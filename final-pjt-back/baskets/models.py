@@ -32,8 +32,8 @@ class Comment(models.Model):
 
 
 class BasketTag(models.Model):
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='users_basket_tags')
-    baskets = models.ManyToManyField(Basket, related_name='basket_tags')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='users_baskets_tags')
+    baskets = models.ManyToManyField(Basket, related_name='baskets_tags')
     name = models.CharField(max_length=20, null=False)
 
     def __str__(self):

@@ -1,6 +1,8 @@
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.auth import get_user_model
 
+from movies.models import Movie
+
 from .models import Basket, Comment, BasketTag
 from .serializers import BasketListSerializer, BasketSerializer, CommentSerializer
 
@@ -13,36 +15,38 @@ import random
 
 @api_view(['POST'])
 def basket_create(request):
+    movies = get_list_or_404(Movie)
+    author = get_object_or_404(get_user_model(), pk=request.user.pk)
+
     serializer = BasketSerializer(data=request.data)
-    print(request.data)
     if serializer.is_valid(raise_exception=True):
-        basket = serializer.save(
-            author=request.user,
-            # movies=
-            )
-        for word in basket.content.split():
-            if word.startswith('#'):
-                tag, created = BasketTag.objects.get_or_create(content=word)
-                basket.basket_tags.add(tag)
+        serializer.save(
+            author = author,
+            movies = movies,
+        )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def basket_detail(request, basket_pk):
+def basket_detail_update_delete(request, basket_pk):
     basket = get_object_or_404(Basket, pk=basket_pk)
+
     if request.method == 'GET':
         serializer = BasketSerializer(basket)
         return Response(serializer.data)
+        
     elif request.method == 'PUT':
-        serializer = BasketSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(author=request.user)
-            basket.basket_tags.clear()
-            for word in basket.content.split():
-                if word.startswith('#'):
-                    tag, created = BasketTag.objects.get_or_create(content=word)
-                    basket.basket_tags.add(tag)
-    else:
+        movies = get_list_or_404(Movie)
+        author = get_object_or_404(get_user_model(), pk=request.user.pk)
+        serializer = BasketSerializer(instance=basket, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(
+                movies=movies,
+                author=author,
+            )
+            return Response(serializer.data)
+
+    elif request.method == 'DELETE':
         basket.delete()
         data = {
             'delete': '바스켓이 삭제되었습니다.'
@@ -50,24 +54,37 @@ def basket_detail(request, basket_pk):
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
-def comment_create(request, basket_pk):
-    basket = get_object_or_404(Basket, pk=basket_pk)
-    serializer = CommentSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save(author=request.user, basket=basket)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+@api_view(['GET', 'POST'])
+def comment_list_create(request, basket_pk):
+
+    if request.method == 'GET':
+        comments = get_list_or_404(Comment, basket=basket_pk)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        basket = get_object_or_404(Basket, pk=basket_pk)
+        author = get_object_or_404(get_user_model(), pk=request.user.pk)
+
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(
+                author=author,
+                basket=basket,
+            )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-def comment_detail(request, basket_pk, comment_pk):
-    basket = get_object_or_404(Basket, pk=basket_pk)
+@api_view(['DELETE'])
+def comment_delete(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
+
     if request.user == comment.author:
-        if request.method == 'DELETE':
-            comment.delete()
-            data = {
-                'delete' : f'{comment_pk}번 댓글이 삭제되었습니다.'
-            }
-            return Response(data, status=status.HTTP_204_NO_CONTENT)
+        comment.delete()
+        data = {
+            'delete' : f'{comment_pk}번 댓글이 삭제되었습니다.'
+        }
+        return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
 def basket_recommend_myself(request):
