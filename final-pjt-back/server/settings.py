@@ -159,3 +159,12 @@ JWT_AUTH = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+# postman 요청시 parsing 오류때문에 추가
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser', # 이게 들어가야 됐음...
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    )
+}
