@@ -191,11 +191,11 @@ def basket_recommend_tags(request):
 
 @api_view(['GET'])
 def basket_recommend_friends(request):
-    random_star = random.sample(list(request.user.stars.values('id')))
+    random_star_id = random.sample(list(request.user.stars.values('id')))
     # public이거나 participants에 user가 포함된 경우만
     q = Q()
     q.add(
-        Q(like_users__id=random_star),
+        Q(like_users__id=random_star_id),
         q.OR
     )
     q.add(
