@@ -100,7 +100,7 @@ def comment_delete(request, comment_pk):
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
-# 성별, 연령
+# 성별, 연령 기준 추천
 @api_view(['GET'])
 def basket_recommend_myinfo(request):
     start_date = request.user.birthdate - timedelta(years=5)
@@ -133,7 +133,7 @@ def basket_recommend_myinfo(request):
     return Response(serializer.data)
 
 
-# 선호 영화가 들어있는
+# 선호 영화가 들어있는 기준 추천
 @api_view(['GET'])
 def basket_recommend_movies(request):
     random_movie_id = random.sample(list(request.user.like_movies.values('id')))
@@ -161,7 +161,7 @@ def basket_recommend_movies(request):
     return Response(serializer.data)
 
 
-# 좋아하는 태그가 들어있는 -> 좋아하는 태그 로직부터 구현해야할 것 같지만
+# 좋아하는 태그가 들어있는 기준 추천 -> 좋아하는 태그 로직부터 구현해야할 것 같지만
 @api_view(['GET'])
 def basket_recommend_tags(request):
     random_tag_id = random.sample(list(request.user.users_basket_tags.values('id')))
@@ -189,6 +189,7 @@ def basket_recommend_tags(request):
     return Response(serializer.data)
 
 
+# 팔로우하는 유저가 좋아한 기준 추천
 @api_view(['GET'])
 def basket_recommend_friends(request):
     random_star_id = random.sample(list(request.user.stars.values('id')))
@@ -240,3 +241,30 @@ def basket_search(request, query):
     serializer = BasketListSerializer(baskets, many=True)
 
     return Response(serializer.data)
+
+
+# 좋아요 기능
+@api_view(['POST'])
+def basket_like(request, basket_pk):
+    basket = get_object_or_404(Basket, pk=basket_pk)
+
+    # user = get_object_or_404(get_user_model(), pk=1)
+    # if basket.like_users.filter(pk=user.pk).exists():
+    #     basket.like_users.remove(user)
+    #     liked = False
+    # else:
+    #     basket.like_users.add(user)
+    #     liked = True
+
+    if basket.like_users.filter(pk=request.user.pk).exists():
+        basket.like_users.remove(request.user)
+        liked = False
+    else:
+        basket.like_users.add(request.user)
+        liked = True
+    data = {
+        'basket': basket_pk,
+        'liked': liked,
+        'cnt_likes': basket.like_users.count(),
+    }
+    return Response(data, status=status.HTTP_204_NO_CONTENT)

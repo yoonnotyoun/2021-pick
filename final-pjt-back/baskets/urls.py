@@ -15,4 +15,7 @@ urlpatterns = [
 
     # 검색
     path('search/<query>/', views.basket_search),
+
+    # 좋아요
+    path('<int:basket_pk>/like/', views.basket_like),
 ]

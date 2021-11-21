@@ -1,6 +1,7 @@
 import random
 from pprint import pprint
 from datetime import timedelta
+from django.contrib.auth import get_user_model
 from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
 
@@ -32,7 +33,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 # movie search (index, 영화섹션용) (검색어 필터링해서 다 보여주는거) 영화명, 배우, 장르 (평점순)
 @api_view(['GET'])
-def movies_search(request, query):
+def movie_search(request, query):
     movies = Movie.objects.filter(
         Q(title__icontains=query)|
         Q(actors__name__icontains=query)|
@@ -48,6 +49,33 @@ def movie_detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     serializer = MovieDetailSerializer(movie)
     return Response(serializer.data)
+
+
+# 좋아요 기능
+@api_view(['POST'])
+def movie_like(request, movie_pk):
+    movie = get_object_or_404(Movie, pk=movie_pk)
+
+    user = get_object_or_404(get_user_model(), pk=1)
+    if movie.like_users.filter(pk=user.pk).exists():
+        movie.like_users.remove(user)
+        liked = False
+    else:
+        movie.like_users.add(user)
+        liked = True
+
+    # if movie.like_users.filter(pk=request.user.pk).exists():
+    #     movie.like_users.remove(request.user)
+    #     liked = False
+    # else:
+    #     movie.like_users.add(request.user)
+    #     liked = True
+    data = {
+        'movie': movie_pk,
+        'liked': liked,
+        'cnt_likes': movie.like_users.count(),
+    }
+    return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
 # 추천: 연령성별
@@ -149,7 +177,7 @@ def movie_recommend_friends(request):
 
 # [TMDB API 영화 데이터 받아오기]
 @api_view(['POST'])
-def tmdb_movies(request):
+def tmdb_movie(request):
     TMDB_API_KEY = config("TMDB_API_KEY")
     for page in range(1, 2):
         url = f'https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=ko&page={page}'

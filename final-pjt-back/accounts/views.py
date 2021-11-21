@@ -102,6 +102,25 @@ def relationship_list(request):
     return Response(serializer.data)
 
 
+# Relationship U (그룹 이동)
+@api_view(['PUT'])
+def relationship_update(request, relationship_pk, star_pk, group_pk):
+    relationship = get_object_or_404(Relationship, pk=relationship_pk)
+    fan = get_object_or_404(get_user_model(), pk=1)
+    # fan = get_object_or_404(get_user_model(), pk=request.user.pk)
+    star = get_object_or_404(get_user_model(), pk=star_pk)
+
+    group = get_object_or_404(Group, pk=group_pk)
+    serializer = RelationshipSerializer(instance=relationship, data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(
+            fan=fan,
+            star=star,
+            group=group,
+        )
+        return Response(serializer.data)
+
+
 # Follow
 # '기본' 그룹으로 들어가게
 @api_view(['POST'])
@@ -123,29 +142,12 @@ def relationship_create(request, star_pk):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-# Relationship UD (그룹 이동, 팔로우 취소)
-@api_view(['PUT', 'DELETE'])
-def relationship_update_delete(request, relationship_pk, star_pk, group_pk):
+# Relationship D (팔로우 취소)
+@api_view(['DELETE'])
+def relationship_delete(request, relationship_pk):
     relationship = get_object_or_404(Relationship, pk=relationship_pk)
-    fan = get_object_or_404(get_user_model(), pk=1)
-    # fan = get_object_or_404(get_user_model(), pk=request.user.pk)
-    star = get_object_or_404(get_user_model(), pk=star_pk)
-
-    if request.method == 'PUT':
-        group = get_object_or_404(Group, pk=group_pk)
-        serializer = RelationshipSerializer(instance=relationship, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(
-                fan=fan,
-                star=star,
-                group=group,
-            )
-            return Response(serializer.data)
-
-    elif request.method == 'DELETE':
-        if star.fans.filter(pk=fan.pk).exists():
-            relationship.delete()
-            data = {
-                'delete': '언팔로우 처리되었습니다.'
-            }
-            return Response(data, status=status.HTTP_204_NO_CONTENT)
+    relationship.delete()
+    data = {
+        'delete': '언팔로우 처리되었습니다.'
+    }
+    return Response(data, status=status.HTTP_204_NO_CONTENT)
