@@ -77,7 +77,7 @@ class BasketSerializer(serializers.ModelSerializer):
 
     class MovieListSerializer(serializers.ModelSerializer):
         class Meta:
-            models = Movie
+            model = Movie # 두번째 에러 models
             fields = ('id', 'title', 'release_date',)
 
     basket_tags = BasketTagListSerializer(many=True, required=False, read_only=True) # 역참조
@@ -97,7 +97,7 @@ class BasketSerializer(serializers.ModelSerializer):
             'author', 'like_users', 'participants', 'basket_tags',
             'basket_tags_names', 'participants_ids', 'movies_ids',
         )
-        read_only_fields = ('author', 'like_users',)
+        read_only_fields = ('author',)
 
     def create(self, validated_data):
         basket_tags_names = validated_data.pop('basket_tags_names')
