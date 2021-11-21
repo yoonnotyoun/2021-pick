@@ -76,6 +76,29 @@ def movie_recommend_myinfo(request):
     serializer = MovieListSerializer(picked_movies, many=True)
 
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def movie_recommend_genre(request):
+    favorite_genre_id = Movie.objects.filter(like_users__id=request.user.pk).values('genre').annotate(Count('genre')).order_by('-genre_count')[0]['id']
+    # like_genre = Review.objects.filter(user=request.user.pk).values('genre').annotate(Count('genre')).order_by('-genre__count')[0]['genre']
+    # recommend = Movie.objects.filter(genres=like_genre).order_by('-vote_average')[:10]
+    q = Q()
+    q.add(
+        Q(genres__id=favorite_genre_id),
+        q.AND
+    )
+    filtered_movie_ids = Movie.objects.filter(q).distinct().values('id')
+
+    if len(filtered_movie_ids) >= 6:
+        picked_movie_ids = random.sample(filtered_movie_ids, 6)
+    else:
+        picked_movie_ids = random.sample(list(Movie.objects.all().values('id'), 6))
+    picked_movies = Movie.objects.filter(pk__in=picked_movie_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
+
+    serializer = MovieListSerializer(picked_movies, many=True)
+
+    return Response(serializer.data)
     
 
 # 추천: 좋아한 바스켓에 들어있는 영화들
