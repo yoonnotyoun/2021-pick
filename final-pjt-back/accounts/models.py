@@ -21,7 +21,8 @@ class User(AbstractUser):
 
 class Group(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='my_groups')
-    name = models.CharField(max_length=20, default='기본', null=False)
+    # user = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='my_groups')
+    name = models.CharField(max_length=20, default='기본')
 
     def __str__(self):
         return self.name
@@ -30,6 +31,7 @@ class Group(models.Model):
 class Relationship(models.Model): # follow
     fan = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='my_stars')
     star = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='my_fans')
+    # group = models.ManyToManyField(Group, related_name='group_stars')
     group = models.ForeignKey(Group, on_delete=models.SET_DEFAULT, default=1, related_name='group_stars')
 
     def __str__(self):

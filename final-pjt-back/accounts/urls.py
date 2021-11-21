@@ -10,11 +10,10 @@ urlpatterns = [
     path('profile/', views.profile),
 
     # 그룹 관리
-    # path('group/', views.group_list_create),
-    # path('group/<int:group_pk>/', views.group_delete),
-    # path('relationship/', views.relationship_list),
-    # path('relationship/<int:relationship_pk>/<int:group_pk>/', views.relationship_update),
-
-    # # 팔로우
-    # path('<int:star_pk>/follow/', views.follow),
+    path('group/', views.group_list_create),
+    path('group/<int:group_pk>/', views.group_delete),
+    path('relationship/', views.relationship_list),
+    path('relationship/star/<int:star_pk>/', views.relationship_create),
+    # 팔로우 
+    path('relationship/<relationship_pk>/star/<int:star_pk>/group/<int:group_pk>/', views.relationship_update_delete),
 ]

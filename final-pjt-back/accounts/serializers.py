@@ -74,24 +74,24 @@ class GroupSerialzier(serializers.ModelSerializer):
 
 class RelationshipListSerializer(serializers.ModelSerializer):
     
-    # class UserSerializer(serializers.ModelSerializer):
-    #     class Meta:
-    #         model = get_user_model()
-    #         fields = '__all__'
+    class UserSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = get_user_model()
+            fields = ('id', 'username', 'nickname',)
 
-    # class GroupSerializer(serializers.ModelSerializer):
-    #     class Meta:
-    #         model = Group
-    #         fields = '__all__'
+    class GroupSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Group
+            fields = '__all__'
 
-    # star = UserSerializer()
-    # fan = UserSerializer()
-    # group = GroupSerializer()
+    star = UserSerializer(read_only=True)
+    fan = UserSerializer(read_only=True)
+    group = GroupSerializer(read_only=True)
     
     class Meta:
         model = Relationship
         fields = '__all__'
-        read_only_fields = '__all__'
+        read_only_fields = ('fan', 'star', 'group',)
 
 
 class RelationshipSerializer(serializers.ModelSerializer):
@@ -113,4 +113,4 @@ class RelationshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Relationship
         fields = '__all__'
-        read_only_fields = '__all__'
+        read_only_fields = ('fan', 'star', 'group',)
