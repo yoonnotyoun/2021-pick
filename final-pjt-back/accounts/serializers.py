@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
     class BasketListSerializer(serializers.ModelSerializer):
         class Meta:
             model = Basket
-            fields = ('id', 'image', 'title', 'author', 'basket_tags',)
+            fields = ('id', 'image', 'title', 'author', 'baskets_tags',)
 
     class CommentListSerializer(serializers.ModelSerializer):
         class Meta:

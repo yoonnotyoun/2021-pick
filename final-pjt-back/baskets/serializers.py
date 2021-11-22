@@ -42,7 +42,7 @@ class BasketListSerializer(serializers.ModelSerializer):
 
     class UserSerializer(serializers.ModelSerializer):
         class Meta:
-            models = get_user_model()
+            model = get_user_model()
             fields = ('id', 'nickname', 'image',)
 
     class BasketTagListSerializer(serializers.ModelSerializer):
@@ -56,8 +56,8 @@ class BasketListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Basket
-        fields = ('id', 'title', 'author', 'image', 'like_users', 'basket_tags',)
-        read_only_fields = ('author', 'like_users', 'basket_tags',)
+        fields = ('id', 'title', 'author', 'image', 'like_users', 'basket_tags', 'movies',)
+        read_only_fields = ('author', 'like_users', 'basket_tags', 'movies',)
 
 
 # accounts에서 가져올 author 정보 (author_nickname, author_img, author_fans)

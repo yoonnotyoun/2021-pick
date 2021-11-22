@@ -42,11 +42,13 @@ def signup(request):
 
 # profile에서 유저와 관련된 데이터 다 가져와야됨
 @api_view(['GET', 'PUT', 'DELETE'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def profile(request):
+    user = get_object_or_404(get_user_model(), pk=1)
     if request.method == 'GET':
-        serializer = UserSerializer(request.user)
+        serializer = UserSerializer(user)
+        # serializer = UserSerializer(request.user)
         return Response(serializer.data)
     elif request.method == 'PUT':
         image = request.data.get('image') # 필수인지 확인

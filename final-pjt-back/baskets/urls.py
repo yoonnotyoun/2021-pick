@@ -8,10 +8,10 @@ urlpatterns = [
     path('comment/<int:comment_pk>/', views.comment_delete),
 
     # 추천로직: 연령성별, 선호영화, 태그, 팔로한사람이좋아한
-    path('recommend/myinfo', views.basket_recommend_myinfo),
-    path('recommend/movies', views.basket_recommend_movies),
-    path('recommend/tags', views.basket_recommend_tags),
-    path('recommend/friend', views.basket_recommend_friends),
+    path('recommend/myinfo/', views.basket_recommend_myinfo),
+    path('recommend/movies/', views.basket_recommend_movies),
+    path('recommend/tags/', views.basket_recommend_tags),
+    path('recommend/friend/', views.basket_recommend_friends),
 
     # 검색
     path('search/<query>/', views.basket_search),
