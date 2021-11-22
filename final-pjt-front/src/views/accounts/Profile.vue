@@ -18,12 +18,12 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Profile',
   methods: {
-    ...mapActions('accountStore', [
+    ...mapActions([
       'getProfile'
     ])
   },
   computed: {
-    ...mapState('accountStore', [
+    ...mapState([
       'userInfo',
     ])
   },

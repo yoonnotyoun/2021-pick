@@ -1,5 +1,4 @@
 const basketStore = {
-  namespaced: true,
   state: {
   },
   mutations: {

@@ -5,7 +5,6 @@ import _ from 'lodash'
 
 
 const movieStore = {
-  namespaced: true,
   state: {
     movies: [],
     selectedMovieDetail: '',
