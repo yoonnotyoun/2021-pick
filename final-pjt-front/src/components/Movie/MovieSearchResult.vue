@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="movie-search-result row row-cols-md-6">
+    <div class="movie-search-result row row-cols-3 row-cols-sm-6">
       <movie-list-item
         v-for="(movie, idx) in movies"
         :movie="movie"

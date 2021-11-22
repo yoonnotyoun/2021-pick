@@ -13,9 +13,11 @@ export default new Vuex.Store({
     userInfo: {},
     movies: [],
     selectedMovie: '',
+    selectedMovieDetail: '',
     baskets: [],
     tastingrooms: [],
     userInput: '',
+    // isModalViewed:false,
   },
   getters: {
     isLoggedIn: function (state) {
@@ -48,6 +50,10 @@ export default new Vuex.Store({
     },
     SET_SELECTED_MOVIE: function (state, selectedMovie) {
       state.selectedMovie = selectedMovie
+      // state.isModalViewed = !state.isModalViewed
+    },
+    SET_MOVIE_DETAIL: function (state, MovieDetail) {
+      state.selectedMovieDetail = MovieDetail
     },
   },
   actions: {
@@ -97,6 +103,10 @@ export default new Vuex.Store({
         console.log(err)
       })
     },
+    setSelectedMovie: function ({ commit, dispatch }, selectedMovie) {
+      commit('SET_SELECTED_MOVIE', selectedMovie)
+      dispatch('getMovieDetail')
+    },
     // getMovieData: function () { // 생각해보니까 최종 db에 미리 다 받아둘 거면 이 함수 필요없을지도?
     //   axios({
     //     method: 'post',
@@ -139,7 +149,23 @@ export default new Vuex.Store({
       .catch((err) => {
         console.log(err)
       })
-    }
+    },
+    getMovieDetail: function ({ commit, getters, state }) {
+      const headers = getters.config
+      const movie_pk = state.selectedMovie.id
+      axios({
+        method: 'get',
+        url: `${SERVER.URL}/api/v1/movies/${movie_pk}/`,
+        headers,
+      })
+      .then((res) => {
+        commit('SET_MOVIE_DETAIL', res.data)
+        router.push({ name: 'MovieDetail' })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
   },
   modules: {
   }
