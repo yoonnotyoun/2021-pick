@@ -3,19 +3,19 @@ import axios from 'axios'
 
 const accountStore = {
   state: {
-    // authToken: localStorage.getItem('jwt'),
+    authToken: localStorage.getItem('jwt'),
     userInfo: {},
   },
-  // getters: {
-  //   isLoggedIn: function (state) {
-  //     return state.authToken ? true: false
-  //   },
-  //   config: function (state) {
-  //     return {
-  //       Authorization: `JWT ${state.authToken}`
-  //     }
-  //   },
-  // },
+  getters: {
+    isLoggedIn: function (state) {
+      return state.authToken ? true: false
+    },
+    config: function (state) {
+      return {
+        Authorization: `JWT ${state.authToken}`
+      }
+    },
+  },
   mutations: {
     // SET_TOKEN: function (state, token) {
     //   state.authToken = token

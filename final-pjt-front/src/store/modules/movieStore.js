@@ -6,9 +6,22 @@ import _ from 'lodash'
 
 const movieStore = {
   state: {
+    authToken: localStorage.getItem('jwt'),
     movies: [],
     selectedMovieDetail: '',
     userInput: '',
+  },
+  getters: {
+    isLoggedIn: function (state) {
+      console.log(state.authToken ? true: false)
+      return state.authToken ? true: false
+    },
+    config: function (state) {
+      console.log(state.authToken ? true: false)
+      return {
+        Authorization: `JWT ${state.authToken}`
+      }
+    },
   },
   mutations: {
     SET_MOVIE_LIST: function (state, movies) {
