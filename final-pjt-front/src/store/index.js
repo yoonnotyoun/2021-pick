@@ -12,6 +12,7 @@ export default new Vuex.Store({
     authToken: localStorage.getItem('jwt'),
     userInfo: {},
     movies: [],
+    selectedMovie: '',
     baskets: [],
     tastingrooms: [],
     userInput: '',
@@ -44,7 +45,10 @@ export default new Vuex.Store({
     },
     SET_INPUT_VALUE: function (state, inputData) {
       state.userInput = inputData
-    }    
+    },
+    SET_SELECTED_MOVIE: function (state, selectedMovie) {
+      state.selectedMovie = selectedMovie
+    },
   },
   actions: {
     login: function ({ commit }, credentials) {
