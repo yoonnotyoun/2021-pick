@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '@/views/Main'
 import Movie from '@/views/Movie'
+import MovieDetail from '@/views/MovieDetail'
 import Basket from '@/views/Basket'
 import Login from '@/views/accounts/Login'
 import Profile from '@/views/accounts/Profile'
@@ -19,6 +20,11 @@ const routes = [
     path: '/movie',
     name: 'Movie',
     component: Movie
+  },
+  {
+    path: '/movie/detail',
+    name: 'MovieDetail',
+    component: MovieDetail
   },
   {
     path: '/basket',

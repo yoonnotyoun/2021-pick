@@ -27,7 +27,6 @@ class Movie(models.Model):
     release_date = models.DateField(null=True)
     adult = models.BooleanField(null=True)
     runtime = models.IntegerField(null=True)
-    # netfilx = models.CharField(max_length=255)
 
     def __str__(self):
         return self.title

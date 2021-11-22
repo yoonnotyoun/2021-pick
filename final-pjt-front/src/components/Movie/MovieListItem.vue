@@ -1,5 +1,5 @@
 <template>
-  <div class="col">
+  <div class="col" @click="setSelectedMovie(movie)">
     <div class="card">
       <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="poster">
       <div class="card-body">
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'MovieListItem',
   props: {
@@ -20,11 +22,19 @@ export default {
       type: Object,
     }
   },
-  // computed: {
-  //   moviePosterSrc: function () {
-  //     return this.movie.poster_path
-  //   }
-  // },
+  methods: {
+    // ...mapMutations([
+    //   'SET_SELECTED_MOVIE',
+    // ]),
+    ...mapActions([
+      'setSelectedMovie',
+    ])
+  },
+  computed: {
+    ...mapState([
+      'selectedMovie',
+    ])
+  }
 }
 </script>
 

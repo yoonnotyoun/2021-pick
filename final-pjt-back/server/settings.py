@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'accounts',
     'baskets',
     'movies',
-    'tastingrooms',
 
     'django.contrib.admin',
     'django.contrib.auth',

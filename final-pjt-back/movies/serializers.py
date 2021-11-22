@@ -3,12 +3,10 @@ from django.contrib.auth import get_user_model
 
 from .models import Actor, Genre, Movie
 from baskets.models import Basket
-from tastingrooms.models import Tastingroom
 
 
 # MovieSerializer
     # poster_path, title, runtime, vote_average, release_date, actors, genres, overview
-    # 테이스팅룸: tastingroom_name, tastingroom_participants 사람수
     # 바스켓: (역참조) img, title
 class MovieDetailSerializer(serializers.ModelSerializer):
 
@@ -21,11 +19,6 @@ class MovieDetailSerializer(serializers.ModelSerializer):
         class Meta:
             model = Genre
             fields = '__all__'
-    
-    class TastingroomListSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = Tastingroom
-            fields = '__all__'
 
     class BasketListSerializer(serializers.ModelSerializer):
         class Meta:
@@ -35,16 +28,15 @@ class MovieDetailSerializer(serializers.ModelSerializer):
 
     actors = ActorListSerializer(many=True, read_only=True)
     genres = GenreListSerializer(many=True, read_only=True)
-    movie_tastingrooms = TastingroomListSerializer(many=True, read_only=True)
     movies_baskets = BasketListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Movie
         fields = (
             'id', 'poster_path', 'title', 'runtime', 'vote_average', 'release_date',
-            'actors', 'genres', 'overview', 'movie_tastingrooms', 'movies_baskets',
+            'actors', 'genres', 'overview', 'movies_baskets',
             )
-        read_only_fields = ('actors', 'genres', 'movie_tastingrooms', 'movies_baskets',)
+        read_only_fields = ('actors', 'genres', 'movies_baskets',)
     
 
 

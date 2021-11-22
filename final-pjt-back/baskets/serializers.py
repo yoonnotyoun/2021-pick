@@ -6,36 +6,6 @@ from movies.models import Movie
 from django.contrib.auth import get_user_model
 
 
-# # 바스켓태그 여러개 R
-# class BasketTagListSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = BasketTag
-#         fields = ('id', 'name', 'baskets',)
-
-
-# # 바스켓 태그 CUD
-# class BasketTagSerializer(serializers.ModelSerializer):
-
-#     class UserSerializer(serializers.ModelSerializer):
-#         class Meta:
-#             model = get_user_model()
-#             fields = ('id', 'nickname',)
-
-#     class BasketSerializer(serializers.ModelSerializer):
-#         class Meta:
-#             model = Basket
-#             fields = ('id', 'title',)
-
-#     users = UserSerializer(many=True, read_only=True)
-#     baskets = BasketSerializer(many=True, read_only=True)
-
-#     class Meta:
-#         model = BasketTag
-#         fields = '__all__'
-#         read_only_fields = ('users', 'baskets',)
-
-
 #(title, author, tags, like_users개수, img)
 # 바스켓 여러개 R
 class BasketListSerializer(serializers.ModelSerializer):
