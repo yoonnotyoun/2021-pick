@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import SERVER from '@/api/drf.js'
 import router from '@/router/index.js'
 import axios from 'axios'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
@@ -35,8 +36,11 @@ export default new Vuex.Store({
     },
     GET_PROFILE: function (state, userData) {
       state.userInfo = userData
-      console.log(state.userInfo)
-    }
+      // console.log(state.userInfo)
+    },
+    SET_MOVIELIST: function (state, movies) {
+      state.movies = movies
+    },
   },
   actions: {
     login: function ({ commit }, credentials) {
@@ -80,6 +84,21 @@ export default new Vuex.Store({
       .then((res) => {
         const userData = res.data
         commit('GET_PROFILE', userData)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    getMovieListRecommendation: function ({ commit, getters }) {
+      const headers = getters.config
+      recommend_method = _.sample['myinfo', 'genre', 'baskets', 'friends'] // 여기서 랜덤으로 골라서 넘겨주도록
+      axios({
+        method: 'get',
+        url: `${SERVER.URL}/api/v1/movies/tmdb/movies/${recommend_method}`,
+        headers,
+      })
+      .then((res) => {
+        commit('SET_MOVIELIST', res.data)
       })
       .catch((err) => {
         console.log(err)
