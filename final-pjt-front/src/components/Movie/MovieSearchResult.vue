@@ -20,7 +20,7 @@ export default {
     MovieListItem,
   },
   computed: {
-    ...mapState([
+    ...mapState('movieStore', [
       'movies',
     ])
   },

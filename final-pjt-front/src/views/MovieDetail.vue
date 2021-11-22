@@ -12,7 +12,7 @@ export default {
   methods: {
   },
   computed: {
-    ...mapState([
+    ...mapState('movieStore', [
       'selectedMovieDetail'
     ])
   }

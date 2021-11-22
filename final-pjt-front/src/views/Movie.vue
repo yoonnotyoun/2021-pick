@@ -22,7 +22,7 @@ export default {
     // MovieDetailModal,
   },
   computed: {
-    ...mapState([
+    ...mapState('movieStore', [
       'selectedMovie',
       // 'isModalViewed',
     ])

@@ -10,12 +10,12 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'MovieList',
   methods: {
-    ...mapActions([
+    ...mapActions('movieStore', [
       'getMovieListRecommendation',
     ])
   },
   computed: {
-    ...mapState([
+    ...mapState('movieStore', [
       'movies',
     ])
   },
