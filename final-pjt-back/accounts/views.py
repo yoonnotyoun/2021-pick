@@ -41,6 +41,14 @@ def signup(request):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def login(request):
+    print(request.user.pk)
+    return Response({ 'userId': request.user.pk }, status=status.HTTP_200_OK)
+
+
 # profile에서 유저와 관련된 데이터 다 가져와야됨
 @api_view(['GET', 'PUT', 'DELETE'])
 @authentication_classes([JSONWebTokenAuthentication])
@@ -66,6 +74,8 @@ def profile(request, user_pk):
 
 
 @api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def liked_baskets_tags(request, user_pk):
     user = get_object_or_404(get_user_model(), pk=user_pk)
 
@@ -78,6 +88,8 @@ def liked_baskets_tags(request, user_pk):
 
 # Group (RC)
 @api_view(['GET', 'POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def group_list_create(request):
     if request.method == 'GET':
         # groups = Group.objects.filter(user=1) 테스트용
@@ -98,6 +110,8 @@ def group_list_create(request):
 
 # Group (D)
 @api_view(['DELETE'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def group_delete(request, group_pk):
     group = Group.objects.filter(pk=group_pk)
     group.delete()
@@ -109,6 +123,8 @@ def group_delete(request, group_pk):
 
 # Relationship (R) - 그룹 조회
 @api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def relationship_list(request):
     # relationships = Relationship.objects.filter(fan=1) 테스트용
     relationships = Relationship.objects.filter(fan=request.user.pk)
@@ -118,6 +134,8 @@ def relationship_list(request):
 
 # Relationship (U) - 그룹 이동
 @api_view(['PUT'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def relationship_update(request, relationship_pk, star_pk, group_pk):
     relationship = get_object_or_404(Relationship, pk=relationship_pk)
     # fan = get_object_or_404(get_user_model(), pk=1) 테스트용
@@ -137,6 +155,8 @@ def relationship_update(request, relationship_pk, star_pk, group_pk):
 
 # Relationship (C) - 팔로우('기본' 그룹으로 들어가게 처리)
 @api_view(['POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def relationship_create(request, star_pk):
     # fan = get_object_or_404(get_user_model(), pk=3) 테스트용
     fan = request.user
@@ -156,6 +176,8 @@ def relationship_create(request, star_pk):
 
 # Relationship (D) - 팔로우 취소
 @api_view(['DELETE'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def relationship_delete(request, relationship_pk):
     relationship = get_object_or_404(Relationship, pk=relationship_pk)
     relationship.delete()

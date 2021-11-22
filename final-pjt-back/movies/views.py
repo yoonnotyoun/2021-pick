@@ -135,23 +135,24 @@ def movie_recommend_myinfo(request):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def movie_recommend_genre(request):
-    # favorite_genres = list(Movie.objects.filter(like_users__pk=1).values('genres').annotate(genres_count=Count('genres')).order_by('-genres_count'))[:3] # 테스트용
+    # favorite_genres = list(Movie.objects.filter(like_users__pk=6).values('genres').annotate(genres_count=Count('genres')).order_by('-genres_count'))[:3] # 테스트용
     favorite_genres = list(Movie.objects.filter(like_users__pk=request.user.pk).values('genres').annotate(genres_count=Count('genres')).order_by('-genres_count'))[:3]
 
     if len(favorite_genres) > 0:
         random_id = random.sample(favorite_genres, 1)
         filtered_movies_ids = list(Movie.objects.filter(genres__pk=random_id[0]['genres']).distinct().values('id')) ### Population must be a sequence.  For dicts or sets, use sorted(d).
         picked_movies_ids_obj = random.sample(filtered_movies_ids, 6)
+        recommended_name = get_object_or_404(Genre, pk=random_id[0]['genres']).name
     else: # 좋아하는 장르가 없는 경우
         genres = list(Genre.objects.values('id'))
         random_id = random.sample(genres, 1)
-        picked_movies_ids_obj = random.sample(list(Movie.objects.filter(genres__id=random_id[0]['genres']).values('id'), 6))
+        picked_movies_ids_obj = random.sample(list(Movie.objects.filter(genres__id=random_id[0]['id']).values('id')), 6)
+        recommended_name = get_object_or_404(Genre, pk=random_id[0]['id']).name
 
     picked_movies_ids = [obj['id'] for obj in picked_movies_ids_obj]
     picked_movies = Movie.objects.filter(pk__in=picked_movies_ids).order_by('-vote_average')
 
     serializer = MovieListSerializer(picked_movies, many=True)
-    recommended_name = get_object_or_404(Genre, pk=random_id[0]['genres']).name
     new_serializer_data = list(serializer.data)
     new_serializer_data.append({ 'recommended_name': recommended_name })
 
