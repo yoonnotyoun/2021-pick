@@ -2,43 +2,47 @@ from datetime import timedelta
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.contrib.auth import get_user_model
 
-from movies.models import Movie
-
 # REST framework
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 # orm
 from django.db.models import Q, Count
 
+# model, serializer
+from movies.models import Movie
 from .models import Basket, Comment, BasketTag
 from .serializers import BasketListSerializer, BasketSerializer, CommentSerializer
-
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
 
 # 추천 로직
 import random
 
 
+# Basket (C) - 바스켓 생성
 @api_view(['POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def basket_create(request):
-    # movies = get_list_or_404(Movie) 첫번째 에러 이거 외래키라 여기서 처리하는 거 아님...
-    # author = get_object_or_404(get_user_model(), pk=request.user.pk)
-    author = get_object_or_404(get_user_model(), pk=1)
+    ### movies = get_list_or_404(Movie) 첫번째 에러 이거 외래키라 여기서 처리하는 거 아님...
+    # author = get_object_or_404(get_user_model(), pk=1) 테스트용
+    author = get_object_or_404(get_user_model(), pk=request.user.pk)
 
     serializer = BasketSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(
             author = author,
-            # movies = movies,
+            # movies = movies, ### 위와 같은 오류
         )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+# Basket (RUD) - 바스켓 디테일 조회, 수정, 삭제
 @api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def basket_detail_update_delete(request, basket_pk):
     basket = get_object_or_404(Basket, pk=basket_pk)
 
@@ -47,14 +51,14 @@ def basket_detail_update_delete(request, basket_pk):
         return Response(serializer.data)
         
     elif request.method == 'PUT':
-        # movies = get_list_or_404(Movie)
-        # author = get_object_or_404(get_user_model(), pk=request.user.pk)
+        # movies = get_list_or_404(Movie) ### 위와 같은 오류
+        author = get_object_or_404(get_user_model(), pk=request.user.pk)
         author = get_object_or_404(get_user_model(), pk=1)
         
         serializer = BasketSerializer(instance=basket, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(
-                # movies=movies,
+                # movies=movies, ### 위와 같은 오류
                 author=author,
             )
             return Response(serializer.data)
@@ -67,7 +71,10 @@ def basket_detail_update_delete(request, basket_pk):
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
+# Comment (CR) - 댓글 생성, 조회
 @api_view(['GET', 'POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def comment_list_create(request, basket_pk):
 
     if request.method == 'GET':
@@ -88,6 +95,7 @@ def comment_list_create(request, basket_pk):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+# Comment (D) - 댓글 삭제
 @api_view(['DELETE'])
 def comment_delete(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
@@ -100,143 +108,43 @@ def comment_delete(request, comment_pk):
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
-# 성별, 연령 기준 추천
+# 추천 : 성별, 연령이 유사한 유저가 좋아한 바스켓  (태그명 똑같이 통일 "유사한 성연령대의 p!cker들이 좋아한 바스켓")
 @api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def basket_recommend_myinfo(request):
-    user = get_object_or_404(get_user_model(), pk=4)
-    start_date = user.birthdate - timedelta(weeks=260)
-    end_date = user.birthdate + timedelta(weeks=260) ### years 안됨
-
-    # public이거나 participants에 user가 포함된 경우만
-    q = Q()
-    q.add(
-        Q(like_users__birthdate__range=(start_date, end_date)),
-        q.AND
-    )
-    q.add(
-        Q(like_users__gender=user.gender),
-        q.AND
-    )
-    q.add(
-        Q(public=True)|
-        Q(participants__pk=user.pk),
-        q.AND
-    )
-    filtered_basket_ids = list(Basket.objects.filter(q).distinct().values('id')) ### 리스트 필수
-
-    # # public이거나 participants에 user가 포함된 경우만
+    # 테스트용 코드
+    # user = get_object_or_404(get_user_model(), pk=4)
+    # start_date = user.birthdate - timedelta(weeks=260)
+    # end_date = user.birthdate + timedelta(weeks=260) ### years 안됨
     # q = Q()
     # q.add(
     #     Q(like_users__birthdate__range=(start_date, end_date)),
     #     q.AND
     # )
     # q.add(
-    #     Q(like_users__gender=request.user.gender),
+    #     Q(like_users__gender=user.gender),
     #     q.AND
     # )
-    # q.add(
+    # q.add( # public이거나 participants에 user가 포함된 경우만
     #     Q(public=True)|
-    #     Q(participants__pk=request.user.pk),
+    #     Q(participants__pk=user.pk),
     #     q.AND
     # )
-    # filtered_basket_ids = list(Basket.objects.filter(q).distinct().values('id'))
+    # filtered_basket_ids = list(Basket.objects.filter(q).distinct().values('id')) ### 리스트 필수
+    start_date = request.user.birthdate - timedelta(weeks=260)  
+    end_date = request.user.birthdate + timedelta(weeks=260) ### years 안됨
 
-    if len(filtered_basket_ids) >= 3:
-        picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
-        print('랜덤아님')
-    else: # 3개 이하일때는 그냥 전체 랜덤으로
-        picked_basket_ids_obj = random.sample(list(Basket.objects.all().values('id')), 3) ### 리스트 필수
-        print('랜덤임')
-    picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj] ### obj형식으로 도는거라 따로 추출해줘야 함
-    print(picked_basket_ids)
-    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
-
-    serializer = BasketListSerializer(picked_baskets, many=True)
-
-    return Response(serializer.data)
-
-
-# 선호 영화가 들어있는 기준 추천
-@api_view(['GET'])
-def basket_recommend_movies(request):
-    # random_movie_id = random.sample(list(request.user.like_movies.values('id')))
-    user = get_object_or_404(get_user_model(), pk=1)
-    random_movie_id = random.sample(list(user.like_movies.values('id')), 1)
-    print(random_movie_id)
-    # public이거나 participants에 user가 포함된 경우만
     q = Q()
     q.add(
-        Q(movies__id=random_movie_id[0]['id']),
-        q.OR
-    )
-    q.add(
-        Q(public=True),
-        # Q(public=True)|
-        # Q(participants__pk=request.user.pk),
+        Q(like_users__birthdate__range=(start_date, end_date)),
         q.AND
     )
-    filtered_basket_ids = list(Basket.objects.filter(q).distinct().values('id'))
-    print(filtered_basket_ids)
-    if len(filtered_basket_ids) >= 3:
-        picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
-        print('랜덤아님')
-    else: # 3개 이하일때는 그냥 전체 랜덤으로
-        picked_basket_ids_obj = random.sample(list(Basket.objects.all().values('id')), 3)
-        print('랜덤임')
-    picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj]
-    print(picked_basket_ids)
-    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
-
-    serializer = BasketListSerializer(picked_baskets, many=True)
-
-    return Response(serializer.data)
-
-
-# 좋아하는 태그가 들어있는 기준 추천 -> 좋아하는 태그 로직부터 구현해야할 것 같지만
-@api_view(['GET'])
-def basket_recommend_tags(request):
-    user = get_object_or_404(get_user_model(), pk=1)
-    random_tag_id = random.sample(list(user.users_baskets_tags.values('id')), 1)
-    # random_tag_id = random.sample(list(request.user.users_baskets_tags.values('id')), 1)
-    # public이거나 participants에 user가 포함된 경우만
-    q = Q()
     q.add(
-        Q(basket_tags__pk=random_tag_id[0]['id']),
-        q.OR
-    )
-    q.add(
-        Q(public=True),
-        # Q(public=True)|
-        # Q(participants__pk=request.user.pk),
+        Q(like_users__gender=request.user.gender),
         q.AND
     )
-    filtered_basket_ids = list(Basket.objects.filter(q).distinct().values('id'))
-
-    if len(filtered_basket_ids) >= 3:
-        picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
-        print('랜덤아님')
-    else: # 3개 이하일때는 그냥 전체 랜덤으로
-        picked_basket_ids_obj = random.sample(list(Basket.objects.all().values('id')), 3)
-        print('랜덤임')
-    picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj]
-    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
-
-    serializer = BasketListSerializer(picked_baskets, many=True)
-
-    return Response(serializer.data)
-
-
-# 팔로우하는 유저가 좋아한 기준 추천
-@api_view(['GET'])
-def basket_recommend_friends(request):
-    random_star_id = random.sample(list(request.user.stars.values('id')), 1)
-    # public이거나 participants에 user가 포함된 경우만
-    q = Q()
-    q.add(
-        Q(like_users__id=random_star_id[0]['id']),
-        q.OR
-    )
-    q.add(
+    q.add( # public이거나 participants에 user가 포함된 경우만
         Q(public=True)|
         Q(participants__pk=request.user.pk),
         q.AND
@@ -245,20 +153,135 @@ def basket_recommend_friends(request):
 
     if len(filtered_basket_ids) >= 3:
         picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
-        print('랜덤아님')
     else: # 3개 이하일때는 그냥 전체 랜덤으로
-        picked_basket_ids_obj = random.sample(list(Basket.objects.all().values('id')), 3)
-        print('랜덤임')
-    picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj]
-    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')  
+        picked_basket_ids_obj = random.sample(list(Basket.objects.all().values('id')), 3) ### 리스트 필수
+
+    picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj] ### obj형식으로 도는거라 따로 추출해줘야 함
+    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
 
     serializer = BasketListSerializer(picked_baskets, many=True)
-
     return Response(serializer.data)
 
 
-# basket search (index, 바스켓섹션용) 바스켓 제목, 바스켓 태그, 작성자, 영화명, 배우 (추천순)
+# 추천 : 선호 영화가 들어있는 바스켓
 @api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def basket_recommend_movies(request):
+    # user = get_object_or_404(get_user_model(), pk=2) 테스트용
+    # like_movies = list(user.like_movies.values('id').annotate(baskets_count=Count('movies_baskets')).filter(baskets_count__gte=3)) # 테스트용
+
+    like_movies = list(request.user.like_movies.values('id').annotate(baskets_count=Count('movies_baskets')).filter(baskets_count__gte=3)) # basket 개수가 3개이상인 것만 필터링
+
+    if len(like_movies) > 0:
+        random_id = random.sample(like_movies, 1)
+        q = Q()
+        q.add(
+            Q(movies__id=random_id[0]['id']),
+            q.OR
+        )
+        q.add(
+            Q(public=True)|
+            Q(participants__pk=request.user.pk),
+            q.AND
+        )
+        filtered_basket_ids = list(Basket.objects.filter(q).distinct().values('id'))
+        picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
+    else: # 좋아한 태그가 없는 경우, 랜덤으로 태그 뽑아서 보여줌
+        like_movies = list(Movie.objects.values('id').annotate(baskets_count=Count('movies_baskets')).filter(baskets_count__gte=3))
+        random_id = random.sample(like_movies, 1)
+        picked_basket_ids_obj = random.sample(list(Basket.objects.filter(movies__pk=random_id[0]['id']).values('id')), 3)
+
+    picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj]
+    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
+
+    serializer = BasketListSerializer(picked_baskets, many=True)
+    recommended_name = get_object_or_404(Movie, pk=random_id[0]['id']).title
+    new_serializer_data = list(serializer.data)
+    new_serializer_data.append({ 'recommended_name': recommended_name })
+    return Response(new_serializer_data, status=status.HTTP_201_CREATED)
+
+# 추천 : 좋아하는 태그가 들어있는 바스켓
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def basket_recommend_tags(request):
+    # user = get_object_or_404(get_user_model(), pk=2) # 테스트용
+    # users_baskets_tags = list(user.users_baskets_tags.values('id').annotate(baskets_count=Count('baskets')).filter(baskets_count__gte=3)) # 테스트용
+    users_baskets_tags = list(request.user.users_baskets_tags.values('id').annotate(baskets_count=Count('baskets')).filter(baskets_count__gte=3)) # basket 개수가 3개이상인 것만 필터링
+
+    if len(users_baskets_tags) > 0:
+        random_id = random.sample(users_baskets_tags, 1)
+        q = Q()
+        q.add(
+            Q(baskets_tags__pk=random_id[0]['id']),
+            q.OR
+        )
+        q.add(
+            Q(public=True)|
+            Q(participants__pk=request.user.pk),
+            q.AND
+        )
+        filtered_basket_ids = list(Basket.objects.filter(q).distinct().values('id'))
+        picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
+    else: # 좋아한 태그가 없는 경우, 랜덤으로 태그 뽑아서 보여줌
+        baskets_tags = list(BasketTag.objects.values('id').annotate(baskets_count=Count('baskets')).filter(baskets_count__gte=3))
+        random_id = random.sample(baskets_tags, 1)
+        picked_basket_ids_obj = random.sample(list(Basket.objects.filter(baskets_tags__pk=random_id[0]['id']).values('id')), 3)
+
+    picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj]
+    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
+
+    serializer = BasketListSerializer(picked_baskets, many=True)
+    recommended_name = get_object_or_404(BasketTag, pk=random_id[0]['id']).name
+    new_serializer_data = list(serializer.data)
+    new_serializer_data.append({ 'recommended_name': recommended_name })
+    return Response(new_serializer_data, status=status.HTTP_201_CREATED)
+
+
+# 추천 : 팔로우하는 유저가 좋아한 바스켓
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def basket_recommend_friends(request):
+    # user = get_object_or_404(get_user_model(), pk=3) # 테스트용
+    # stars = list(user.stars.values('id').annotate(baskets_count=Count('like_baskets')).filter(baskets_count__gte=3)) # 테스트용
+    stars = list(request.user.stars.values('id').annotate(baskets_count=Count('like_baskets')).filter(baskets_count__gte=3)) # basket 개수가 3개이상인 것만 필터링
+
+    if len(stars) > 0:
+        random_id = random.sample(stars, 1)
+        q = Q()
+        q.add(
+            Q(like_users__id=random_id[0]['id']),
+            q.OR
+        )
+        q.add(
+            Q(public=True)|
+            Q(participants__pk=request.user.pk),
+            q.AND
+        )
+        filtered_basket_ids = list(Basket.objects.filter(q).distinct().values('id'))
+        picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
+    else: # 좋아한 태그가 없는 경우, 랜덤으로 태그 뽑아서 보여줌
+        stars = list(get_user_model().objects.values('id').annotate(baskets_count=Count('like_baskets')).filter(baskets_count__gte=3))
+        random_id = random.sample(stars, 1)
+        picked_basket_ids_obj = random.sample(list(Basket.objects.filter(like_users__pk=random_id[0]['id']).values('id')), 3)
+
+    picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj]
+    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
+
+    serializer = BasketListSerializer(picked_baskets, many=True)
+    recommended_name = get_object_or_404(get_user_model(), pk=random_id[0]['id']).nickname
+    new_serializer_data = list(serializer.data)
+    new_serializer_data.append({ 'recommended_name': recommended_name })
+
+    return Response(new_serializer_data, status=status.HTTP_201_CREATED)
+
+
+# basket search (index, 바스켓섹션용) - 바스켓 제목, 바스켓 태그, 작성자, 영화명, 배우에 검색어 검색 (좋아요순으로 정렬)
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def basket_search(request, query):
     q = Q()
     q.add(
@@ -271,7 +294,6 @@ def basket_search(request, query):
         q.OR
     )
     q.add(
-        # Q(public=True),
         Q(public=True)|
         Q(participants__nickname__icontains=request.user.nickname),
         q.AND
@@ -284,33 +306,22 @@ def basket_search(request, query):
 
 # 좋아요 기능
 @api_view(['POST'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def basket_like(request, basket_pk):
+    # user = get_object_or_404(get_user_model(), pk=1)
     basket = get_object_or_404(Basket, pk=basket_pk)
-    # user = get_object_or_404(get_user_model(), pk=request.user.pk)
-    user = get_object_or_404(get_user_model(), pk=1)
+    user = get_object_or_404(get_user_model(), pk=request.user.pk)
     print(basket.baskets_tags.all())
 
     user = get_object_or_404(get_user_model(), pk=1)
-    if basket.like_users.filter(pk=user.pk).exists():
+    if basket.like_users.filter(pk=user.pk).exists(): ### 태그 뱃지에 대한 고민(어떻게 카운트할 지)
         basket.like_users.remove(user)
         liked = False
     else:
         basket.like_users.add(user)
-        baskets_tags_ids_obj = list(basket.baskets_tags.all().values('id'))
-        baskets_tags_ids = [obj['id'] for obj in baskets_tags_ids_obj]
-        for baskets_tags_id in baskets_tags_ids:
-            baskets_tag = get_object_or_404(BasketTag, pk=baskets_tags_id)
-            user.users_baskets_tags.add(baskets_tag)
-        print(baskets_tags_ids)
-        
         liked = True
 
-    # if basket.like_users.filter(pk=request.user.pk).exists():
-    #     basket.like_users.remove(request.user)
-    #     liked = False
-    # else:
-    #     basket.like_users.add(request.user)
-    #     liked = True
     data = {
         'basket': basket_pk,
         'liked': liked,

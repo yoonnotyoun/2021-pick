@@ -40,7 +40,7 @@ class UserSerializer(serializers.ModelSerializer):
     like_baskets = BasketListSerializer(many=True, required=False, read_only=True)
     participating_baskets = BasketListSerializer(many=True, required=False, read_only=True)
     author_comments = CommentListSerializer(many=True, required=False, read_only=True)
-    users_basket_tags = BasketTagListSerializer(many=True, required=False, read_only=True)
+    users_baskets_tags = BasketTagListSerializer(many=True, required=False, read_only=True)
     author_tastingrooms = TastingroomListSerializer(many=True, required=False, read_only=True)
     participating_tastingrooms = TastingroomListSerializer(many=True, required=False, read_only=True)
     
@@ -49,11 +49,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'username', 'password', 'stars', 'fans', 'nickname', 'birthdate', 'gender', 'image',
             'like_movies', 'author_baskets', 'like_baskets', 'participating_baskets',
-            'author_comments', 'users_basket_tags', 'author_tastingrooms', 'participating_tastingrooms',
+            'author_comments', 'users_baskets_tags', 'author_tastingrooms', 'participating_tastingrooms',
             )
         read_only_fields = (
             'stars', 'fans', 'like_movies', 'author_baskets', 'like_baskets', 'participating_baskets',
-            'author_comments', 'users_basket_tags', 'author_tastingrooms', 'participating_tastingrooms',
+            'author_comments', 'users_baskets_tags', 'author_tastingrooms', 'participating_tastingrooms',
             )
 
 

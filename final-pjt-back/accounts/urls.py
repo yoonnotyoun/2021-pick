@@ -7,7 +7,8 @@ urlpatterns = [
     # 로그인/회원가입
     path('signup/', views.signup),
     path('api-token-auth/', obtain_jwt_token),
-    path('profile/', views.profile),
+    path('profile/<int:user_pk>/', views.profile),
+    path('liked_baskets_tags/<int:user_pk>/', views.liked_baskets_tags),
 
     # 그룹 관리
     path('group/', views.group_list_create),

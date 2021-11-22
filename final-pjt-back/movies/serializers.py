@@ -33,10 +33,10 @@ class MovieDetailSerializer(serializers.ModelSerializer):
             fields = '__all__'
         
 
-    actors = ActorListSerializer(many=True)
-    genres = GenreListSerializer(many=True)
-    movie_tastingrooms = TastingroomListSerializer(many=True)
-    movies_baskets = BasketListSerializer(many=True)
+    actors = ActorListSerializer(many=True, read_only=True)
+    genres = GenreListSerializer(many=True, read_only=True)
+    movie_tastingrooms = TastingroomListSerializer(many=True, read_only=True)
+    movies_baskets = BasketListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Movie
@@ -54,11 +54,11 @@ class MovieListSerializer(serializers.ModelSerializer):
     class UserSerializer(serializers.ModelSerializer):
         class Meta:
             model = get_user_model()
-            fields = '__all__'
+            fields = ('id', 'nickname',)
 
-    like_users = UserSerializer(many=True)
+    like_users = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Movie
-        fields = ('title', 'release_date', 'poster_path', 'like_users', 'vote_average')
+        fields = ('id', 'title', 'release_date', 'poster_path', 'like_users', 'vote_average',)
         read_only_fields = ('like_users',)
