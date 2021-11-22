@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Main from '@/views/Main'
 import Movie from '@/views/Movie'
 import Basket from '@/views/Basket'
-import Tastingroom from '@/views/Tastingroom'
 import Login from '@/views/accounts/Login'
 import Profile from '@/views/accounts/Profile'
 import Signup from '@/views/accounts/Signup'
@@ -25,11 +24,6 @@ const routes = [
     path: '/basket',
     name: 'Basket',
     component: Basket
-  },
-  {
-    path: '/tastingroom',
-    name: 'Tastingroom',
-    component: Tastingroom
   },
   {
     path: '/accounts/login',

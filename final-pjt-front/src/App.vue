@@ -4,7 +4,6 @@
       <router-link :to="{ name: 'Main' }">P!ck</router-link> |
       <router-link :to="{ name: 'Movie' }">Movie</router-link> |
       <router-link :to="{ name: 'Basket' }">Basket</router-link> |
-      <router-link :to="{ name: 'Tastingroom' }">Tastingroom</router-link> |
       <span v-if="isLoggedIn">
         <router-link :to="{ name: 'Profile' }">Profile</router-link> |
         <router-link @click.native="logout" to="#">Logout</router-link>
@@ -26,13 +25,17 @@ export default {
   methods: {
     ...mapActions([
       'logout',
+      // 'getMovieData'
       ])
   },
   computed: {
     ...mapGetters([
       'isLoggedIn',
     ])
-  }
+  },
+  // created: function () {
+  //   this.getMovieData()
+  // }
 }
 </script>
 

@@ -7,6 +7,6 @@ export default {
     login: '/api/v1/accounts/api-token-auth/',
     // createTodo: '/todos/',
     // todoList: '/todos/',
-    movies: '/api/v1/movies/db/movies/', //created 시점에 실행?
+    getMovieData: '/api/v1/movies/tmdb/', //created 시점에 실행?
   }
 }

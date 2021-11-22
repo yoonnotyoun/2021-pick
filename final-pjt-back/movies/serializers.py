@@ -7,7 +7,7 @@ from tastingrooms.models import Tastingroom
 
 
 # MovieSerializer
-    # poster_path, title, runtime, origin_country, vote_average, release_date, actors, genres, overview
+    # poster_path, title, runtime, vote_average, release_date, actors, genres, overview
     # 테이스팅룸: tastingroom_name, tastingroom_participants 사람수
     # 바스켓: (역참조) img, title
 class MovieDetailSerializer(serializers.ModelSerializer):
@@ -60,5 +60,5 @@ class MovieListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = ('title', 'release_date', 'poster_path', 'like_users',)
+        fields = ('title', 'release_date', 'poster_path', 'like_users', 'vote_average')
         read_only_fields = ('like_users',)
