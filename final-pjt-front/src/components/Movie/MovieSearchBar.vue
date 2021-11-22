@@ -10,13 +10,13 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'MovieSearchBar',
   methods: {
-    ...mapActions([
+    ...mapActions('movieStore', [
       // 'setInputValue',
       'getMovieSearchResult',
     ])
   },
   computed: {
-    ...mapState([
+    ...mapState('movieStore', [
       'userInput',
       'movies',
     ])
