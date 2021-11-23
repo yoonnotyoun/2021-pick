@@ -84,8 +84,6 @@ class BasketSerializer(serializers.ModelSerializer):
         for participants_id in participants_ids:
             participant = get_user_model().objects.get(pk=participants_id)
             basket.participants.add(participant)
-        # movies = Movie.objects.filter(pk__in=movies_ids)
-        # basket.movies.set(movies)
         for movies_id in movies_ids:
             movie = Movie.objects.get(pk=movies_id)
             basket.movies.add(movie)

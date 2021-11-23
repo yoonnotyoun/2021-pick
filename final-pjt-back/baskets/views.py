@@ -97,6 +97,8 @@ def comment_list_create(request, basket_pk):
 
 # Comment (D) - 댓글 삭제
 @api_view(['DELETE'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def comment_delete(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
 
