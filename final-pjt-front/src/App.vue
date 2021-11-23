@@ -6,6 +6,7 @@
       <router-link :to="{ name: 'Basket' }">Basket</router-link> |
       <span v-if="isLoggedIn">
         <router-link :to="{ name: 'Profile' }">Profile</router-link> |
+        <router-link :to="{ name: 'Group' }">Group</router-link> |
         <router-link @click.native="logout" to="#">Logout</router-link>
       </span>
       <span v-else>
@@ -25,6 +26,7 @@ export default {
   methods: {
     ...mapActions('accountStore', [
       'logout',
+      'getUserId',
       // 'getMovieData'
       ])
   },
@@ -33,9 +35,9 @@ export default {
       'isLoggedIn',
     ])
   },
-  // created: function () {
-  //   this.getMovieData()
-  // }
+  created: function () {
+    this.getUserId()
+  }
 }
 </script>
 

@@ -7,6 +7,7 @@ import Basket from '@/views/Basket'
 import Login from '@/views/accounts/Login'
 import Profile from '@/views/accounts/Profile'
 import Signup from '@/views/accounts/Signup'
+import Group from '@/views/accounts/Group'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ const routes = [
     path: '/accounts/signup',
     name: 'Signup',
     component: Signup
+  },
+  {
+    path: '/accounts/group',
+    name: 'Group',
+    component: Group
   },
 ]
 

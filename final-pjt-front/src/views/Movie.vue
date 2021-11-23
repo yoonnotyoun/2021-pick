@@ -31,14 +31,17 @@ export default {
     ])
   },
   computed: {
-    ...mapState('movieStore', [
-      'searchedMovies',
-      'recommendedMovies',
+    ...mapState('movieStore', {
+      recommendedMovies: state => state.recommendedMovies,
+      searchedMovies: state => state.searchedMovies,
+      // 'searchedMovies',
+      // 'recommendedMovies',
       // 'selectedMovie',
       // 'isModalViewed',
-    ])
+    })
   },
   created: function () { // 반복실행 setInterval로 해야하나 고민중... 시간 말고 횟수로 멈추는 법 있을 거 같은데
+  console.log(this.recommendedMovies)
     if (this.$store.getters.isLoggedIn) {
       this.getMovieRecommendation()
       this.getMovieRecommendation()

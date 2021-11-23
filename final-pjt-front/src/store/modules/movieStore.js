@@ -6,12 +6,12 @@ import axios from 'axios'
 
 const movieStore = {
   namespaced: true,
-  state: {
+  state: () => ({
     authToken: localStorage.getItem('jwt'),
     searchedMovies: [],
     recommendedMovies: [],
     selectedMovieDetail: '',
-  },
+  }),
   getters: {
     isLoggedIn: function (state) {
       return state.authToken ? true: false
