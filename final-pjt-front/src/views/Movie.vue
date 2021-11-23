@@ -27,22 +27,20 @@ export default {
   },
   methods: {
     ...mapActions('movieStore', [
-      'getMovieRecommendation'
+      'resetMovies',
+      'getMovieRecommendation',
     ])
   },
   computed: {
     ...mapState('movieStore', {
       recommendedMovies: state => state.recommendedMovies,
       searchedMovies: state => state.searchedMovies,
-      // 'searchedMovies',
-      // 'recommendedMovies',
-      // 'selectedMovie',
-      // 'isModalViewed',
     })
   },
   created: function () {
   // console.log(this.recommendedMovies)
     if (this.$store.getters.isLoggedIn) {
+      this.resetMovies('recommended')
       this.getMovieRecommendation()
       this.getMovieRecommendation()
       this.getMovieRecommendation()

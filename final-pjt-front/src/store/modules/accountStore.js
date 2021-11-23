@@ -101,7 +101,7 @@ const accountStore = {
       })
       .then(() => {
         console.log(SERVER.URL + SERVER.ROUTES.signup)
-        router.push({ name: 'Login' })
+        router.push({ name: 'SetMovieTaste' })
       })
       .catch((err) => {
         console.log(err)

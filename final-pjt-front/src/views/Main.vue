@@ -22,7 +22,7 @@ export default {
   methods: {
     ...mapActions('movieStore', [
       'getMovieRecommendation',
-      // 'resetMovies',
+      'resetMovies',
     ]),
     ...mapActions('basketStore', [
       'getBasketRecommendation',
@@ -40,7 +40,7 @@ export default {
   created: function () {
     if (this.$store.getters.isLoggedIn) {
       this.resetBaskets('recommended')
-      // this.resetMovies('recommended')
+      this.resetMovies('recommended')
       this.getBasketRecommendation()
       this.getBasketRecommendation()
       this.getMovieRecommendation()

@@ -4,6 +4,7 @@
       <router-link :to="{ name: 'Main' }">P!ck</router-link> |
       <router-link :to="{ name: 'Movie' }">Movie</router-link> |
       <router-link :to="{ name: 'Basket' }">Basket</router-link> |
+      <router-link :to="{ name: 'SetMovieTaste' }">SetMovieTaste</router-link> |
       <span v-if="isLoggedIn">
         <router-link :to="{ name: 'Profile' }">Profile</router-link> |
         <router-link :to="{ name: 'Group' }">Group</router-link> |

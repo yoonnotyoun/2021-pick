@@ -8,6 +8,7 @@ import BasketDetail from '@/views/BasketDetail'
 import Login from '@/views/accounts/Login'
 import Profile from '@/views/accounts/Profile'
 import Signup from '@/views/accounts/Signup'
+import SetMovieTaste from '@/views/accounts/SetMovieTaste'
 import Group from '@/views/accounts/Group'
 
 Vue.use(VueRouter)
@@ -52,6 +53,11 @@ const routes = [
     path: '/accounts/signup',
     name: 'Signup',
     component: Signup
+  },
+  {
+    path: '/accounts/setmovietaste',
+    name: 'SetMovieTaste',
+    component: SetMovieTaste
   },
   {
     path: '/accounts/group',

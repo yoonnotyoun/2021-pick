@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'MovieListItem',
@@ -23,14 +23,15 @@ export default {
     },
   },
   methods: {
-    // ...mapMutations([
-    //   'SET_SELECTED_MOVIE',
-    // ]),
     ...mapActions('movieStore', [
-      // 'setSelectedMovie',
       'getMovieDetail',
     ])
   },
+  computed: {
+    ...mapState('movieStore', {
+      pickedMovies: state => state.pickedMovies
+    })
+  }
 }
 </script>
 

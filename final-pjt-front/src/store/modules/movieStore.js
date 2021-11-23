@@ -9,6 +9,7 @@ const movieStore = {
   state: () => ({
     userId: '',
     authToken: localStorage.getItem('jwt'),
+    pickedMovies: [],
     // 리스트 검색, 추천
     searchedMovies: [],
     recommendedMovies: [],
@@ -52,6 +53,16 @@ const movieStore = {
       })
       state.searchedMovies = []
       // console.log(state.recommendedMovies)
+    },
+    ADD_TO_PICK: function (state) {
+      const movie = state.selectedMovieDetail
+      if (!(movie in state.pickedMovies)) {
+        // console.log(movie)
+        state.pickedMovies.push(movie)
+        // console.log(state.pickedMovies)
+      }
+      state.selectedMovieDetail = ''
+      // state.pickedMovies = []
     },
     // 디테일, 좋아요
     SET_MOVIE_DETAIL: function (state, MovieDetail) {
@@ -119,9 +130,10 @@ const movieStore = {
     },
     // 디테일, 좋아요
     getMovieDetail: function ({ commit, getters }, selectedMovie) {
-      console.log(selectedMovie.id)
+      // console.log(document.location.href.split("0/"))
       const headers = getters.config
       const movie_pk = selectedMovie.id
+      const location = document.location.href.split("0/")[1]
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/movies/${movie_pk}/`,
@@ -129,7 +141,11 @@ const movieStore = {
       })
       .then((res) => {
         commit('SET_MOVIE_DETAIL', res.data)
-        router.push({ name: 'MovieDetail' })
+        if (location === `accounts/setmovietaste`) {
+          commit('ADD_TO_PICK') // like 해버리기?
+        } else {
+          router.push({ name: 'MovieDetail' })
+        }
       })
       .catch((err) => {
         console.log(err)
