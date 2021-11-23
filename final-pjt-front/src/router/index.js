@@ -4,6 +4,7 @@ import Main from '@/views/Main'
 import Movie from '@/views/Movie'
 import MovieDetail from '@/views/MovieDetail'
 import Basket from '@/views/Basket'
+import BasketDetail from '@/views/BasketDetail'
 import Login from '@/views/accounts/Login'
 import Profile from '@/views/accounts/Profile'
 import Signup from '@/views/accounts/Signup'
@@ -31,6 +32,11 @@ const routes = [
     path: '/basket',
     name: 'Basket',
     component: Basket
+  },
+  {
+    path: '/basket/detail',
+    name: 'BasketDetail',
+    component: BasketDetail
   },
   {
     path: '/accounts/login',

@@ -75,7 +75,7 @@ const movieStore = {
       const headers = getters.config
       // const recommend_method = _.sample(['myinfo', 'genre', 'baskets', 'friends'])
       const recommend_method = 'genre'
-      // 리스트 하나 만들어서 중복방지 체크용으로 쓰기 (for문)
+      // 중복방지 처리 하기
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/movies/recommend/${recommend_method}`,
