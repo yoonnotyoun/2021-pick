@@ -27,7 +27,7 @@ import random
 @permission_classes([IsAuthenticated])
 def basket_create(request):
     ### movies = get_list_or_404(Movie) 첫번째 에러 이거 외래키라 여기서 처리하는 거 아님...
-    # author = get_object_or_404(get_user_model(), pk=1) #테스트용
+    # author = get_object_or_404(get_user_model(), pk=1) 테스트용
     author = get_object_or_404(get_user_model(), pk=request.user.pk)
 
     serializer = BasketSerializer(data=request.data)
@@ -311,7 +311,7 @@ def basket_search(request, query):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def basket_like(request, basket_pk):
-    # user = get_object_or_404(get_user_model(), pk=2)
+    # user = get_object_or_404(get_user_model(), pk=1)
     basket = get_object_or_404(Basket, pk=basket_pk)
     user = get_object_or_404(get_user_model(), pk=request.user.pk)
     print(basket.baskets_tags.all())

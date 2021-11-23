@@ -132,8 +132,8 @@ def movie_recommend_myinfo(request):
 
 # 추천 : 좋아하는 장르 TOP3 중 1개 랜덤으로 뽑아 영화 추천
 @api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def movie_recommend_genre(request):
     # favorite_genres = list(Movie.objects.filter(like_users__pk=6).values('genres').annotate(genres_count=Count('genres')).order_by('-genres_count'))[:3] # 테스트용
     favorite_genres = list(Movie.objects.filter(like_users__pk=request.user.pk).values('genres').annotate(genres_count=Count('genres')).order_by('-genres_count'))[:3]
