@@ -6,12 +6,17 @@ import axios from 'axios'
 
 const movieStore = {
   namespaced: true,
-  state: {
+  state: () => ({
+    // 로그인
     authToken: localStorage.getItem('jwt'),
+    // 검색
     searchedMovies: [],
+    // 추천
     recommendedMovies: [],
+    recommendedNameList: [],
+    // 디테일
     selectedMovieDetail: '',
-  },
+  }),
   getters: {
     isLoggedIn: function (state) {
       return state.authToken ? true: false
@@ -28,10 +33,13 @@ const movieStore = {
       state.recommendedMovies = []
     },
     SET_RECOMMENDED_MOVIE_LIST: function (state, recommendedData) {
+      const recommendedName = recommendedData.pop(6).recommended_name
+      state.recommendedNameList.push(recommendedName)
       state.recommendedMovies.push({
-        recommended_name: recommendedData.pop(6).recommended_name,
+        recommendedName: recommendedName,
         movies: recommendedData
       })
+      // state.recommendedMovies = recommendedMovies
       state.searchedMovies = []
       // console.log(state.recommendedMovies)
     },
@@ -75,15 +83,19 @@ const movieStore = {
       const headers = getters.config
       // const recommend_method = _.sample(['myinfo', 'genre', 'baskets', 'friends'])
       const recommend_method = 'genre'
-      // 리스트 하나 만들어서 중복방지 체크용으로 쓰기 (for문)
+
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/movies/recommend/${recommend_method}`,
         headers,
       })
       .then((res) => {
-        console.log(recommend_method)
-        commit('SET_RECOMMENDED_MOVIE_LIST', res.data)
+        // console.log(recommend_method)
+        // const recommended_name = res.data.pop(6).recommended_name
+        // console.log(res.data[6].recommended_name)
+        if (!(res.data[6].recommended_name in state.recommendedNameList)) {
+          commit('SET_RECOMMENDED_MOVIE_LIST', res.data)
+        }
       })
       .catch((err) => {
         console.log(err)
