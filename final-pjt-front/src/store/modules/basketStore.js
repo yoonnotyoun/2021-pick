@@ -42,6 +42,13 @@ const basketStore = {
     SET_BASKET_DETAIL: function (state, basketDetail) {
       state.selectedBasketDetail = basketDetail
     },
+    RESET_BASKETS: function (state, type) {
+      if (type === 'recommended') {
+        state.recommendedBaskets = []
+      } if (type === 'searched') {
+        state.searchedBaskets = []
+      }
+    },
     // COMMENT
     SET_COMMENTS: function (state, comments) {
       state.comments = comments
@@ -106,6 +113,9 @@ const basketStore = {
       .catch((err) => {
         console.log(err)
       })
+    },
+    resetBaskets: function ({ commit }, type) {
+      commit('RESET_BASKETS', type)
     },
     // COMMENT
     getCommentList: function ({ state, commit, getters }) {

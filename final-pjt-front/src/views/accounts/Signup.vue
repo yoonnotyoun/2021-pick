@@ -2,7 +2,7 @@
   <div>
     <h1>Signup</h1>
     <div>
-      <label for="username">사용자 이름: </label>
+      <label for="username">아이디: </label>
       <input type="text" id="username" v-model="credentials.username">
     </div>
     <div>
@@ -17,7 +17,11 @@
         v-model="credentials.passwordConfirmation"
         @keypress.enter="signup(credentials)"
       >
-    </div> 
+    </div>
+    <div>
+      <label for="nickname">닉네임: </label>
+      <input type="text" id="nickname" v-model="credentials.nickname">
+    </div>
     <div>
       <label for="birthdate">생년월일: </label>
       <input type="date" id="birthdate" v-model="credentials.birthdate">
@@ -48,6 +52,7 @@ export default {
         username: '',
         password: '',
         passwordConfirmation: '',
+        nickname: '',
         birthdate: '',
         gender: '',
       }
