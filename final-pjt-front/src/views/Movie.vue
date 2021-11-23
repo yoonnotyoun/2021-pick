@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     ...mapActions('movieStore', [
-      'getMovieRecommendation'
+      'getMovieRecommendation',
     ])
   },
   computed: {

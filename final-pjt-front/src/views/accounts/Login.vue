@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Login',
@@ -36,12 +36,24 @@ export default {
       'login',
     ]),
     ...mapActions('movieStore', [
-      'getMovieUserId',
+      // 'getMovieUserId',
+      // 'movieSetToken',
+    ]),
+    ...mapActions('basketStore', [
+      // 'getBasketUserId',
     ]),
     startLogin: function() {
       this.login(this.credentials)
-      this.getMovieUserId()
+      // this.getMovieUserId(this.userId)
+      // this.movieSetToken(this.authToken)
+      // this.getBasketUserId(this.userId)
     }
-  }
+  },
+  computed: {
+    ...mapState('accountStore', {
+      // userId: state => state.userId,
+      // authToken: state => state.authToken,
+    })
+  },
 }
 </script>

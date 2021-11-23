@@ -79,6 +79,7 @@ def comment_list_create(request, basket_pk):
 
     if request.method == 'GET':
         comments = get_list_or_404(Comment, basket=basket_pk)
+        # comments = Comment.objects.filter(basket=basket_pk)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -201,7 +202,7 @@ def basket_recommend_movies(request):
     recommended_name = get_object_or_404(Movie, pk=random_id[0]['id']).title
     new_serializer_data = list(serializer.data)
     new_serializer_data.append({ 'recommended_name': recommended_name })
-    return Response(new_serializer_data, status=status.HTTP_201_CREATED)
+    return Response(new_serializer_data, status=status.HTTP_200_OK)
 
 # 추천 : 좋아하는 태그가 들어있는 바스켓
 @api_view(['GET'])
@@ -238,7 +239,7 @@ def basket_recommend_tags(request):
     recommended_name = get_object_or_404(BasketTag, pk=random_id[0]['id']).name
     new_serializer_data = list(serializer.data)
     new_serializer_data.append({ 'recommended_name': recommended_name })
-    return Response(new_serializer_data, status=status.HTTP_201_CREATED)
+    return Response(new_serializer_data, status=status.HTTP_200_OK)
 
 
 # 추천 : 팔로우하는 유저가 좋아한 바스켓
@@ -277,7 +278,7 @@ def basket_recommend_friends(request):
     new_serializer_data = list(serializer.data)
     new_serializer_data.append({ 'recommended_name': recommended_name })
 
-    return Response(new_serializer_data, status=status.HTTP_201_CREATED)
+    return Response(new_serializer_data, status=status.HTTP_200_OK)
 
 
 # basket search (index, 바스켓섹션용) - 바스켓 제목, 바스켓 태그, 작성자, 영화명, 배우에 검색어 검색 (좋아요순으로 정렬)
@@ -329,4 +330,4 @@ def basket_like(request, basket_pk):
         'liked': liked,
         'cnt_likes': basket.like_users.count(),
     }
-    return Response(data, status=status.HTTP_204_NO_CONTENT)
+    return Response(data, status=status.HTTP_200_OK) # status도 잘넣어야됨

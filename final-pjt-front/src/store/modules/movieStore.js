@@ -28,10 +28,14 @@ const movieStore = {
     },
   },
   mutations: {
-    // 프로필
-    SET_MOVIE_USER_ID: function (state, userId) {
+    // 로그인
+    SET_USER_ID: function (state, userId) {
+      console.log('movie userId', userId)
       state.userId = userId
     },
+    // SET_TOKEN: function (state, token) {
+    //   state.authToken = token
+    // },
     // 초기화
     RESET_MOVIES: function (state, type) {
       if (type === 'recommended') {
@@ -65,19 +69,12 @@ const movieStore = {
     },
   },
   actions: {
-    // 프로필
-    getMovieUserId: function ({ commit, getters }) {
-      axios({
-        url: SERVER.URL + '/api/v1/accounts/login/',
-        method: 'get',
-        headers: getters.config
-      })
-      .then((res) => {
-        commit('SET_MOVIE_USER_ID', res.data.userId)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    // 로그인
+    movieSetToken: function ({ commit }, authToken) {
+      commit('SET_TOKEN', authToken)
+    },
+    getMovieUserId: function ({ commit }, userId) {
+      commit('SET_USER_ID', userId)
     },
     // 초기화
     resetMovies: function ({ commit }, type) {
@@ -129,6 +126,7 @@ const movieStore = {
       })
       .then((res) => {
         commit('SET_MOVIE_DETAIL', res.data)
+        commit('GET_LIKE_CNT', res.data.like_users.length)
         router.push({ name: 'MovieDetail' })
       })
       .catch((err) => {
