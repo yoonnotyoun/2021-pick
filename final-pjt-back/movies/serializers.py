@@ -24,17 +24,21 @@ class MovieDetailSerializer(serializers.ModelSerializer):
         class Meta:
             model = Basket
             fields = '__all__'
-        
+
+    class UserSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = get_user_model()
+            fields = ('id',) 
 
     actors = ActorListSerializer(many=True, read_only=True)
     genres = GenreListSerializer(many=True, read_only=True)
     movies_baskets = BasketListSerializer(many=True, read_only=True)
+    like_users = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Movie
         fields = (
-            'id', 'poster_path', 'title', 'runtime', 'vote_average', 'release_date',
-            'actors', 'genres', 'overview', 'movies_baskets',
+            'id', 'poster_path', 'title', 'runtime', 'vote_average', 'release_date', 'actors', 'genres', 'overview', 'movies_baskets', 'like_users',
             )
         read_only_fields = ('actors', 'genres', 'movies_baskets',)
     

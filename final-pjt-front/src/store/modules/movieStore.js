@@ -8,9 +8,13 @@ const movieStore = {
   namespaced: true,
   state: () => ({
     authToken: localStorage.getItem('jwt'),
+    // 리스트 검색, 추천
     searchedMovies: [],
     recommendedMovies: [],
+    // 디테일, 좋아요
     selectedMovieDetail: '',
+    likeButtonName: '',
+    likeCnt: '',
   }),
   getters: {
     isLoggedIn: function (state) {
@@ -23,6 +27,7 @@ const movieStore = {
     },
   },
   mutations: {
+    // 리스트 검색, 추천
     SET_SEARCHED_MOVIE_LIST: function (state, movies) {
       state.searchedMovies = movies
       state.recommendedMovies = []
@@ -35,11 +40,19 @@ const movieStore = {
       state.searchedMovies = []
       // console.log(state.recommendedMovies)
     },
+    // 디테일, 좋아요
     SET_MOVIE_DETAIL: function (state, MovieDetail) {
       state.selectedMovieDetail = MovieDetail
     },
+    GET_LIKE_INFO: function (state, likeButtonName) {
+      state.likeButtonName = likeButtonName
+    },
+    GET_LIKE_CNT: function (state, likeCnt) {
+      state.likeCnt = likeCnt
+    },
   },
   actions: {
+    // 리스트 검색, 추천
     getMovieSearchResult: function ({ commit, getters }, event) {
       const headers = getters.config
       const query = event.target.value
@@ -50,22 +63,6 @@ const movieStore = {
       })
       .then((res) => {
         commit('SET_SEARCHED_MOVIE_LIST', res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
-    getMovieDetail: function ({ commit, getters }, selectedMovie) {
-      const headers = getters.config
-      const movie_pk = selectedMovie.id
-      axios({
-        method: 'get',
-        url: `${SERVER.URL}/api/v1/movies/${movie_pk}/`,
-        headers,
-      })
-      .then((res) => {
-        commit('SET_MOVIE_DETAIL', res.data)
-        router.push({ name: 'MovieDetail' })
       })
       .catch((err) => {
         console.log(err)
@@ -89,6 +86,63 @@ const movieStore = {
         console.log(err)
       })
     },
+    // 디테일, 좋아요
+    getMovieDetail: function ({ commit, getters }, selectedMovie) {
+      const headers = getters.config
+      const movie_pk = selectedMovie.id
+      axios({
+        method: 'get',
+        url: `${SERVER.URL}/api/v1/movies/${movie_pk}/`,
+        headers,
+      })
+      .then((res) => {
+        commit('SET_MOVIE_DETAIL', res.data)
+        router.push({ name: 'MovieDetail' })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    getLikeButtonName: function ({ state, commit }) {
+      if (this.userId in state.selectedMovieDetail.like_users) {
+        commit('GET_LIKE_INFO', 'unlike')
+      } else {
+        commit('GET_LIKE_INFO', 'like')
+      }
+    },
+    likeUnlike: function ({ state, commit, dispatch, getters }, movieId) {
+      axios({
+        method: 'post',
+        url: `${SERVER.URL}/api/v1/movies/${movieId}/like/`,
+        headers: getters.config
+      })
+      .then((res) => {
+        dispatch('getMovieDetail', state.selectedMovie)
+        if (res.data.liked) {
+          commit('GET_LIKE_INFO', 'unlike')
+        } else {
+          commit('GET_LIKE_INFO', 'like')
+        }
+        commit('GET_LIKE_CNT', res.data.cnt_likes)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    // unlike: function ({ state, commit, dispatch, getters }, movieId) {
+    //   axios({
+    //     method: 'delete',
+    //     url: `${SERVER.URL}/api/v1/accounts/relationship/star/${movieId}/`,
+    //     headers: getters.config
+    //   })
+    //   .then(() => {
+    //     dispatch('getMovieDetail', state.selectedMovie)
+    //     commit('GET_LIKE_INFO', 'like')
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
+    // },
   },
 }
 export default movieStore

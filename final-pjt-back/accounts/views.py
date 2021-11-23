@@ -51,8 +51,8 @@ def login(request):
 
 # profile에서 유저와 관련된 데이터 다 가져와야됨
 @api_view(['GET', 'PUT', 'DELETE'])
-# @authentication_classes([JSONWebTokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def profile(request, user_pk):
     user = get_object_or_404(get_user_model(), pk=user_pk)
 
@@ -92,8 +92,8 @@ def liked_baskets_tags(request, user_pk):
 @permission_classes([IsAuthenticated])
 def group_list_create(request):
     if request.method == 'GET':
-        groups = Group.objects.filter(user=1) # 테스트용
-        # groups = Group.objects.filter(user=request.user.pk)
+        # groups = Group.objects.filter(user=1) # 테스트용
+        groups = Group.objects.filter(user=request.user.pk)
         serializer = GroupListSerialzier(groups, many=True)
         return Response(serializer.data)
     
@@ -160,12 +160,12 @@ def relationship_update(request, relationship_pk, group_pk):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def relationship_create_delete(request, star_pk):
+    # fan = get_object_or_404(get_user_model(), pk=1)  # 테스트용
     fan = request.user
     star = get_object_or_404(get_user_model(), pk=star_pk)
     if request.method == 'POST':
-        # fan = get_object_or_404(get_user_model(), pk=1)  # 테스트용
         group = get_object_or_404(Group, user=fan, name='기본') # 기본 그룹
-        print('팔로우')
+        # print('팔로우')
         # if fan != star:
         serializer = RelationshipSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -177,8 +177,9 @@ def relationship_create_delete(request, star_pk):
             print()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
     elif request.method == 'DELETE':
-        print('언팔로우')
+        # print('언팔로우')
         relationship = get_object_or_404(Relationship, fan=fan, star=star)
+        # relationship = get_object_or_404(Relationship, pk=22)
         relationship.delete()
         data = {
             'delete': '언팔로우 처리되었습니다.'

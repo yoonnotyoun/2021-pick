@@ -34,7 +34,7 @@ export default {
   methods: {
     ...mapActions('accountStore', [
       'login',
-    ])
+    ]),
   }
 }
 </script>

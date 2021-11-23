@@ -4,7 +4,7 @@
       <span @click="setGroupFilterId('전체')">전체</span><br>
       <span v-for="(group, idx) in groups" :key="idx">
         <span @click="setGroupFilterId(group.id)">{{ group.name }}</span>
-        <button @click="deleteGroup(group.id)">삭제</button><br>
+        <button @click="deleteGroup(group.id)" v-if="group.name !== '기본'">삭제</button><br>
       </span>
     </ul>
   </div>
