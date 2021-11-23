@@ -1,30 +1,29 @@
 <template>
   <div>
-    <p>{{movies}}</p>
+    <div v-for="(movieListData, idx) in recommendedMovies"
+      :movieListData="movieListData"
+      :key="idx">{{ movieListData.recommended_name }}
+      <div class="movie-search-result row row-cols-3 row-cols-sm-6">
+        <movie-list-item v-for="(movie, idx) in movieListData.movies"
+          :movie="movie"
+          :key="idx"
+        ></movie-list-item>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
+import MovieListItem from './MovieListItem.vue'
 
 export default {
+  components: { MovieListItem },
   name: 'MovieList',
-  methods: {
-    ...mapActions('movieStore', [
-      'getMovieListRecommendation',
-    ])
-  },
   computed: {
     ...mapState('movieStore', [
-      'movies',
+      'recommendedMovies',
     ])
-  },
-  created: function () {
-    if (this.$store.getters.isLoggedIn) {
-      this.getMovieListRecommendation()
-    } else {
-      // 여기 random 으로 영화 가져오는거 필요한가
-    }
   }
 }
 </script>

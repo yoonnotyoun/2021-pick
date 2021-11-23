@@ -20,7 +20,7 @@ export default {
   props: {
     movie: {
       type: Object,
-    }
+    },
   },
   methods: {
     // ...mapMutations([
