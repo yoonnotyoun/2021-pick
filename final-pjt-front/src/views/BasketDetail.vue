@@ -1,7 +1,8 @@
 <template>
   <div>
     <p>{{ selectedBasketDetail }}</p>
-    <h2>아래부터는 comment</h2>
+    <h2>이 바스켓에서 이야기 나누는 공간</h2>
+    <!-- 버튼 -->
     <comment-list></comment-list>
   </div>
 </template>
@@ -26,9 +27,6 @@ export default {
       selectedBasketDetail: state => state.selectedBasketDetail
     })
   },
-  // created: function () {
-  //   this.getBasketDetail(this.selectedBasketDetail)
-  // }
 }
 </script>
 

@@ -4,7 +4,7 @@
     <p>스포일러 포함하기</p>
     <input type="checkbox" name="spoiler" v-model="spoiler">
     <input type="text" v-model.trim="content">
-    <button @click="createComment({ content, spoiler })">등록하기</button>
+    <button @click="createAndErase({ content, spoiler })">등록하기</button>
   </div>
 </template>
 
@@ -20,9 +20,14 @@ export default {
     }
   },
   methods: {
+    createAndErase: function ({ content, spoiler }) {
+      this.createComment({ content, spoiler })
+      this.content = ''
+      this.spoiler = false
+    },
     ...mapActions('basketStore', [
       'createComment',
-    ])
+    ]),
   },
 }
 </script>

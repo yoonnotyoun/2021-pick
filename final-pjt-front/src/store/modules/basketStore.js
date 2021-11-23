@@ -99,6 +99,7 @@ const basketStore = {
     getCommentList: function ({ state, commit, getters }) {
       const headers = getters.config
       const basket_id = state.selectedBasketDetail.id
+      // console.log(basket_id)
       axios({
         url: `${SERVER.URL}/api/v1/baskets/${basket_id}/comment/`,
         method: 'get',
@@ -111,9 +112,8 @@ const basketStore = {
         console.log(err)
       })
     },
-    createComment: function ({ state, getters }, { content, spoiler }) {
+    createComment: function ({ state, getters, dispatch }, { content, spoiler }) {
       const headers = getters.config
-      console.log(state.selectedBasketDetail)
       const basket_id = state.selectedBasketDetail.id
       const commentItem = {
         content,
@@ -127,14 +127,32 @@ const basketStore = {
           data: commentItem,
           headers,
         })
-        .then((res) => {
-          console.log(res)
+        .then(() => {
+          dispatch('getCommentList')
         })
         .catch((err) => {
           console.log(err)
         })
       }
-    }
+    },
+    deleteComment: function ({ getters, dispatch }, comment) {
+      const headers = getters.config
+      const comment_pk = comment.id
+      axios({
+        url: `${SERVER.URL}/api/v1/baskets/comment/${comment_pk}/`,
+        method: 'delete',
+        headers,
+      })
+      .then(() => {
+        dispatch('getCommentList')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    // setSpoilerFilter: function ({ commit }, ???) {
+    //   commit('SET_SPOILER_FILTER', ???)
+    // },
   },
 }
 export default basketStore
