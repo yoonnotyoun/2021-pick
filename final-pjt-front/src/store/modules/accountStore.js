@@ -12,6 +12,7 @@ const accountStore = {
     userId: '',
     profileInfo: '',
     tags: [],
+    followButtonName: '',
     selectedProfile: '',
     // 그룹
     groups: [],
@@ -55,9 +56,15 @@ const accountStore = {
     GET_TAGS: function (state, userData) {
       state.tags = userData.liked_baskets_tags
     },
+    // 팔로우
+    GET_FOLLOW_INFO: function (state, followButtonName) {
+      state.followButtonName = followButtonName
+    },
+    // 그룹
     SET_GROUPS: function (state, groups) {
       state.groups = groups
     },
+    // Relationship
     SET_RELATIONSHIP_LIST: function (state, relationshipList) {
       state.relationshipList = relationshipList
     },
@@ -116,27 +123,68 @@ const accountStore = {
         console.log(err)
       })
     },
-    getProfile: function ({ state, commit, getters }) {
+    getProfile: function ({ commit, getters, dispatch }, userId) {
       axios({
         method: 'get',
-        url: `${SERVER.URL}/api/v1/accounts/profile/${state.userId}/`,
+        url: `${SERVER.URL}/api/v1/accounts/profile/${userId}/`,
         headers: getters.config
       })
       .then((res) => {
         const userData = res.data
         commit('GET_PROFILE', userData)
+        dispatch('followButtonName', userData)
       })
       .catch((err) => {
         console.log(err)
       })
       axios({
         method: 'get',
-        url: `${SERVER.URL}/api/v1/accounts/liked_baskets_tags/${state.userId}/`,
+        url: `${SERVER.URL}/api/v1/accounts/liked_baskets_tags/${userId}/`,
         headers: getters.config
       })
       .then((res) => {
         const userData = res.data
         commit('GET_TAGS', userData)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    //팔로우
+    followButtonName: function ({ commit }, profileInfo) {
+      console.log('this.userId in profileInfo.fans', this.userId in profileInfo.fans)
+      console.log(this.userId)
+      console.log(profileInfo.fans)
+      if (this.userId in profileInfo.fans) {
+        commit('GET_FOLLOW_INFO', '언팔로우')
+      } else {
+        commit('GET_FOLLOW_INFO', '팔로우')
+      }
+    },
+    follow: function ({ dispatch, getters }, starId) {
+      axios({
+        method: 'post',
+        url: `${SERVER.URL}/api/v1/accounts/relationship/star/${starId}/`,
+        headers: getters.config
+      })
+      .then((res) => {
+        const userData = res.data
+        console.log('follow', userData)
+        dispatch('followButtonName', userData)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    unfollow: function ({ dispatch, getters }, starId) {
+      axios({
+        method: 'delete',
+        url: `${SERVER.URL}/api/v1/accounts/relationship/star/${starId}/`,
+        headers: getters.config
+      })
+      .then((res) => {
+        const userData = res.data
+        dispatch('followButtonName', userData)
       })
       .catch((err) => {
         console.log(err)

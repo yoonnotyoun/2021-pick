@@ -18,6 +18,6 @@ urlpatterns = [
     path('relationship/<relationship_pk>/group/<int:group_pk>/', views.relationship_update),
     # path('relationship/<relationship_pk>/star/<int:star_pk>/group/<int:group_pk>/', views.relationship_update),
     # 팔로우
-    path('relationship/star/<int:star_pk>/', views.relationship_create),
-    path('relationship/<relationship_pk>/', views.relationship_delete),
+    path('relationship/star/<int:star_pk>/', views.relationship_create_delete),
+    # path('relationship/<int:star_/', views.relationship_delete),
 ]

@@ -156,16 +156,17 @@ def relationship_update(request, relationship_pk, group_pk):
 
 
 # Relationship (C) - 팔로우('기본' 그룹으로 들어가게 처리)
-@api_view(['POST'])
+@api_view(['POST', 'DELETE'])
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
-def relationship_create(request, star_pk):
-    # fan = get_object_or_404(get_user_model(), pk=1)  # 테스트용
+def relationship_create_delete(request, star_pk):
     fan = request.user
     star = get_object_or_404(get_user_model(), pk=star_pk)
-    group = get_object_or_404(Group, user=fan, name='기본') # 기본 그룹
-
-    if fan != star:
+    if request.method == 'POST':
+        # fan = get_object_or_404(get_user_model(), pk=1)  # 테스트용
+        group = get_object_or_404(Group, user=fan, name='기본') # 기본 그룹
+        print('팔로우')
+        # if fan != star:
         serializer = RelationshipSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(
@@ -173,17 +174,25 @@ def relationship_create(request, star_pk):
                 star=star,
                 group=group,
             )
+            print()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+    elif request.method == 'DELETE':
+        print('언팔로우')
+        relationship = get_object_or_404(Relationship, fan=fan, star=star)
+        relationship.delete()
+        data = {
+            'delete': '언팔로우 처리되었습니다.'
+        }
+        return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 # Relationship (D) - 팔로우 취소
-@api_view(['DELETE'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def relationship_delete(request, relationship_pk):
-    relationship = get_object_or_404(Relationship, pk=relationship_pk)
-    relationship.delete()
-    data = {
-        'delete': '언팔로우 처리되었습니다.'
-    }
-    return Response(data, status=status.HTTP_204_NO_CONTENT)
+# @api_view(['DELETE'])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def relationship_delete(request, relationship_pk):
+#     relationship = get_object_or_404(Relationship, pk=relationship_pk)
+#     relationship.delete()
+#     data = {
+#         'delete': '언팔로우 처리되었습니다.'
+#     }
+#     return Response(data, status=status.HTTP_204_NO_CONTENT)

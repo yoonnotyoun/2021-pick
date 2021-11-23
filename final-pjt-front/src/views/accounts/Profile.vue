@@ -5,11 +5,17 @@
       <p>{{ profileInfo.username }}</p>
       <p>{{ profileInfo.nickname }}</p>
       <span v-for="(tag, idx) in tags" :key="idx">{{ tag }} </span>
-      <p>팔로워: {{ profileInfo.fans.length }}</p>
-      <p>팔로잉: {{ profileInfo.stars.length }}</p>
-      <p>{{ profileInfo.nickname }}님이 작성한 바스켓: {{ profileInfo.author_baskets }}</p>
-      <p>{{ profileInfo.nickname }}님이 좋아하는 바스켓: {{ profileInfo.like_basktets }}</p>
-      <p>{{ profileInfo.nickname }}님이 좋아하는 영화: {{ profileInfo.like_movies }}</p>
+      <br>
+      <span>팔로워: {{ profileInfo.fans.length }} / </span>
+      <span>팔로잉: {{ profileInfo.stars.length }}</span>
+      <!-- <button @click="follow({ profileInfo, followButtonName })" v-if="userId !== profileInfo.id">{{ followButtonName }}</button> -->
+      <button @click="followUnfollow">{{ followButtonName }}</button>
+      <div>{{ profileInfo.nickname }}님이 작성한 바스켓</div>
+      <ul v-for="(author_basket, idx) in profileInfo.author_baskets" :key="'author_baskets' + idx">{{ author_basket }}</ul>
+      <div>{{ profileInfo.nickname }}님이 좋아하는 바스켓</div>
+      <ul v-for="(like_basktet, idx) in profileInfo.like_basktets" :key="'like_basktet' + idx">{{ like_basktet }}</ul>
+      <div>{{ profileInfo.nickname }}님이 좋아하는 영화</div>
+      <ul v-for="(like_movie, idx) in profileInfo.like_movies" :key="'like_movie' + idx">{{ like_movie }}</ul>
     </header>
   </div>
 </template>
@@ -22,17 +28,29 @@ export default {
   name: 'Profile',
   methods: {
     ...mapActions('accountStore', [
-      'getProfile'
-    ])
+      'getProfile',
+      'follow',
+      'unfollow'
+    ]),
+    followUnfollow: function() {
+      if (this.followButtonName === '팔로우') {
+        console.log(this.profileInfo.id)
+        this.follow(this.profileInfo.id)
+      } else {
+        this.unfollow(this.profileInfo.id)
+      }
+    }
   },
   computed: {
     ...mapState('accountStore', [
       'profileInfo',
       'tags',
-    ])
+      'userId',
+      'followButtonName',
+    ]),
   },
   created: function () {
-    this.getProfile()
+    this.getProfile(this.userId)
   }
 }
 </script>
