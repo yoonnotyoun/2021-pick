@@ -13,7 +13,7 @@ class BasketListSerializer(serializers.ModelSerializer):
     class UserSerializer(serializers.ModelSerializer):
         class Meta:
             model = get_user_model()
-            fields = ('id', 'nickname', 'image',)
+            fields = ('id',)
 
     class BasketTagListSerializer(serializers.ModelSerializer):
 
@@ -43,7 +43,7 @@ class BasketSerializer(serializers.ModelSerializer):
     class UserSerializer(serializers.ModelSerializer):
         class Meta:
             model = get_user_model()
-            fields = ('id', 'nickname', 'image', 'fans',)
+            fields = ('id',)
 
     class MovieListSerializer(serializers.ModelSerializer):
         class Meta:

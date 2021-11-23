@@ -7,10 +7,15 @@ import axios from 'axios'
 const basketStore = {
   namespaced: true,
   state: () => ({
+    userId: '',
     authToken: localStorage.getItem('jwt'),
     searchedBaskets: [],
     recommendedBaskets: [],
+    // 디테일
     selectedBasketDetail: '',
+    // 좋아요
+    likeButtonName: '',
+    likeCnt: '',
     // COMMENT
     comments: [],
     noSpoilerComments: [],
@@ -27,6 +32,11 @@ const basketStore = {
     },
   },
   mutations: {
+    // 프로필
+    SET_USER_ID: function (state, userId) {
+      console.log('basket userId', userId)
+      state.userId = userId
+    },
     SET_SEARCHED_BASKET_LIST: function (state, baskets) {
       state.searchedBaskets = baskets
       state.recommendedBaskets = []
@@ -39,8 +49,16 @@ const basketStore = {
       })
       state.searchedBaskets = []
     },
+    // 디테일
     SET_BASKET_DETAIL: function (state, basketDetail) {
       state.selectedBasketDetail = basketDetail
+    },
+    // 좋아요
+    GET_LIKE_INFO: function (state, likeButtonName) {
+      state.likeButtonName = likeButtonName
+    },
+    GET_LIKE_CNT: function (state, likeCnt) {
+      state.likeCnt = likeCnt
     },
     RESET_BASKETS: function (state, type) {
       if (type === 'recommended') {
@@ -65,6 +83,10 @@ const basketStore = {
     },
   },
   actions: {
+    // 프로필
+    getBasketUserId: function ({ commit }, userId) {
+      commit('SET_USER_ID', userId)
+    },
     getBasketSearchResult: function ({ commit, getters }, event) {
       const headers = getters.config
       const query = event.target.value
@@ -75,22 +97,6 @@ const basketStore = {
       })
       .then((res) => {
         commit('SET_SEARCHED_BASKET_LIST', res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
-    getBasketDetail: function ({ commit, getters }, selectedBasket) {
-      const headers = getters.config
-      const basket_pk = selectedBasket.id
-      axios({
-        method: 'get',
-        url: `${SERVER.URL}/api/v1/baskets/${basket_pk}/`,
-        headers,
-      })
-      .then((res) => {
-        commit('SET_BASKET_DETAIL', res.data)
-        router.push({ name: 'BasketDetail' })
       })
       .catch((err) => {
         console.log(err)
@@ -114,6 +120,53 @@ const basketStore = {
         console.log(err)
       })
     },
+    // 디테일
+    getBasketDetail: function ({ commit, getters }, selectedBasket) {
+      const headers = getters.config
+      const basket_pk = selectedBasket.id
+      axios({
+        method: 'get',
+        url: `${SERVER.URL}/api/v1/baskets/${basket_pk}/`,
+        headers,
+      })
+      .then((res) => {
+        commit('SET_BASKET_DETAIL', res.data)
+        commit('GET_LIKE_CNT', res.data.like_users.length)
+        router.push({ name: 'BasketDetail' })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    // 좋아요
+    getLikeButtonName: function ({ state, commit }) {
+      if (this.userId in state.selectedBasketDetail.like_users) {
+        commit('GET_LIKE_INFO', 'unlike')
+      } else {
+        commit('GET_LIKE_INFO', 'like')
+      }
+    },
+    likeUnlike: function ({ state, commit, dispatch, getters }, basketId) {
+      axios({
+        method: 'post',
+        url: `${SERVER.URL}/api/v1/baskets/${basketId}/like/`,
+        headers: getters.config
+      })
+      .then((res) => {
+        console.log('likeUnlike', res)
+        dispatch('getBasketDetail', state.selectedBasketDetail)
+        if (res.data.liked) {
+          commit('GET_LIKE_INFO', 'unlike')
+        } else {
+          commit('GET_LIKE_INFO', 'like')
+        }
+        commit('GET_LIKE_CNT', res.data.cnt_likes)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    // 초기화
     resetBaskets: function ({ commit }, type) {
       commit('RESET_BASKETS', type)
     },
