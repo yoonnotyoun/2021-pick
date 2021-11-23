@@ -2,6 +2,7 @@ import SERVER from '@/api/drf.js'
 import axios from 'axios'
 
 const accountStore = {
+  namespaced: true,
   state: {
     authToken: localStorage.getItem('jwt'),
     userInfo: {},

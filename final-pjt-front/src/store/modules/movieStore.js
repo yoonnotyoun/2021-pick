@@ -1,66 +1,55 @@
 import SERVER from '@/api/drf.js'
 import router from '@/router/index.js'
 import axios from 'axios'
-import _ from 'lodash'
+// import _ from 'lodash'
 
 
 const movieStore = {
+  namespaced: true,
   state: {
     authToken: localStorage.getItem('jwt'),
-    movies: [],
+    searchedMovies: [],
+    recommendedMovies: [],
     selectedMovieDetail: '',
-    userInput: '',
   },
   getters: {
     isLoggedIn: function (state) {
-      console.log(state.authToken ? true: false)
       return state.authToken ? true: false
     },
     config: function (state) {
-      console.log(state.authToken ? true: false)
       return {
         Authorization: `JWT ${state.authToken}`
       }
     },
   },
   mutations: {
-    SET_MOVIE_LIST: function (state, movies) {
-      state.movies = movies
+    SET_SEARCHED_MOVIE_LIST: function (state, movies) {
+      state.searchedMovies = movies
+      state.recommendedMovies = []
     },
-    SET_INPUT_VALUE: function (state, inputData) {
-      state.userInput = inputData
+    SET_RECOMMENDED_MOVIE_LIST: function (state, recommendedData) {
+      state.recommendedMovies.push({
+        recommended_name: recommendedData.pop(6).recommended_name,
+        movies: recommendedData
+      })
+      state.searchedMovies = []
+      // console.log(state.recommendedMovies)
     },
     SET_MOVIE_DETAIL: function (state, MovieDetail) {
       state.selectedMovieDetail = MovieDetail
     },
   },
   actions: {
-    getMovieSearchResult: function ({ commit, state, getters }, event) {
-      commit('SET_INPUT_VALUE', event.target.value)
+    getMovieSearchResult: function ({ commit, getters }, event) {
       const headers = getters.config
-      const query = state.userInput
+      const query = event.target.value
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/movies/search/${query}/`,
         headers,
       })
       .then((res) => {
-        commit('SET_MOVIE_LIST', res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
-    getMovieListRecommendation: function ({ commit, getters }) {
-      const headers = getters.config
-      const recommend_method = _.sample(['myinfo', 'genre', 'baskets', 'friends']) // 여기서 랜덤으로 골라서 넘겨주도록
-      axios({
-        method: 'get',
-        url: `${SERVER.URL}/api/v1/movies/recommend/${recommend_method}`,
-        headers,
-      })
-      .then((res) => {
-        commit('SET_MOVIE_LIST', res.data)
+        commit('SET_SEARCHED_MOVIE_LIST', res.data)
       })
       .catch((err) => {
         console.log(err)
@@ -77,6 +66,24 @@ const movieStore = {
       .then((res) => {
         commit('SET_MOVIE_DETAIL', res.data)
         router.push({ name: 'MovieDetail' })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    getMovieRecommendation: function ({ commit, getters }) {
+      const headers = getters.config
+      // const recommend_method = _.sample(['myinfo', 'genre', 'baskets', 'friends'])
+      const recommend_method = 'genre'
+      // 리스트 하나 만들어서 중복방지 체크용으로 쓰기 (for문)
+      axios({
+        method: 'get',
+        url: `${SERVER.URL}/api/v1/movies/recommend/${recommend_method}`,
+        headers,
+      })
+      .then((res) => {
+        console.log(recommend_method)
+        commit('SET_RECOMMENDED_MOVIE_LIST', res.data)
       })
       .catch((err) => {
         console.log(err)

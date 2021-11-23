@@ -2,7 +2,7 @@
   <div>
     <div class="movie-search-result row row-cols-3 row-cols-sm-6">
       <movie-list-item
-        v-for="(movie, idx) in movies"
+        v-for="(movie, idx) in searchedMovies"
         :movie="movie"
         :key="idx"
       ></movie-list-item>
@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     ...mapState('movieStore', [
-      'movies',
+      'searchedMovies',
     ])
   },
 }
