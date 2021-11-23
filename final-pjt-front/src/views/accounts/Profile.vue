@@ -18,7 +18,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Profile',
   methods: {
-    ...mapActions([
+    ...mapActions('accountStore', [
       'getProfile'
     ])
   },
