@@ -88,7 +88,9 @@ class RelationshipListSerializer(serializers.ModelSerializer):
 
 class RelationshipSerializer(serializers.ModelSerializer):
     
+    # relationship_ids = serializers.ListField(write_only=True)
+
     class Meta:
         model = Relationship
-        fields = '__all__'
+        fields = ('id', 'fan', 'star', 'group',)
         read_only_fields = ('fan', 'star', 'group',)

@@ -254,11 +254,12 @@ def tmdb_movie(request):
                 # genre = Genre.objects.get(name=genre_name.get('name')) ### create로 하면 중복데이터 저장됨
                 genre.movies.add(movie)
             # 배우 처리
-            for cast in credit_result.get('cast'):
-                if cast.get('known_for_department') == 'Acting':
-                    if Actor.objects.filter(name=cast.get('name')).exists():
-                        actor = get_object_or_404(Actor, name=cast.get('name'))
+            casts = credit_result.get('cast')
+            for i in range(6):
+                if casts[i].get('known_for_department') == 'Acting':
+                    if Actor.objects.filter(name=casts[i].get('name')).exists():
+                        actor = get_object_or_404(Actor, name=casts[i].get('name'))
                     else:
-                        actor = Actor.objects.create(name=cast.get('name'))
+                        actor = Actor.objects.create(name=casts[i].get('name'))
                     movie.actors.add(actor)
     return Response({ 'db': '가져왔습니다.' })

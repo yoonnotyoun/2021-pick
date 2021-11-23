@@ -51,8 +51,8 @@ def login(request):
 
 # profile에서 유저와 관련된 데이터 다 가져와야됨
 @api_view(['GET', 'PUT', 'DELETE'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def profile(request, user_pk):
     user = get_object_or_404(get_user_model(), pk=user_pk)
 
@@ -88,8 +88,8 @@ def liked_baskets_tags(request, user_pk):
 
 # Group (RC)
 @api_view(['GET', 'POST'])
-# @authentication_classes([JSONWebTokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def group_list_create(request):
     if request.method == 'GET':
         groups = Group.objects.filter(user=1) # 테스트용
@@ -136,11 +136,13 @@ def relationship_list(request):
 @api_view(['PUT'])
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
-def relationship_update(request, relationship_pk, star_pk, group_pk):
+def relationship_update(request, relationship_pk, group_pk):
     relationship = get_object_or_404(Relationship, pk=relationship_pk)
+    star = relationship.star
+    
     # fan = get_object_or_404(get_user_model(), pk=1) # 테스트용
     fan = get_object_or_404(get_user_model(), pk=request.user.pk)
-    star = get_object_or_404(get_user_model(), pk=star_pk)
+    # star = get_object_or_404(get_user_model(), pk=star_pk)
 
     group = get_object_or_404(Group, pk=group_pk)
     serializer = RelationshipSerializer(instance=relationship, data=request.data)

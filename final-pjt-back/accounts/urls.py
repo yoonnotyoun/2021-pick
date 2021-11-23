@@ -15,7 +15,8 @@ urlpatterns = [
     path('group/', views.group_list_create),
     path('group/<int:group_pk>/', views.group_delete),
     path('relationship/', views.relationship_list),
-    path('relationship/<relationship_pk>/star/<int:star_pk>/group/<int:group_pk>/', views.relationship_update),
+    path('relationship/<relationship_pk>/group/<int:group_pk>/', views.relationship_update),
+    # path('relationship/<relationship_pk>/star/<int:star_pk>/group/<int:group_pk>/', views.relationship_update),
     # 팔로우
     path('relationship/star/<int:star_pk>/', views.relationship_create),
     path('relationship/<relationship_pk>/', views.relationship_delete),

@@ -1,10 +1,16 @@
 <template>
   <div>
     <ul>
-      <li v-for="(relationship, idx) in relationshipList" :key="idx">
-        <input type="checkbox">
-        <span>{{ relationship.star.username }}</span>
-        <span>{{ relationship.star.nickname }}</span>
+      <select v-model="selectedGroup" class="d-inline">
+        <option disabled value="">선택</option>
+        <option v-for="(group, idx) in groups" :key="idx"
+        :value="group.id">{{ group.name }}</option>
+      </select>
+      <button @click="changeRelationshipGroup({ selectedRelationships, selectedGroup })">그룹 이동</button>
+      <li v-for="(relationship, idx) in filterRelationshipList(relationshipList, groupFilterId)" :key="idx">
+        <input type="checkbox" :value="relationship.id" v-model="selectedRelationships">
+        <span> {{ relationship.star.username }} </span>
+        <span>{{ relationship.star.nickname }} </span>
         <span>{{ relationship.group.name }}</span>
       </li>
     </ul>
@@ -16,15 +22,51 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'groupList',
+  data: function () {
+    return {
+      selectedRelationships: [],
+      selectedGroup: '',
+    }
+  },
   methods: {
     ...mapActions('accountStore', [
+      'changeRelationshipGroup',
     ]),
+    filterRelationshipList: function (relationshipList, groupFilterId) {
+      return relationshipList.filter(relationship => {
+        console.log(relationship.id)
+        console.log(relationship.id === this.groupFilterId)
+        if (groupFilterId === '전체') {
+          return relationship
+        } else {
+          return relationship.group.id === this.groupFilterId
+        }
+      })
+    }
   },
   computed: {
     ...mapState('accountStore', {
       relationshipList: state => state.relationshipList,
+      groupFilterId: state => state.groupFilterId,
+      groups: state => state.groups,
     })
   },
+  // watch: {
+  //   this.groupFilterId: function () {
+
+  //   }
+  // }
+  // filters: {
+  //   filterRelationshipList: function (relationshipList, groupFilterId) {
+  //     return relationshipList.filter(relationship => {
+  //       if (groupFilterId === '전체') {
+  //         return relationship
+  //       } else {
+  //         return relationship.id === groupFilterId
+  //       }
+  //     })
+  //   }
+  // }
   // created: function () {
   //   if (this.$store.getters.isLoggedIn) {
   //     this.getGroups()

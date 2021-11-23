@@ -1,10 +1,11 @@
 <template>
   <div>
     <ul>
-      <li v-for="(group, idx) in groups" :key="idx">
-        <span @click="filterGroupRelationshipList(group.name)">{{ group.name }}</span>
-        <button @click="deleteGroup(group)">X</button>
-      </li>
+      <span @click="setGroupFilterId('전체')">전체</span><br>
+      <span v-for="(group, idx) in groups" :key="idx">
+        <span @click="setGroupFilterId(group.id)">{{ group.name }}</span>
+        <button @click="deleteGroup(group.id)">삭제</button><br>
+      </span>
     </ul>
   </div>
 </template>
@@ -14,11 +15,17 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'groupList',
+  // data: function() {
+  //   return {
+
+  //   }
+  // },
   methods: {
     ...mapActions('accountStore', [
       'getGroups',
       'deleteGroup',
       'getGroupRelationshipList',
+      'setGroupFilterId',
     ]),
   },
   computed: {
@@ -33,8 +40,6 @@ export default {
     } else {
       this.$router.push({ name: 'Login' })
     }
-    // console.log(this.$store.state.accoutStore.groups)
-    console.log(this.groups)
   },
 }
 </script>
