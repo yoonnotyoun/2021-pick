@@ -88,12 +88,12 @@ def liked_baskets_tags(request, user_pk):
 
 # Group (RC)
 @api_view(['GET', 'POST'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
 def group_list_create(request):
     if request.method == 'GET':
-        # groups = Group.objects.filter(user=1) 테스트용
-        groups = Group.objects.filter(user=request.user.pk)
+        groups = Group.objects.filter(user=1) # 테스트용
+        # groups = Group.objects.filter(user=request.user.pk)
         serializer = GroupListSerialzier(groups, many=True)
         return Response(serializer.data)
     
@@ -121,12 +121,12 @@ def group_delete(request, group_pk):
     return Response(data, status=status.HTTP_204_NO_CONTENT)
 
 
-# Relationship (R) - 그룹 조회
+# Relationship (R) - 관계 조회
 @api_view(['GET'])
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def relationship_list(request):
-    # relationships = Relationship.objects.filter(fan=1) 테스트용
+    # relationships = Relationship.objects.filter(fan=1) # 테스트용
     relationships = Relationship.objects.filter(fan=request.user.pk)
     serializer = RelationshipListSerializer(relationships, many=True)
     return Response(serializer.data)
@@ -138,7 +138,7 @@ def relationship_list(request):
 @permission_classes([IsAuthenticated])
 def relationship_update(request, relationship_pk, star_pk, group_pk):
     relationship = get_object_or_404(Relationship, pk=relationship_pk)
-    # fan = get_object_or_404(get_user_model(), pk=1) 테스트용
+    # fan = get_object_or_404(get_user_model(), pk=1) # 테스트용
     fan = get_object_or_404(get_user_model(), pk=request.user.pk)
     star = get_object_or_404(get_user_model(), pk=star_pk)
 
@@ -158,7 +158,7 @@ def relationship_update(request, relationship_pk, star_pk, group_pk):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def relationship_create(request, star_pk):
-    # fan = get_object_or_404(get_user_model(), pk=3) 테스트용
+    # fan = get_object_or_404(get_user_model(), pk=1)  # 테스트용
     fan = request.user
     star = get_object_or_404(get_user_model(), pk=star_pk)
     group = get_object_or_404(Group, user=fan, name='기본') # 기본 그룹

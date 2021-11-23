@@ -7,7 +7,6 @@ import axios from 'axios'
 const movieStore = {
   namespaced: true,
   state: () => ({
-    // 로그인
     authToken: localStorage.getItem('jwt'),
     // 검색
     searchedMovies: [],

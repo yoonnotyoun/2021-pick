@@ -32,22 +32,23 @@ export default {
   },
   computed: {
     ...mapState('movieStore', {
-      searchedMovies: state => state.searchedMovies,
       recommendedMovies: state => state.recommendedMovies,
+      searchedMovies: state => state.searchedMovies,
       // 'searchedMovies',
       // 'recommendedMovies',
       // 'selectedMovie',
       // 'isModalViewed',
     })
   },
-  created: 
-  function () {
-    console.log(this.recommendedMovies)
-    // if (this.$store.getters.isLoggedIn) {
-    //   while (this.recommendedMovies.length < 5) {
-    //     this.getMovieRecommendation()
-    //   }
-    // }
+  created: function () { // 반복실행 setInterval로 해야하나 고민중... 시간 말고 횟수로 멈추는 법 있을 거 같은데
+  console.log(this.recommendedMovies)
+    if (this.$store.getters.isLoggedIn) {
+      this.getMovieRecommendation()
+      this.getMovieRecommendation()
+      this.getMovieRecommendation()
+      this.getMovieRecommendation()
+      this.getMovieRecommendation()
+    }
   }
 }
 </script>
