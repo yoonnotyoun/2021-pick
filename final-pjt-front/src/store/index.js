@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-import axios from 'axios'
-import SERVER from '@/api/drf.js'
+// import axios from 'axios'
+// import SERVER from '@/api/drf.js'
 
 
 Vue.use(Vuex)
@@ -20,7 +20,6 @@ const store = new Vuex.Store({
   },
   state: {
     authToken: localStorage.getItem('jwt'),
-    userId: '',
   },
   getters: {
     isLoggedIn: function (state) {
@@ -33,27 +32,8 @@ const store = new Vuex.Store({
     },
   },
   mutations: {
-    // 프로필
-    SET_USER_ID: function (state, userId) {
-      state.userId = userId
-      console.log(state.userId)
-    },
   },
   actions: {
-    // 프로필
-    getUserId: function ({ commit, getters }) {
-      axios({
-        url: SERVER.URL + '/api/v1/accounts/login/',
-        method: 'get',
-        headers: getters.config
-      })
-      .then((res) => {
-        commit('SET_USER_ID', res.data.userId)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
   },
   plugins: [createPersistedState()]
 })

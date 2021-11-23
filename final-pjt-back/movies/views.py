@@ -81,7 +81,8 @@ def movie_like(request, movie_pk):
         'liked': liked,
         'cnt_likes': movie.like_users.count(),
     }
-    return Response(data, status=status.HTTP_204_NO_CONTENT)
+    print(data)
+    return Response(data, status=status.HTTP_200_OK)
 
 
 # 추천: 연령, 성별

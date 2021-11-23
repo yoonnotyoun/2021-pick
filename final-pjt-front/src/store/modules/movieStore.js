@@ -7,6 +7,7 @@ import axios from 'axios'
 const movieStore = {
   namespaced: true,
   state: () => ({
+    userId: '',
     authToken: localStorage.getItem('jwt'),
     // 리스트 검색, 추천
     searchedMovies: [],
@@ -27,6 +28,18 @@ const movieStore = {
     },
   },
   mutations: {
+    // 프로필
+    SET_MOVIE_USER_ID: function (state, userId) {
+      state.userId = userId
+    },
+    // 초기화
+    RESET_MOVIES: function (state, type) {
+      if (type === 'recommended') {
+        state.recommendedMovies = []
+      } if (type === 'searched') {
+        state.searchedMovies = []
+      }
+    },
     // 리스트 검색, 추천
     SET_SEARCHED_MOVIE_LIST: function (state, movies) {
       state.searchedMovies = movies
@@ -52,6 +65,24 @@ const movieStore = {
     },
   },
   actions: {
+    // 프로필
+    getMovieUserId: function ({ commit, getters }) {
+      axios({
+        url: SERVER.URL + '/api/v1/accounts/login/',
+        method: 'get',
+        headers: getters.config
+      })
+      .then((res) => {
+        commit('SET_MOVIE_USER_ID', res.data.userId)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    // 초기화
+    resetMovies: function ({ commit }, type) {
+      commit('RESET_MOVIES', type)
+    },
     // 리스트 검색, 추천
     getMovieSearchResult: function ({ commit, getters }, event) {
       const headers = getters.config
@@ -88,6 +119,7 @@ const movieStore = {
     },
     // 디테일, 좋아요
     getMovieDetail: function ({ commit, getters }, selectedMovie) {
+      console.log(selectedMovie.id)
       const headers = getters.config
       const movie_pk = selectedMovie.id
       axios({
@@ -117,7 +149,8 @@ const movieStore = {
         headers: getters.config
       })
       .then((res) => {
-        dispatch('getMovieDetail', state.selectedMovie)
+        console.log(res)
+        dispatch('getMovieDetail', state.selectedMovieDetail)
         if (res.data.liked) {
           commit('GET_LIKE_INFO', 'unlike')
         } else {

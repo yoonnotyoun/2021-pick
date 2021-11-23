@@ -11,10 +11,10 @@
         type="password" 
         id="password" 
         v-model="credentials.password"
-        @keypress.enter="login(credentials)"
+        @keypress.enter="startLogin"
       >
     </div>
-    <button @click="login(credentials)">로그인</button>
+    <button @click="startLogin">로그인</button>
   </div>
 </template>
 
@@ -35,6 +35,13 @@ export default {
     ...mapActions('accountStore', [
       'login',
     ]),
+    ...mapActions('movieStore', [
+      'getMovieUserId',
+    ]),
+    startLogin: function() {
+      this.login(this.credentials)
+      this.getMovieUserId()
+    }
   }
 }
 </script>
