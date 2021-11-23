@@ -13,6 +13,8 @@ const basketStore = {
     selectedBasketDetail: '',
     // COMMENT
     comments: [],
+    noSpoilerComments: [],
+    showSpoilerOption: false,
   }),
   getters: {
     isLoggedIn: function (state) {
@@ -43,6 +45,16 @@ const basketStore = {
     // COMMENT
     SET_COMMENTS: function (state, comments) {
       state.comments = comments
+      const noSpoilerCommentList = []
+      for (let comment of comments) {
+        if (!comment.spoiler) {
+          noSpoilerCommentList.push(comment)
+        }
+      }
+      state.noSpoilerComments = noSpoilerCommentList
+    },
+    SET_SPOILER_FILTER: function (state, showSpoiler) {
+      state.showSpoilerOption = showSpoiler
     },
   },
   actions: {
@@ -150,9 +162,9 @@ const basketStore = {
         console.log(err)
       })
     },
-    // setSpoilerFilter: function ({ commit }, ???) {
-    //   commit('SET_SPOILER_FILTER', ???)
-    // },
+    setSpoilerFilter: function ({ commit }, showSpoiler) {
+      commit('SET_SPOILER_FILTER', showSpoiler)
+    },
   },
 }
 export default basketStore
