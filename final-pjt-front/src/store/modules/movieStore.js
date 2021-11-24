@@ -9,7 +9,10 @@ const movieStore = {
   state: () => ({
     // userId: '',
     authToken: localStorage.getItem('jwt'),
-    pickedMovies: [],
+    pickedMovie: '',
+    pickedMovieList: [],
+    pickedMovieIdList: [],
+    pickedMovieTitleList: [],
     // 리스트 검색, 추천
     searchedMovies: [],
     recommendedMovies: [],
@@ -36,7 +39,11 @@ const movieStore = {
       } if (type === 'searched') {
         state.searchedMovies = []
       } if (type === 'picked') {
-        state.pickedMovies = []
+        state.pickedMovieList = []
+      } if (type === 'pickedId') {
+        state.pickedMovieIdList = []
+      } if (type === 'pickedTitle') {
+        state.pickedMovieTitleList = []
       } if (type === 'method') {
         state.recommendedMethod = []
       } if (type === 'tail') {
@@ -71,16 +78,23 @@ const movieStore = {
     },
     ADD_TO_PICK: function (state) {
       const movie = state.selectedMovieDetail
-      let checkDuplication = state.pickedMovies.findIndex(item => item.id === movie.id)
+      // let checkDuplication = state.pickedMovieList.findIndex(item => item.id === movie.id)
+      let checkDuplication = state.pickedMovieIdList.findIndex(item => item === movie.id)
       // if (!(movie.id in state.pickedMovies)) {
       console.log(checkDuplication)
       if (checkDuplication === -1) {
         // console.log(movie)
-        state.pickedMovies.push(movie)
+        state.pickedMovie = movie
+        state.pickedMovieList.push(movie)
+        state.pickedMovieIdList.push(movie.id)
+        state.pickedMovieTitleList.push(movie.title)
         // console.log(state.pickedMovies)
+      } else {
+        state.pickedMovieList.pop(movie)
+        state.pickedMovieIdList.pop(movie.id)
+        state.pickedMovieTitleList.pop(movie.title)
       }
       state.selectedMovieDetail = ''
-      // state.pickedMovies = []
     },
     // 디테일, 좋아요
     SET_MOVIE_DETAIL: function (state, MovieDetail) {
@@ -161,7 +175,7 @@ const movieStore = {
         // }
         console.log(location)
         if (location === 'basketform') {
-          commit('ADD_TO_PICK') // like 해버리기?
+          commit('ADD_TO_PICK')
         }
       })
       .catch((err) => {

@@ -100,7 +100,6 @@ const accountStore = {
       .then((res) => {
         const userData = res.data
         commit('GET_TAGS', userData)
-        router.push({ name: 'Profile' })
       })
       .catch((err) => {
         console.log(err)

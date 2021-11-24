@@ -1,6 +1,11 @@
 <template>
-  <div>
-    <h2>그룹관리</h2>
+  <div class="container">
+    <div>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >{{ userInfo[userId].nickname }}</p>
+      <p class="d-inline-block ms-1">님의 팔로잉 그룹 관리</p>
+    </div>
     <create-group></create-group>
     <group-list></group-list>
     <relationship-list></relationship-list>
@@ -12,9 +17,17 @@ import CreateGroup from '../../components/Account/CreateGroup.vue'
 import GroupList from '../../components/Account/GroupList.vue'
 import RelationshipList from '../../components/Account/RelationshipList.vue'
 
+import { mapState } from 'vuex'
+
 export default {
   name: 'Group',
   components: { GroupList, RelationshipList, CreateGroup },
+  computed: {
+    ...mapState({
+      userId: state => state.userId,
+      userInfo: state => state.userInfo,
+    })
+  }
 }
 </script>
 

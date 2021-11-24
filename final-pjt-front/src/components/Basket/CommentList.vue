@@ -47,10 +47,6 @@
 import CommentForm from '@/components/Basket/CommentForm.vue'
 
 import { mapState, mapActions } from 'vuex'
-import Vue from 'vue'
-import vueMoment from 'vue-moment'
-
-Vue.use(vueMoment)
 
 export default {
   name: 'CommentList',
