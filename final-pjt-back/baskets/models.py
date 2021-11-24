@@ -13,7 +13,7 @@ class Basket(models.Model):
     public = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    image = models.ImageField(default='static/nongdam3.jpg')
+    image = models.TextField()
 
     def __str__(self):
         return self.title

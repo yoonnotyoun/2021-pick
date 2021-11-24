@@ -71,9 +71,8 @@ export default {
         title: '',
         explanation: '',
         basket_tags_names: [],
-        public: true,
+        public: '',
         groups_ids: [],
-        // image: '',
         movies_ids: [],
       }
     }

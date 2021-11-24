@@ -22,8 +22,14 @@ class BasketListSerializer(serializers.ModelSerializer):
             model = BasketTag
             fields = ('id', 'name', 'baskets',)
 
+    class MovieListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Movie # 두번째 에러 models
+            fields = ('poster_path',)
+
     like_users = UserSerializer(many=True, required=False, read_only=True)
     basket_tags = BasketTagListSerializer(many=True, required=False, read_only=True)
+    movies = MovieListSerializer(many=True, required=False, read_only=True)
 
     class Meta:
         model = Basket
@@ -49,7 +55,7 @@ class BasketSerializer(serializers.ModelSerializer):
     class MovieListSerializer(serializers.ModelSerializer):
         class Meta:
             model = Movie # 두번째 에러 models
-            fields = ('id', 'title', 'release_date',)
+            fields = ('id', 'title', 'release_date', 'poster_path',)
 
     basket_tags = BasketTagListSerializer(many=True, required=False, read_only=True) # 역참조
     like_users = UserSerializer(many=True, required=False, read_only=True)
@@ -64,7 +70,7 @@ class BasketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Basket
         fields = (
-            'id', 'image', 'public', 'title', 'explanation', 'movies', 'created_at', 'updated_at',
+            'id', 'public', 'title', 'explanation', 'movies', 'created_at', 'updated_at',
             'author', 'like_users', 'participants', 'basket_tags',
             'basket_tags_names', 'groups_ids', 'movies_ids',
         )

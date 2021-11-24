@@ -228,7 +228,7 @@ const basketStore = {
     setSpoilerFilter: function ({ commit }, showSpoiler) {
       commit('SET_SPOILER_FILTER', showSpoiler)
     },
-    // 바스켓 CUD
+    // 바스켓 CD
     createBasket: function ({ getters, dispatch }, basketInfo) {
       const headers = getters.config
       console.log(basketInfo)
@@ -255,7 +255,7 @@ const basketStore = {
       })
       .then(() => {
         alert('해당 바스켓이 삭제되었습니다.')
-        
+        router.push({ name: 'Main' })
       })
       .catch((err) => {
         console.log(err)

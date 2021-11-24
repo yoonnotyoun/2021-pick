@@ -1,5 +1,16 @@
 <template>
-  <div>
+  <div class="container">
+    <div class="card border-light" style="max-width: 400px;">
+      <div v-if="selectedBasketDetail.movies.length > 3">
+        <div class="container">
+          <div class="row row-cols-2 m-0 p-0">
+            <div class="imgContainer2 col m-0 p-0" v-for="(movie, idx) in selectedBasketDetail.movies.slice(0,4)" :key="idx">
+              <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="poster" class="image">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <p>{{ selectedBasketDetail }}</p>
     <p>좋아요 개수: {{ likeCnt }}</p>
     <button @click="likeUnlike(selectedBasketDetail.id)">{{ likeButtonName }}</button>
@@ -55,5 +66,14 @@ export default {
 </script>
 
 <style>
-
+.imgContainer2 {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+.imgContainer2 > img {
+  width: 100%;
+  object-fit: fill;
+  /* height: 200px; */
+}
 </style>

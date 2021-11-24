@@ -1,11 +1,13 @@
 <template>
   <div>
-    <p>고른 영화: {{ pickedMovies }}</p>
+    <!-- <p>고른 영화: {{ pickedMovies }}</p>
     <b-button v-b-modal.modal-xl variant="primary">검색하기</b-button>
     <b-modal id="modal-xl" size="xl" title="p!ck movies">
       <movie-search-bar></movie-search-bar>
       <movie-search-result></movie-search-result>
-    </b-modal>
+    </b-modal> -->
+    <movie-search-bar></movie-search-bar>
+    <movie-search-result></movie-search-result>
   </div>
 </template>
 
