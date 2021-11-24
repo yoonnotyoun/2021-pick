@@ -1,20 +1,23 @@
 <template>
   <div>
-    <h1>Login</h1>
-    <div>
-      <label for="username">사용자 이름: </label>
-      <input type="text" id="username" v-model="credentials.username">
+    <div class="container">
+      <h1>Login</h1>
+      <div>
+        <label for="username">사용자 이름: </label>
+        <input type="text" id="username" v-model="credentials.username">
+      </div>
+      <div>
+        <label for="password">비밀번호: </label>
+        <input 
+          type="password" 
+          id="password" 
+          v-model="credentials.password"
+          @keypress.enter="login(credentials)"
+        >
+      </div>
+      <b-button class="action-button" @click="login(credentials)">로그인</b-button>
     </div>
-    <div>
-      <label for="password">비밀번호: </label>
-      <input 
-        type="password" 
-        id="password" 
-        v-model="credentials.password"
-        @keypress.enter="login(credentials)"
-      >
-    </div>
-    <b-button class="action-button" @click="login(credentials)">로그인</b-button>
+    <p><router-link :to="{ name: 'Signup' }">회원가입</router-link></p>
   </div>
 </template>
 

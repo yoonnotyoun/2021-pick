@@ -49,10 +49,17 @@ const movieStore = {
       state.recommendedMovies = []
     },
     SET_RECOMMENDED_MOVIE_LIST: function (state, recommendedData) {
-      state.recommendedMovies.push({
-        recommended_name: recommendedData.pop(6).recommended_name,
-        movies: recommendedData
-      })
+      if (recommendedData.length === 7) {
+        state.recommendedMovies.push({
+          recommended_name: recommendedData.pop(6).recommended_name,
+          movies: recommendedData
+        })
+      } else {
+        state.recommendedMovies.push({
+          recommended_name: '당신 또래의 같은 성별',
+          movies: recommendedData
+        })
+      }
       state.searchedMovies = []
       // console.log(state.recommendedMovies)
     },
@@ -112,7 +119,7 @@ const movieStore = {
       const recommend_method = _.sample(['myinfo', 'genre', 'baskets', 'friends'])
       // const recommend_method = 'genre'
       const recommend_tail = {
-        'myinfo': '당신과 연령, 성별이 비슷한 사용자들이 p!ck한 영화',
+        'myinfo': '사용자들이 p!ck한 영화',
         'genre': '장르의 영화',
         'baskets': '바스켓을 포함해 당신이 p!ck한 바스켓의 영화',
         'friends': '님이 p!ck한 바스켓',
