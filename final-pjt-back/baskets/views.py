@@ -39,6 +39,27 @@ def basket_create(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+# Basket (R) - 바스켓 리스트(유저)
+@api_view(['GET'])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
+def user_basket_list(request, user_pk):
+    baskets = Basket.objects.filter(author=1)
+    # baskets = Basket.objects.filter(author=user_pk)
+    serializer = BasketListSerializer(baskets, many=True)
+    return Response(serializer.data)
+
+
+# Basket (R) - 바스켓 리스트(영화)
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def movie_basket_list(request, movie_pk):
+    baskets = Basket.objects.filter(movies__in=movie_pk)
+    serializer = BasketListSerializer(baskets, many=True)
+    return Response(serializer.data)
+
+
 # Basket (RUD) - 바스켓 디테일 조회, 수정, 삭제
 @api_view(['GET', 'PUT', 'DELETE'])
 @authentication_classes([JSONWebTokenAuthentication])

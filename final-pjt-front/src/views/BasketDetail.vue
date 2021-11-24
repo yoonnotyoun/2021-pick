@@ -1,7 +1,7 @@
 <template>
   <div class="container my-5">
     <!-- 바스켓 소개 -->
-    <div class="card p-3">
+    <div class="card p-3 border-light">
       <div class="row">
         <div class="card col-6 border-light" style="max-width: 400px;">
           <div v-if="selectedBasketDetail.movies.length > 3">
@@ -20,6 +20,7 @@
           <p>제목 : {{ selectedBasketDetail.title }}</p>
           <p @click="getProfile(selectedBasketDetail.author)" class="" style="cursor:pointer">닉네임: {{ userInfo[selectedBasketDetail.author].nickname }}</p>
           <p class="">팔로워 {{ userInfo[selectedBasketDetail.author].fans.length }}명</p>
+          <!-- 태그 -->
           <span v-for="(basket_tag, idx) in selectedBasketDetail.baskets_tags" :key="'basket' + idx">{{ basket_tag.name }} </span>
           <p>설명 : {{ selectedBasketDetail.explanation }}</p>
           <p>좋아요 개수: {{ likeCnt }}</p>
@@ -40,7 +41,10 @@
       </div>
     </div>
     <!-- 영화 -->
-    <h3>이 바스켓의 영화 목록</h3>
+      <div class="d-flex align-items-end">
+        <h5 class="d-inline-block me-2">이 바스켓의</h5>
+        <h4 class="strong-text mb-2">영화 리스트</h4>
+      </div>
     <div class="container">
       <b-card-group class="row row-cols-3 row-cols-lg-6">
         <movie-list-item v-for="(movie, idx) in selectedBasketDetail.movies"
@@ -51,7 +55,10 @@
     </div>
     <!-- 테이스팅 홀 -->
     <div class="d-flex justify-content-between align-items-center">
-      <h3 class="d-inline-block">영화에 대해 이야기 나누는 테이스팅 홀</h3>
+      <div class="d-flex align-items-end">
+        <h5 class="d-inline-block me-2">영화에 대해 이야기 나누는</h5>
+        <h4 class="strong-text mb-2">테이스팅 홀</h4>
+      </div>
       <b-form-checkbox @change="setSpoilerFilter(showSpoiler)" v-model="showSpoiler" name="spoiler-button" switch class="d-inline-block">
       스포일러 보기
       </b-form-checkbox>
