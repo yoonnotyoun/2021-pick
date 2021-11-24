@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     ...mapActions('movieStore', [
+      'resetMovies',
       'getMovieRecommendation',
       'resetMovies',
     ])
@@ -35,10 +36,6 @@ export default {
     ...mapState('movieStore', {
       recommendedMovies: state => state.recommendedMovies,
       searchedMovies: state => state.searchedMovies,
-      // 'searchedMovies',
-      // 'recommendedMovies',
-      // 'selectedMovie',
-      // 'isModalViewed',
     })
   },
   created: function () {

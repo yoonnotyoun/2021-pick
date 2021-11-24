@@ -11,7 +11,6 @@ export default {
   name: 'MovieSearchBar',
   methods: {
     ...mapActions('movieStore', [
-      // 'setInputValue',
       'getMovieSearchResult',
     ])
   },

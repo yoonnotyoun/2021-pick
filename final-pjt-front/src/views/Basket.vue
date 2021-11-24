@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     ...mapActions('basketStore', [
+      'resetBaskets',
       'getBasketRecommendation',
       'resetBaskets',
     ])

@@ -77,54 +77,6 @@ const accountStore = {
   },
 
   actions: {
-    // 로그인
-    // login: function ({ commit, dispatch }, credentials) {
-    //   axios({
-    //     url: SERVER.URL + SERVER.ROUTES.login,
-    //     method: 'post',
-    //     data: credentials,
-    //   })
-    //   .then((res) => {
-    //     commit('SET_TOKEN', res.data.token)
-    //     router.push({ name: 'Main' })
-    //     dispatch('getUserId')
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    // },
-    // logout: function ({ commit }) {
-    //   commit('REMOVE_TOKEN')
-    //   router.push({ name: 'Login' })
-    // },
-    // signup: function (context, credentials) {
-    //   axios({
-    //     url: SERVER.URL + SERVER.ROUTES.signup,
-    //     method: 'post',
-    //     data: credentials,
-    //   })
-    //   .then(() => {
-    //     console.log(SERVER.URL + SERVER.ROUTES.signup)
-    //     router.push({ name: 'Login' })
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    // },
-    // // 프로필
-    // getUserId: function ({ commit, getters }) {
-    //   axios({
-    //     url: SERVER.URL + '/api/v1/accounts/login/',
-    //     method: 'get',
-    //     headers: getters.config
-    //   })
-    //   .then((res) => {
-    //     commit('SET_USER_ID', res.data.userId)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    // },
     getProfile: function ({ commit, getters }, userId) {
       axios({
         method: 'get',
