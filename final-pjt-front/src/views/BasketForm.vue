@@ -1,5 +1,6 @@
 <template>
   <div>
+    <button @click="createBasket(info)">생성하기</button>
     <div>
       <label for="title">바스켓 이름: </label>
       <input type="text" id="title" v-model="info.title">
@@ -19,15 +20,19 @@
       </b-form-group>
     </div>
     <!-- public 비공개 선택 시 친구 선택 창 나타내기 -->
-    <div>{{ participants_ids }}</div>
     <div>
-    <b-button v-b-toggle.collapse-1 variant="primary">친구 초대</b-button>
-    <b-collapse id="collapse-1" class="mt-2">
-      <b-card>
-        <p class="card-text">친구선택창</p>
-        <relationship-list></relationship-list>
+    <!-- <b-button v-b-toggle.collapse-1 variant="primary" v-if="info.public === false">친구 초대</b-button> -->
+    <!-- <b-collapse id="collapse-1" class="mt-2"> -->
+      <b-card v-if="info.public === 'False'">
+        <p>나의 친구 그룹</p>
+        <ul>
+          <span v-for="(group, idx) in groups" :key="idx">
+            <input type="checkbox" :value="group.id" v-model="info.groups_ids">
+            <span @click="setGroupFilterId(group.id)">{{ group.name }}</span><br>
+          </span>
+        </ul>
       </b-card>
-    </b-collapse>
+    <!-- </b-collapse> -->
     </div>
     <!-- 영화 선택 -->
     <div>
@@ -41,7 +46,7 @@
           tag-pills
           size="lg"
           separator=" "
-          disabled="true"
+          :disabled="true"
         ></b-form-tags>
       </div>
       <movie-search-bar></movie-search-bar>
@@ -52,7 +57,6 @@
 </template>
 
 <script>
-import RelationshipList from '@/components/Account/RelationshipList'
 import MovieSearchBar from '@/components/Movie/MovieSearchBar'
 import MovieSearchResult from '@/components/Movie/MovieSearchResult'
 
@@ -67,15 +71,14 @@ export default {
         title: '',
         explanation: '',
         basket_tags_names: [],
-        public: false,
-        participants_ids: [],
-        image: '',
+        public: true,
+        groups_ids: [],
+        // image: '',
         movies_ids: [],
       }
     }
   },
   components: {
-    RelationshipList,
     MovieSearchBar,
     MovieSearchResult,
   },
@@ -88,12 +91,24 @@ export default {
     },
     ...mapActions('movieStore', [
       'resetMovies',
-    ])
+    ]),
+    ...mapActions('accountStore', [
+      'getGroups',
+    ]),
+    ...mapActions('basketStore', [
+      'createBasket',
+    ]),
   },
   computed: {
     ...mapState('movieStore', {
       pickedMovies: state => state.pickedMovies,
-    })
+    }),
+    ...mapState('accountStore', {
+      groups: state => state.groups,
+    }),
+  },
+  created: function () {
+    this.getGroups()
   }
 }
 </script>

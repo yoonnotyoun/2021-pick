@@ -1,7 +1,8 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework import serializers
 
 from .models import Basket, Comment, BasketTag
+from accounts.models import Relationship
 from movies.models import Movie
 from django.contrib.auth import get_user_model
 
@@ -57,7 +58,7 @@ class BasketSerializer(serializers.ModelSerializer):
 
     # Vue에서 보내줄 추가 데이터
     basket_tags_names = serializers.ListField(write_only=True)
-    participants_ids = serializers.ListField(write_only=True)
+    groups_ids = serializers.ListField(write_only=True)
     movies_ids = serializers.ListField(write_only=True)
 
     class Meta:
@@ -65,13 +66,13 @@ class BasketSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'image', 'public', 'title', 'explanation', 'movies', 'created_at', 'updated_at',
             'author', 'like_users', 'participants', 'basket_tags',
-            'basket_tags_names', 'participants_ids', 'movies_ids',
+            'basket_tags_names', 'groups_ids', 'movies_ids',
         )
         read_only_fields = ('author',)
 
     def create(self, validated_data):
         basket_tags_names = validated_data.pop('basket_tags_names')
-        participants_ids = validated_data.pop('participants_ids')
+        groups_ids = validated_data.pop('groups_ids')
         movies_ids = validated_data.pop('movies_ids')
         basket = Basket.objects.create(**validated_data)
         
@@ -81,9 +82,13 @@ class BasketSerializer(serializers.ModelSerializer):
             else:
                 basket_tag = BasketTag.objects.create(name=basket_tags_name)
             basket.baskets_tags.add(basket_tag)
-        for participants_id in participants_ids:
-            participant = get_user_model().objects.get(pk=participants_id)
-            basket.participants.add(participant)
+        for groups_id in groups_ids:
+            participants_ids_obj = list(Relationship.objects.filter(group=groups_id).values('star'))
+            print(participants_ids_obj)
+            participants_ids = [obj['star'] for obj in participants_ids_obj]
+            for participants_id in participants_ids:
+                participant = get_user_model().objects.get(pk=participants_id)
+                basket.participants.add(participant)
         for movies_id in movies_ids:
             movie = Movie.objects.get(pk=movies_id)
             basket.movies.add(movie)
@@ -92,7 +97,7 @@ class BasketSerializer(serializers.ModelSerializer):
 
     def update(self, basket, validated_data):
         basket_tags_names = validated_data.pop('basket_tags_names')
-        participants_ids = validated_data.pop('participants_ids')
+        groups_ids = validated_data.pop('groups_ids')
         movies_ids = validated_data.pop('movies_ids')
         basket = Basket.objects.create(**validated_data)
 
@@ -110,9 +115,12 @@ class BasketSerializer(serializers.ModelSerializer):
             else:
                 basket_tag = BasketTag.objects.create(name=basket_tags_name)
             basket.baskets_tags.add(basket_tag)
-        for participants_id in participants_ids:
-            participant = get_user_model().objects.get(pk=participants_id)
-            basket.participants.add(participant)
+        for groups_id in groups_ids:
+            participants_ids_obj = list(Relationship.objects.filter(group=groups_id).values('star'))
+            participants_ids = [obj['star'] for obj in participants_ids_obj]
+            for participants_id in participants_ids:
+                participant = get_user_model().objects.get(pk=participants_id)
+                basket.participants.add(participant)
         for movies_id in movies_ids:
             movie = Movie.objects.get(pk=movies_id)
             basket.movies.add(movie)

@@ -229,22 +229,37 @@ const basketStore = {
       commit('SET_SPOILER_FILTER', showSpoiler)
     },
     // 바스켓 CUD
-    deleteBasket: function ({ getters, dispatch }, basket) {
+    createBasket: function ({ getters, dispatch }, basketInfo) {
       const headers = getters.config
+      console.log(basketInfo)
       axios({
-        url: `${SERVER.URL}/api/v1/baskets/comment/${basket.id}/`,
-        method: 'delete',
+        url: `${SERVER.URL}/api/v1/baskets/`,
+        method: 'post',
+        data: basketInfo,
         headers,
       })
-      .then(() => {
-        dispatch('getBasketDetail', basket)
+      .then((res) => {
+        console.log(res)
+        dispatch('getBasketDetail', res.data)
       })
       .catch((err) => {
         console.log(err)
       })
     },
-    setSpoilerFilter: function ({ commit }, showSpoiler) {
-      commit('SET_SPOILER_FILTER', showSpoiler)
+    deleteBasket: function ({ getters }, basket) {
+      const headers = getters.config
+      axios({
+        url: `${SERVER.URL}/api/v1/baskets/${basket.id}/`,
+        method: 'delete',
+        headers,
+      })
+      .then(() => {
+        alert('해당 바스켓이 삭제되었습니다.')
+        
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     },
   },
 }
