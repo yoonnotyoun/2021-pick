@@ -33,6 +33,8 @@ const movieStore = {
         state.recommendedMovies = []
       } if (type === 'searched') {
         state.searchedMovies = []
+      } if (type === 'picked') {
+        state.pickedMovies = []
       }
     },
     // 리스트 검색, 추천
@@ -50,7 +52,10 @@ const movieStore = {
     },
     ADD_TO_PICK: function (state) {
       const movie = state.selectedMovieDetail
-      if (!(movie in state.pickedMovies)) {
+      let checkDuplication = state.pickedMovies.findIndex(item => item.id === movie.id)
+      // if (!(movie.id in state.pickedMovies)) {
+      console.log(checkDuplication)
+      if (checkDuplication === -1) {
         // console.log(movie)
         state.pickedMovies.push(movie)
         // console.log(state.pickedMovies)
@@ -121,7 +126,11 @@ const movieStore = {
       })
       .then((res) => {
         commit('SET_MOVIE_DETAIL', res.data)
-        if (location === `accounts/setmovietaste`) {
+        // if (location === 'accounts/setmovietaste') {
+        //   commit('ADD_TO_PICK') // like 해버리기?
+        // }
+        console.log(location)
+        if (location === 'basketform') {
           commit('ADD_TO_PICK') // like 해버리기?
         } else {
           router.push({ name: 'MovieDetail' })
@@ -143,6 +152,15 @@ const movieStore = {
         commit('GET_LIKE_INFO', 'like')
       }
     },
+    // checkPickedMovies: function ({ state }, selectedMovie) {
+    //   let checkDuplication = state.pickedMovies.findIndex(item => item.id === selectedMovie.id)
+    //   console.log(checkDuplication)
+    //   if (checkDuplication === -1) {
+    //     return false
+    //   } else {
+    //     return true
+    //   }
+    // },
     likeUnlike: function ({ state, commit, dispatch, getters }, movieId) {
       axios({
         method: 'post',

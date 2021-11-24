@@ -2,6 +2,7 @@
   <div class="col" @click="getMovieDetail(movie)">
     <div class="card">
       <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="poster">
+      <!-- <h3 v-show="checked">p!cked</h3> -->
       <div class="card-body">
         <p>{{ movie.title }}</p>
         <p>{{ movie.release_date }}</p>
@@ -22,9 +23,15 @@ export default {
       type: Object,
     },
   },
+  // data: function () {
+  //   return {
+  //     checked: this.checkPickedMovies(this.movie),
+  //   } 
+  // },
   methods: {
     ...mapActions('movieStore', [
       'getMovieDetail',
+      // 'checkPickedMovies',
     ])
   },
   computed: {
