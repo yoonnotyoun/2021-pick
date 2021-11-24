@@ -55,9 +55,9 @@ class BasketSerializer(serializers.ModelSerializer):
     class MovieListSerializer(serializers.ModelSerializer):
         class Meta:
             model = Movie # 두번째 에러 models
-            fields = ('id', 'title', 'release_date', 'poster_path',)
+            fields = ('id', 'title', 'release_date', 'poster_path', 'vote_average',)
 
-    basket_tags = BasketTagListSerializer(many=True, required=False, read_only=True) # 역참조
+    baskets_tags = BasketTagListSerializer(many=True, required=False, read_only=True) # 역참조
     like_users = UserSerializer(many=True, required=False, read_only=True)
     participants = UserSerializer(many=True, required=False, read_only=True)
     movies = MovieListSerializer(many=True, required=False, read_only=True)
@@ -71,7 +71,7 @@ class BasketSerializer(serializers.ModelSerializer):
         model = Basket
         fields = (
             'id', 'public', 'title', 'explanation', 'movies', 'created_at', 'updated_at',
-            'author', 'like_users', 'participants', 'basket_tags',
+            'author', 'like_users', 'participants', 'baskets_tags',
             'basket_tags_names', 'groups_ids', 'movies_ids',
         )
         read_only_fields = ('author',)

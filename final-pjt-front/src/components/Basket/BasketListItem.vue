@@ -2,7 +2,7 @@
   <div class="container">
     <div class="card p-3">
       <div class="row">
-        <div class="card col-6 border-light" style="max-width: 230px;" @click="getBasketDetail(basket)">
+        <div class="card col-6 border-light" style="max-width: 230px; cursor:pointer;" @click="getBasketDetail(basket)">
           <div v-if="basket.movies.length > 3">
             <div class="container">
               <div class="row row-cols-2 m-0 p-0">

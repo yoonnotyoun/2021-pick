@@ -1,10 +1,13 @@
 <template>
   <div>
-    <h3>코멘트 폼</h3>
-    <p>스포일러 포함하기</p>
-    <input type="checkbox" name="spoiler" v-model="spoiler">
-    <input type="text" v-model.trim="content">
-    <button @click="createAndErase({ content, spoiler })">등록하기</button>
+    <div class="text-start d-flex align-items-center ms-4 mt-2">
+      <span class="me-2">스포일러를 포함하기</span>
+      <input type="checkbox" name="spoiler" v-model="spoiler"><br>
+    </div>
+    <div class="">
+      <input type="text" @keypress.enter="createAndErase({ content, spoiler })" v-model.trim="content" class="form-control mt-2 mb-4" placeholder="댓글을 입력해주세요.">
+      <!-- <button @click="createAndErase({ content, spoiler })" class="mb-3">등록하기</button> -->
+    </div>
   </div>
 </template>
 
