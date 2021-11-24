@@ -14,7 +14,7 @@
         @keypress.enter="login(credentials)"
       >
     </div>
-    <button @click="login(credentials)">로그인</button>
+    <b-button class="action-button" @click="login(credentials)">로그인</b-button>
   </div>
 </template>
 

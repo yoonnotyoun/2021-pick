@@ -37,7 +37,7 @@
         <input type="radio" id="female" name="gender" v-model="credentials.gender" value=2>
       </div>
     </div>
-    <button @click="signup(credentials)">가입하기</button>
+    <b-button class="action-button" @click="signup(credentials)">가입하기</b-button>
   </div>
 </template>
 

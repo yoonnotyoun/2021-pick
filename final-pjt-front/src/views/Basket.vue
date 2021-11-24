@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-button variant="outline-primary" @click="showBasketForm">새 바스켓 생성</b-button>
-    <h2>바스켓</h2>
-    <h3>바스켓검색창 / 추천기준 5줄</h3>
+    <div align="right" class="mx-3">
+      <b-button class="action-button" @click="showBasketForm">새 바스켓 생성</b-button>
+    </div>
     <basket-search-bar></basket-search-bar>
     <basket-search-result v-if="searchedBaskets"></basket-search-result>
     <basket-list v-if="recommendedBaskets"></basket-list>

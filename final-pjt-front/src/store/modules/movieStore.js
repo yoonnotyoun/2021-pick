@@ -1,7 +1,7 @@
 import SERVER from '@/api/drf.js'
 import router from '@/router/index.js'
 import axios from 'axios'
-// import _ from 'lodash'
+import _ from 'lodash'
 
 
 const movieStore = {
@@ -13,6 +13,8 @@ const movieStore = {
     // 리스트 검색, 추천
     searchedMovies: [],
     recommendedMovies: [],
+    recommendedMethod: [],
+    recommendedTail: [],
     // 디테일, 좋아요
     selectedMovieDetail: '',
     likeButtonName: '',
@@ -35,6 +37,10 @@ const movieStore = {
         state.searchedMovies = []
       } if (type === 'picked') {
         state.pickedMovies = []
+      } if (type === 'method') {
+        state.recommendedMethod = []
+      } if (type === 'tail') {
+        state.recommendedTail = []
       }
     },
     // 리스트 검색, 추천
@@ -49,6 +55,12 @@ const movieStore = {
       })
       state.searchedMovies = []
       // console.log(state.recommendedMovies)
+    },
+    SET_RECOMMENDED_METHOD_TAIL: function (state, methodTail) {
+      state.recommendedMethod.push(methodTail.method)
+      state.recommendedTail.push(methodTail.tail)
+      console.log(state.recommendedMethod)
+      console.log(state.recommendedTail)
     },
     ADD_TO_PICK: function (state) {
       const movie = state.selectedMovieDetail
@@ -97,8 +109,18 @@ const movieStore = {
     },
     getMovieRecommendation: function ({ commit, getters }) {
       const headers = getters.config
-      // const recommend_method = _.sample(['myinfo', 'genre', 'baskets', 'friends'])
-      const recommend_method = 'genre'
+      const recommend_method = _.sample(['myinfo', 'genre', 'baskets', 'friends'])
+      // const recommend_method = 'genre'
+      const recommend_tail = {
+        'myinfo': '당신과 연령, 성별이 비슷한 사용자들이 p!ck한 영화',
+        'genre': '장르의 영화',
+        'baskets': '바스켓을 포함해 당신이 p!ck한 바스켓의 영화',
+        'friends': '님이 p!ck한 바스켓',
+      }
+      const methodTail = {
+        method: recommend_method,
+        tail: recommend_tail[recommend_method],
+      }
       // 중복방지 처리 하기
       axios({
         method: 'get',
@@ -108,6 +130,7 @@ const movieStore = {
       .then((res) => {
         console.log(recommend_method)
         commit('SET_RECOMMENDED_MOVIE_LIST', res.data)
+        commit('SET_RECOMMENDED_METHOD_TAIL', methodTail)
       })
       .catch((err) => {
         console.log(err)

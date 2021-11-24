@@ -1,8 +1,6 @@
 <template>
   <div>
     <!-- <movie-detail-modal v-if="isModalViewed" @close-modal="isModalViewed=false"></movie-detail-modal> -->
-    <h2>영화</h2>
-    <h3>영화검색창 / 추천기준 5줄</h3>
     <movie-search-bar></movie-search-bar>
     <movie-search-result v-if="searchedMovies"></movie-search-result>
     <movie-list v-if="recommendedMovies"></movie-list>
@@ -42,6 +40,8 @@ export default {
   // console.log(this.recommendedMovies)
     if (this.$store.getters.isLoggedIn) {
       this.resetMovies('recommended')
+      this.resetMovies('method')
+      this.resetMovies('tail')
       this.getMovieRecommendation()
       this.getMovieRecommendation()
       this.getMovieRecommendation()
