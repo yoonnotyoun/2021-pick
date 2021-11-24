@@ -1,13 +1,15 @@
 <template>
-  <div class="col" @click="getMovieDetail(movie)">
-    <div class="card">
-      <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="poster">
+  <div class="col" @click="getMovieDetail(movie)" style="cursor:pointer">
+    <div class="card border-0" style="background-color:#F9F9F9;">
+      <img class="card-img-top" :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="poster">
       <!-- <h3 v-show="checked">p!cked</h3> -->
-      <div class="card-body">
-        <p>{{ movie.title }}</p>
-        <p>{{ movie.release_date }}</p>
-        <p>{{ movie.like_users }}</p>
-        <p>{{ movie.vote_average }}</p>
+      <div class="card-body px-0">
+        <p class="fw-bold" align="left">{{ movie.title }}</p>
+        <div class="d-flex justify-content-between">
+          <p>{{ year }}</p>
+          <p>⭐ {{ movie.vote_average }}</p>
+        </div>
+        <!-- <p>{{ movie.like_users }}</p> -->
       </div>
     </div>
   </div>
@@ -23,11 +25,11 @@ export default {
       type: Object,
     },
   },
-  // data: function () {
-  //   return {
-  //     checked: this.checkPickedMovies(this.movie),
-  //   } 
-  // },
+  data: function () {
+    return {
+      year: this.movie.release_date.split('-')[0]
+    } 
+  },
   methods: {
     ...mapActions('movieStore', [
       'getMovieDetail',
@@ -43,5 +45,10 @@ export default {
 </script>
 
 <style>
+
+.card-img-top {
+  height: 15rem;
+  object-fit: cover;
+}
 
 </style>

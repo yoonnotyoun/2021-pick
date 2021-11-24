@@ -1,5 +1,6 @@
 <template>
-  <div id="app">
+  <div id="app" class="container-fluid">
+    <img id="line" src="@/assets/navbar.png" width="vw" alt="line">
     <div>
       <router-link :to="{ name: 'Main' }">
         <img src="@/assets/logo.png" alt="p!ck logo" width="75px" class="d-inline-block"/>your taste
@@ -19,7 +20,6 @@
         <router-link :to="{ name: 'Signup' }">Signup</router-link>
         <router-link :to="{ name: 'Login' }">Login</router-link>
       </span>
-      <img id="line" src="@/assets/navbar.png" width="vw" alt="line">
     </div>
     <router-view/>
   </div>
@@ -50,12 +50,14 @@ export default {
 
 
 <style>
+
 #app {
   font-family: 'Gothic A1', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #222222;
+  background-color: #f9f9f9;
 }
 
 #nav {
@@ -63,12 +65,13 @@ export default {
 }
 
 #nav a {
+  font-size: 95%;
   font-weight: 600;
   color: #222222;
   margin: 30px;
 }
 
-#nav #line {
+#line {
   position: absolute;
   top: 90px; left: 0px;
   width: 100%;
