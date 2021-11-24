@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.basket_create),
+    path('user/<int:user_pk>/', views.user_basket_list),
+    path('movie/<int:movie_pk>/', views.movie_basket_list),
     path('<int:basket_pk>/', views.basket_detail_update_delete),
     path('<int:basket_pk>/comment/', views.comment_list_create),
     path('comment/<int:comment_pk>/', views.comment_delete),

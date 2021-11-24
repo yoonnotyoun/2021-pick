@@ -168,26 +168,26 @@ def relationship_update(request, relationship_pk, group_pk):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def relationship_create_delete(request, star_pk):
-    # fan = get_object_or_404(get_user_model(), pk=1)  # 테스트용
+    # fan = get_object_or_404(get_user_model(), pk=3)  # 테스트용
     fan = request.user
     star = get_object_or_404(get_user_model(), pk=star_pk)
     if request.method == 'POST':
         group = get_object_or_404(Group, user=fan, name='기본') # 기본 그룹
         # print('팔로우')
-        # if fan != star:
-        serializer = RelationshipSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(
-                fan=fan,
-                star=star,
-                group=group,
-            )
-            print()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if fan != star:
+            serializer = RelationshipSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(
+                    fan=fan,
+                    star=star,
+                    group=group,
+                )
+                print()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
     elif request.method == 'DELETE':
         # print('언팔로우')
         relationship = get_object_or_404(Relationship, fan=fan, star=star)
-        # relationship = get_object_or_404(Relationship, pk=22)
+        # relationship = get_object_or_404(Relationship, pk=33)
         relationship.delete()
         data = {
             'delete': '언팔로우 처리되었습니다.'

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-start d-flex align-items-center ms-4 mt-2">
+    <div class="text-start d-flex align-items-center mt-2">
       <span class="me-2">스포일러를 포함하기</span>
       <input type="checkbox" name="spoiler" v-model="spoiler"><br>
     </div>

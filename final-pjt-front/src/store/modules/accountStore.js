@@ -100,7 +100,6 @@ const accountStore = {
       .then((res) => {
         const userData = res.data
         commit('GET_TAGS', userData)
-        router.push({ name: 'Profile' })
       })
       .catch((err) => {
         console.log(err)
@@ -108,8 +107,8 @@ const accountStore = {
     },
     //팔로우
     getFollowButtonName: function ({ commit, rootState }, profileInfo) {
+      console.log(profileInfo)
       if (rootState.userId in profileInfo.fans) {
-      // if (this.userId in profileInfo.fans) {
         commit('GET_FOLLOW_INFO', '언팔로우')
       } else {
         commit('GET_FOLLOW_INFO', '팔로우')

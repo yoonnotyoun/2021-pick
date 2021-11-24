@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="container">
     <comment-form></comment-form>
     <div v-if="showSpoilerOption">
-      <ul v-for="(comment, idx) in comments" :comment="comment" :key="'spoilered' + idx">
+      <div v-for="(comment, idx) in comments" :comment="comment" :key="'spoilered' + idx" class="mb-1">
         <span class="d-flex justify-content-between">
           <div class="d-flex">
             <p class="me-4 strong-text" @click="getProfile(comment.author)" style="cursor:pointer">{{ userInfo[comment.author].nickname }}</p>
@@ -13,10 +13,10 @@
             <button @click="deleteComment(comment)" v-show="comment.author === userId" class="mb-3">X</button>
           </div>
         </span>
-      </ul>
+      </div>
     </div>
     <div v-else>
-      <ul v-for="(comment, idx) in comments" :comment="comment" :key="'notSpoilered' + idx">
+      <div v-for="(comment, idx) in comments" :comment="comment" :key="'notSpoilered' + idx" class="mb-1">
         <div v-if="comment.spoiler === true && comment.author !== userId"> <!--  && comment.author !== userId -->
           <span class="d-flex justify-content-between">
             <div class="d-flex">
@@ -38,7 +38,7 @@
             </div>
           </span>
         </div>
-      </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -47,10 +47,6 @@
 import CommentForm from '@/components/Basket/CommentForm.vue'
 
 import { mapState, mapActions } from 'vuex'
-import Vue from 'vue'
-import vueMoment from 'vue-moment'
-
-Vue.use(vueMoment)
 
 export default {
   name: 'CommentList',
