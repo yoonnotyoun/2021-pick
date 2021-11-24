@@ -22,6 +22,7 @@ const store = new Vuex.Store({
   state: {
     authToken: localStorage.getItem('jwt'),
     userId: '',
+    userInfo: '',
   },
   getters: {
     isLoggedIn: function (state) {
@@ -48,6 +49,10 @@ const store = new Vuex.Store({
       state.userId = userId
       console.log(state.userId)
     },
+    // 모든 유저 정보
+    SET_USER_INFO: function (state, userInfo) {
+      state.userInfo = userInfo
+    }
   },
   actions: {
     // 로그인
@@ -61,6 +66,7 @@ const store = new Vuex.Store({
         commit('SET_TOKEN', res.data.token)
         router.push({ name: 'Main' })
         dispatch('getUserId')
+        dispatch('setUserInfo')
       })
       .catch((err) => {
         console.log(err)
@@ -98,6 +104,26 @@ const store = new Vuex.Store({
         console.log(err)
       })
     },
+    // 모든 유저 정보
+    setUserInfo: function ({ commit, getters }) {
+      axios({
+        url: SERVER.URL + '/api/v1/accounts/user_info/',
+        method: 'get',
+        headers: getters.config
+      })
+      .then((res) => {
+        commit('SET_USER_INFO', res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    getUserInfo: function (userId) {
+      // return this.userInfo.find((user) => {
+      //   return user.id === userId
+      // })
+      return this.userInfo.find(userId)
+    }
   },
   plugins: [createPersistedState()]
 })

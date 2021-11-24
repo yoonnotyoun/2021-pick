@@ -1,5 +1,5 @@
 from django.db.models.aggregates import Count
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 # model
@@ -8,7 +8,7 @@ from accounts.models import Group, Relationship
 from baskets.models import Basket, BasketTag
 
 # serializer
-from .serializers import GroupListSerialzier, GroupSerialzier, RelationshipListSerializer, RelationshipSerializer, UserSerializer
+from .serializers import GroupListSerialzier, GroupSerialzier, RelationshipListSerializer, RelationshipSerializer, UserListSerializer, UserSerializer
 
 # REST framework
 from rest_framework.decorators import authentication_classes, permission_classes
@@ -45,8 +45,16 @@ def signup(request):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def login(request):
-    print(request.user.pk)
     return Response({ 'userId': request.user.pk }, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def user_info(request):
+    users = get_user_model().objects.all()
+    serializer = UserListSerializer(users, many=True)
+    return Response(serializer.data)
 
 
 # profile에서 유저와 관련된 데이터 다 가져와야됨

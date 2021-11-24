@@ -6,6 +6,14 @@ from movies.models import Movie
 from baskets.models import Basket, BasketTag, Comment
 
 
+class UserListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'username', 'nickname',)
+        read_only_fields = ()
+
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 

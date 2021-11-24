@@ -8,6 +8,7 @@ urlpatterns = [
     path('signup/', views.signup),
     path('api-token-auth/', obtain_jwt_token),
     path('login/', views.login),
+    path('user_info/', views.user_info),
     path('profile/<int:user_pk>/', views.profile),
     path('liked_baskets_tags/<int:user_pk>/', views.liked_baskets_tags),
 

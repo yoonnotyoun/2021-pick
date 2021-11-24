@@ -163,6 +163,7 @@ def basket_recommend_myinfo(request):
     picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
 
     serializer = BasketListSerializer(picked_baskets, many=True)
+
     return Response(serializer.data)
 
 
@@ -200,6 +201,7 @@ def basket_recommend_movies(request):
 
     serializer = BasketListSerializer(picked_baskets, many=True)
     recommended_name = get_object_or_404(Movie, pk=random_id[0]['id']).title
+    
     new_serializer_data = list(serializer.data)
     new_serializer_data.append({ 'recommended_name': recommended_name })
     return Response(new_serializer_data, status=status.HTTP_200_OK)
