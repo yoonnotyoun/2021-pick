@@ -78,8 +78,8 @@ def basket_detail_update_delete(request, basket_pk):
 def comment_list_create(request, basket_pk):
 
     if request.method == 'GET':
-        comments = get_list_or_404(Comment, basket=basket_pk)
-        # comments = Comment.objects.filter(basket=basket_pk)
+        # comments = get_list_or_404(Comment, basket=basket_pk)
+        comments = Comment.objects.filter(basket=basket_pk)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
