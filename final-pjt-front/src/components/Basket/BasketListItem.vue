@@ -1,8 +1,8 @@
 <template>
-  <div class="container" @click="getBasketDetail(basket)">
+  <div class="container">
     <div class="card p-3">
       <div class="row">
-        <div class="card col-6 border-light" style="max-width: 230px;">
+        <div class="card col-6 border-light" style="max-width: 230px;" @click="getBasketDetail(basket)">
           <div v-if="basket.movies.length > 3">
             <div class="container">
               <div class="row row-cols-2 m-0 p-0">
@@ -14,11 +14,11 @@
           </div>
         </div>
         <div class="card col me-3 border-light">
-          <p>{{ basket }}</p>
-          <p>{{ basket.title }}</p>
-          <p>{{ getUserInfo(basket.author) }}</p>
-          <p>{{ basket.baskets_tags }}</p>
-          <p>{{ basket.like_users.length }}</p>
+          <p @click="getBasketDetail(basket)" style="cursor:pointer">제목: {{ basket.title }}</p>
+          <p @click="getProfile(basket.author)" style="cursor:pointer">닉네임: {{ userInfo[basket.author].nickname }}</p>
+          <span>태그: </span>
+          <span v-for="(basket_tag, idx) in basket.baskets_tags" :key="'basket' + idx">{{ basket_tag.name }}</span>
+          <p>좋아요개수: {{ basket.like_users.length }}</p>
         </div>
       </div>
     </div>
@@ -39,8 +39,8 @@ export default {
     ...mapActions('basketStore', [
       'getBasketDetail',
     ]),
-    ...mapActions([
-      'getUserInfo',
+    ...mapActions('accountStore', [
+      'getProfile',
     ]),
   },
   computed: {

@@ -1,5 +1,5 @@
 import SERVER from '@/api/drf.js'
-// import router from '@/router/index.js'
+import router from '@/router/index.js'
 import axios from 'axios'
 
 const accountStore = {
@@ -78,6 +78,7 @@ const accountStore = {
 
   actions: {
     getProfile: function ({ commit, getters }, userId) {
+      console.log('getProfile', userId)
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/accounts/profile/${userId}/`,
@@ -86,6 +87,7 @@ const accountStore = {
       .then((res) => {
         const userData = res.data
         commit('GET_PROFILE', userData)
+        router.push({ name: 'Profile', userId: userId })
       })
       .catch((err) => {
         console.log(err)
@@ -98,6 +100,7 @@ const accountStore = {
       .then((res) => {
         const userData = res.data
         commit('GET_TAGS', userData)
+        router.push({ name: 'Profile' })
       })
       .catch((err) => {
         console.log(err)
@@ -170,7 +173,7 @@ const accountStore = {
         })
         .then(() => {
           dispatch('getGroups')
-          this.$router.push({ name: 'Group' })
+          router.push({ name: 'Group' })
         })
         .catch((err) => {
           console.log(err)
@@ -222,7 +225,7 @@ const accountStore = {
         })
         .then(() => {
           dispatch('getGroupRelationshipList')
-          this.$router.push({ name: 'Group' })
+          router.push({ name: 'Group' })
         })
         .catch((err) => {
           console.log(err)

@@ -54,7 +54,7 @@ export default {
   },
   created: function () {
     this.getProfile(this.userId) // 나중에 다른 회원 정보랑 분리해야됨
-    this.getFollowButtonName(this.profileInfo)
+    // this.getFollowButtonName(this.profileInfo)
   }
 }
 </script>

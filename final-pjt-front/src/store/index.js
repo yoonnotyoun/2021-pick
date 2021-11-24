@@ -112,18 +112,28 @@ const store = new Vuex.Store({
         headers: getters.config
       })
       .then((res) => {
-        commit('SET_USER_INFO', res.data)
+        console.log('유저정보', res)
+        const userInfo = {}
+        for (let data of res.data) {
+          // const obj = {
+          //   [data.id]: data
+          // }
+          // userInfo.push(obj)
+          userInfo[data.id] = data
+        }
+        console.log(userInfo)
+        commit('SET_USER_INFO', userInfo)
       })
       .catch((err) => {
         console.log(err)
       })
     },
-    getUserInfo: function (userId) {
-      // return this.userInfo.find((user) => {
-      //   return user.id === userId
-      // })
-      return this.userInfo.find(userId)
-    }
+    // getUserInfo: function (userId) {
+    //   // return this.userInfo.find((user) => {
+    //   //   return user.id === userId
+    //   // })
+    //   return this.userInfo.find(userId)
+    // }
   },
   plugins: [createPersistedState()]
 })

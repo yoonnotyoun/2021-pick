@@ -1,5 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container my-5">
+    <p @click="getProfile(selectedBasketDetail.author)" class="">닉네임: {{ userInfo[selectedBasketDetail.author].nickname }}</p>
+    <p class="">팔로워 {{ userInfo[selectedBasketDetail.author].fans.length }}명</p>
     <div class="card border-light" style="max-width: 400px;">
       <div v-if="selectedBasketDetail.movies.length > 3">
         <div class="container">
@@ -46,7 +48,10 @@ export default {
       'getLikeButtonName',
       'updateBasket',
       'deleteBasket',
-    ])
+    ]),
+    ...mapActions('accountStore', [
+      'getProfile',
+    ]),
   },
   computed: {
     ...mapState('basketStore', {
@@ -57,6 +62,7 @@ export default {
     }),
     ...mapState({
       userId: state => state.userId,
+      userInfo: state => state.userInfo
     })
   },
   created: function () {
