@@ -5,6 +5,7 @@ import Movie from '@/views/Movie'
 import MovieDetail from '@/views/MovieDetail'
 import Basket from '@/views/Basket'
 import BasketDetail from '@/views/BasketDetail'
+import BasketForm from '@/views/BasketForm'
 import Login from '@/views/accounts/Login'
 import Profile from '@/views/accounts/Profile'
 import Signup from '@/views/accounts/Signup'
@@ -38,6 +39,11 @@ const routes = [
     path: '/basket/detail',
     name: 'BasketDetail',
     component: BasketDetail
+  },
+  {
+    path: '/basketform',
+    name: 'BasketForm',
+    component: BasketForm
   },
   {
     path: '/accounts/login',

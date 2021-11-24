@@ -1,5 +1,6 @@
 <template>
   <div>
+    <b-button variant="outline-primary" @click="showBasketForm">새 바스켓 생성</b-button>
     <h2>바스켓</h2>
     <h3>바스켓검색창 / 추천기준 5줄</h3>
     <basket-search-bar></basket-search-bar>
@@ -25,6 +26,7 @@ export default {
   methods: {
     ...mapActions('basketStore', [
       'resetBaskets',
+      'showBasketForm',
       'getBasketRecommendation',
     ])
   },

@@ -138,6 +138,10 @@ const basketStore = {
         console.log(err)
       })
     },
+    // 생성 관련
+    showBasketForm: function () {
+      router.push({ name: 'BasketForm' })
+    },
     // 좋아요
     getLikeButtonName: function ({ state, commit }) {
       if (this.userId in state.selectedBasketDetail.like_users) {
