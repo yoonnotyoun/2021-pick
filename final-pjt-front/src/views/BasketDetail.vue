@@ -3,8 +3,8 @@
     <p>{{ selectedBasketDetail }}</p>
     <p>좋아요 개수: {{ likeCnt }}</p>
     <button @click="likeUnlike(selectedBasketDetail.id)">{{ likeButtonName }}</button>
-    <button @click="updateBasket(selectedBasketDetail.id)" v-if="userId === selectedBasketDetail.author">수정</button>
-    <button @click="deleteBasket(selectedBasketDetail.id)" v-if="userId === selectedBasketDetail.author">삭제</button>
+    <button @click="updateBasket(selectedBasketDetail)" v-if="userId === selectedBasketDetail.author">수정</button>
+    <button @click="deleteBasket(selectedBasketDetail)" v-if="userId === selectedBasketDetail.author">삭제</button>
     <h2>이 바스켓에서 이야기 나누는 공간</h2>
     <b-form-checkbox @change="setSpoilerFilter(showSpoiler)" v-model="showSpoiler" name="spoiler-button" switch>
       스포일러 보기
@@ -33,6 +33,8 @@ export default {
       'setSpoilerFilter',
       'likeUnlike',
       'getLikeButtonName',
+      'updateBasket',
+      'deleteBasket',
     ])
   },
   computed: {

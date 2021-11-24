@@ -224,6 +224,24 @@ const basketStore = {
     setSpoilerFilter: function ({ commit }, showSpoiler) {
       commit('SET_SPOILER_FILTER', showSpoiler)
     },
+    // 바스켓 CUD
+    deleteBasket: function ({ getters, dispatch }, basket) {
+      const headers = getters.config
+      axios({
+        url: `${SERVER.URL}/api/v1/baskets/comment/${basket.id}/`,
+        method: 'delete',
+        headers,
+      })
+      .then(() => {
+        dispatch('getBasketDetail', basket)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    setSpoilerFilter: function ({ commit }, showSpoiler) {
+      commit('SET_SPOILER_FILTER', showSpoiler)
+    },
   },
 }
 export default basketStore
