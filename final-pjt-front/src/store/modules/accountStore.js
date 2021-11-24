@@ -1,5 +1,5 @@
 import SERVER from '@/api/drf.js'
-import router from '@/router/index.js'
+// import router from '@/router/index.js'
 import axios from 'axios'
 
 const accountStore = {
@@ -7,9 +7,9 @@ const accountStore = {
 
   state: () => ({
     // 로그인
-    authToken: localStorage.getItem('jwt'),
-    // 프로필
-    userId: '',
+    // authToken: localStorage.getItem('jwt'),
+    // // 프로필
+    // userId: '',
     profileInfo: '',
     tags: [],
     followButtonName: '',
@@ -22,33 +22,37 @@ const accountStore = {
 
   getters: {
     // 로그인
-    isLoggedIn: function (state) {
-      console.log(state.authToken ? true: false)
-      return state.authToken ? true: false
+    // isLoggedIn: function (state) {
+    //   return state.authToken ? true: false
+    // },
+    // config: function (state) {
+    //   return {
+    //     Authorization: `JWT ${state.authToken}`
+    //   }
+    // },
+    isLoggedIn: function (state, getters, rootState, rootGetters) {
+      return rootGetters.isLoggedIn
     },
-    config: function (state) {
-      console.log(state.authToken ? true: false)
-      return {
-        Authorization: `JWT ${state.authToken}`
-      }
+    config: function (state, getters, rootState, rootGetters) {
+      return rootGetters.config
     },
   },
 
   mutations: {
     // 로그인
-    SET_TOKEN: function (state, token) {
-      state.authToken = token
-      localStorage.setItem('jwt', token)
-    },
-    REMOVE_TOKEN: function (state) {
-      localStorage.removeItem('jwt')
-      state.authToken = ''
-    },
-    // 프로필
-    SET_USER_ID: function (state, userId) {
-      state.userId = userId
-      console.log(state.userId)
-    },
+    // SET_TOKEN: function (state, token) {
+    //   state.authToken = token
+    //   localStorage.setItem('jwt', token)
+    // },
+    // REMOVE_TOKEN: function (state) {
+    //   localStorage.removeItem('jwt')
+    //   state.authToken = ''
+    // },
+    // // 프로필
+    // SET_USER_ID: function (state, userId) {
+    //   state.userId = userId
+    //   console.log(state.userId)
+    // },
     GET_PROFILE: function (state, userData) {
       state.profileInfo = userData
     },
@@ -74,58 +78,58 @@ const accountStore = {
 
   actions: {
     // 로그인
-    login: function ({ commit, dispatch }, credentials) {
-      axios({
-        url: SERVER.URL + SERVER.ROUTES.login,
-        method: 'post',
-        data: credentials,
-      })
-      .then((res) => {
-        commit('SET_TOKEN', res.data.token)
-        router.push({ name: 'Main' })
-        dispatch('getUserId')
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
-    logout: function ({ commit }) {
-      commit('REMOVE_TOKEN')
-      router.push({ name: 'Login' })
-    },
-    signup: function (context, credentials) {
-      axios({
-        url: SERVER.URL + SERVER.ROUTES.signup,
-        method: 'post',
-        data: credentials,
-      })
-      .then(() => {
-        console.log(SERVER.URL + SERVER.ROUTES.signup)
-        router.push({ name: 'Login' })
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
-    // 프로필
-    getUserId: function ({ commit, getters }) {
-      axios({
-        url: SERVER.URL + '/api/v1/accounts/login/',
-        method: 'get',
-        headers: getters.config
-      })
-      .then((res) => {
-        commit('SET_USER_ID', res.data.userId)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
+    // login: function ({ commit, dispatch }, credentials) {
+    //   axios({
+    //     url: SERVER.URL + SERVER.ROUTES.login,
+    //     method: 'post',
+    //     data: credentials,
+    //   })
+    //   .then((res) => {
+    //     commit('SET_TOKEN', res.data.token)
+    //     router.push({ name: 'Main' })
+    //     dispatch('getUserId')
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
+    // },
+    // logout: function ({ commit }) {
+    //   commit('REMOVE_TOKEN')
+    //   router.push({ name: 'Login' })
+    // },
+    // signup: function (context, credentials) {
+    //   axios({
+    //     url: SERVER.URL + SERVER.ROUTES.signup,
+    //     method: 'post',
+    //     data: credentials,
+    //   })
+    //   .then(() => {
+    //     console.log(SERVER.URL + SERVER.ROUTES.signup)
+    //     router.push({ name: 'Login' })
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
+    // },
+    // // 프로필
+    // getUserId: function ({ commit, getters }) {
+    //   axios({
+    //     url: SERVER.URL + '/api/v1/accounts/login/',
+    //     method: 'get',
+    //     headers: getters.config
+    //   })
+    //   .then((res) => {
+    //     commit('SET_USER_ID', res.data.userId)
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
+    // },
     getProfile: function ({ commit, getters }, userId) {
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/accounts/profile/${userId}/`,
-        headers: getters.config
+        headers: getters.config // getters.config
       })
       .then((res) => {
         const userData = res.data
@@ -148,8 +152,9 @@ const accountStore = {
       })
     },
     //팔로우
-    getFollowButtonName: function ({ commit }, profileInfo) {
-      if (this.userId in profileInfo.fans) {
+    getFollowButtonName: function ({ commit, rootState }, profileInfo) {
+      if (rootState.userId in profileInfo.fans) {
+      // if (this.userId in profileInfo.fans) {
         commit('GET_FOLLOW_INFO', '언팔로우')
       } else {
         commit('GET_FOLLOW_INFO', '팔로우')

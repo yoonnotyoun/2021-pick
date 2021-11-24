@@ -24,14 +24,14 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'App',
   methods: {
-    ...mapActions('accountStore', [
+    ...mapActions([
       'logout',
       'getUserId',
       // 'getMovieData'
       ])
   },
   computed: {
-    ...mapGetters('accountStore', [
+    ...mapGetters([
       'isLoggedIn',
     ])
   },

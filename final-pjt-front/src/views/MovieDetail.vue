@@ -18,13 +18,14 @@ export default {
     ]),
   },
   computed: {
-    ...mapState('movieStore', [
-      'selectedMovieDetail',
-      'likeButtonName',
-      'likeCnt',
-    ])
+    ...mapState('movieStore', {
+      selectedMovieDetail: state => state.selectedMovieDetail,
+      likeButtonName: state => state.likeButtonName,
+      likeCnt: state => state.likeCnt,
+    })
   },
   created: function () {
+    console.log('Movie getLikeButtonName')
     this.getLikeButtonName(this.selectedMovieDetail)
   }
 }

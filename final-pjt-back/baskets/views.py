@@ -312,12 +312,13 @@ def basket_search(request, query):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def basket_like(request, basket_pk):
+    print('userId', request.user.pk)
     # user = get_object_or_404(get_user_model(), pk=1)
     basket = get_object_or_404(Basket, pk=basket_pk)
     user = get_object_or_404(get_user_model(), pk=request.user.pk)
     print(basket.baskets_tags.all())
 
-    user = get_object_or_404(get_user_model(), pk=1)
+    # user = get_object_or_404(get_user_model(), pk=1) ### 와....이것때문이었다.....
     if basket.like_users.filter(pk=user.pk).exists(): ### 태그 뱃지에 대한 고민(어떻게 카운트할 지)
         basket.like_users.remove(user)
         liked = False
@@ -325,6 +326,7 @@ def basket_like(request, basket_pk):
         basket.like_users.add(user)
         liked = True
 
+    print(list(basket.like_users.all()))
     data = {
         'basket': basket_pk,
         'liked': liked,

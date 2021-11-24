@@ -7,7 +7,7 @@ import axios from 'axios'
 const movieStore = {
   namespaced: true,
   state: () => ({
-    userId: '',
+    // userId: '',
     authToken: localStorage.getItem('jwt'),
     // 리스트 검색, 추천
     searchedMovies: [],
@@ -18,24 +18,14 @@ const movieStore = {
     likeCnt: '',
   }),
   getters: {
-    isLoggedIn: function (state) {
-      return state.authToken ? true: false
+    isLoggedIn: function (state, getters, rootState, rootGetters) {
+      return rootGetters.isLoggedIn
     },
-    config: function (state) {
-      return {
-        Authorization: `JWT ${state.authToken}`
-      }
+    config: function (state, getters, rootState, rootGetters) {
+      return rootGetters.config
     },
   },
   mutations: {
-    // 로그인
-    SET_USER_ID: function (state, userId) {
-      console.log('movie userId', userId)
-      state.userId = userId
-    },
-    // SET_TOKEN: function (state, token) {
-    //   state.authToken = token
-    // },
     // 초기화
     RESET_MOVIES: function (state, type) {
       if (type === 'recommended') {
@@ -69,13 +59,6 @@ const movieStore = {
     },
   },
   actions: {
-    // 로그인
-    movieSetToken: function ({ commit }, authToken) {
-      commit('SET_TOKEN', authToken)
-    },
-    getMovieUserId: function ({ commit }, userId) {
-      commit('SET_USER_ID', userId)
-    },
     // 초기화
     resetMovies: function ({ commit }, type) {
       commit('RESET_MOVIES', type)
@@ -133,10 +116,15 @@ const movieStore = {
         console.log(err)
       })
     },
-    getLikeButtonName: function ({ state, commit }) {
-      if (this.userId in state.selectedMovieDetail.like_users) {
-        commit('GET_LIKE_INFO', 'unlike')
-      } else {
+    getLikeButtonName: function ({ state, commit, rootState }) {
+      let flag = false
+      for (let like_user of state.selectedMovieDetail.like_users) {
+        if (rootState.userId === like_user['id']) {
+          commit('GET_LIKE_INFO', 'unlike')
+          flag = true
+        }
+      }
+      if (flag === false) {
         commit('GET_LIKE_INFO', 'like')
       }
     },
@@ -160,20 +148,6 @@ const movieStore = {
         console.log(err)
       })
     },
-    // unlike: function ({ state, commit, dispatch, getters }, movieId) {
-    //   axios({
-    //     method: 'delete',
-    //     url: `${SERVER.URL}/api/v1/accounts/relationship/star/${movieId}/`,
-    //     headers: getters.config
-    //   })
-    //   .then(() => {
-    //     dispatch('getMovieDetail', state.selectedMovie)
-    //     commit('GET_LIKE_INFO', 'like')
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
-    // },
   },
 }
 export default movieStore

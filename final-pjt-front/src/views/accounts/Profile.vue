@@ -8,10 +8,7 @@
       <br>
       <span>팔로워: {{ profileInfo.fans.length }} / </span>
       <span>팔로잉: {{ profileInfo.stars.length }}</span>
-      <!-- <button @click="followUnfollow" v-if="userId !== profileInfo.id">{{ followButtonName }}</button> -->
-      <button @click="followUnfollow">{{ followButtonName }}</button>
-      <!-- <button @click="follow(profileInfo.id)" v-show="!isFollowed">팔로우</button>
-      <button @click="Unfollow(profileInfo.id)" v-show="isFollowed">언팔로우</button> -->
+      <button @click="followUnfollow" v-if="userId !== profileInfo.id">{{ followButtonName }}</button>
 
       <div>{{ profileInfo.nickname }}님이 작성한 바스켓</div>
       <ul v-for="(author_basket, idx) in profileInfo.author_baskets" :key="'author_baskets' + idx">{{ author_basket }}</ul>
@@ -34,12 +31,10 @@ export default {
       'getProfile',
       'follow',
       'unfollow',
-      // 'isFollowed'
-      
+      'getFollowButtonName',
     ]),
     followUnfollow: function() {
       if (this.followButtonName === '팔로우') {
-        console.log(this.profileInfo.id)
         this.follow(this.profileInfo.id)
       } else {
         this.unfollow(this.profileInfo.id)
@@ -51,16 +46,15 @@ export default {
     ...mapState('accountStore', {
       profileInfo: state => state.profileInfo,
       tags: state => state.tags,
-      userId: state => state.userId,
       followButtonName: state => state.followButtonName,
-      getFollowButtonName: state => state.getFollowButtonName
     }),
+    ...mapState({
+      userId: state => state.userId,
+    })
   },
   created: function () {
     this.getProfile(this.userId) // 나중에 다른 회원 정보랑 분리해야됨
     this.getFollowButtonName(this.profileInfo)
-    // this.followButtonName = '팔로우'
-    console.log(this.followButtonName)
   }
 }
 </script>

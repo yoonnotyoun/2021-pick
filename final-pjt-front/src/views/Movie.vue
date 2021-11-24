@@ -28,6 +28,7 @@ export default {
   methods: {
     ...mapActions('movieStore', [
       'getMovieRecommendation',
+      'resetMovies',
     ])
   },
   computed: {
@@ -43,6 +44,7 @@ export default {
   created: function () {
   // console.log(this.recommendedMovies)
     if (this.$store.getters.isLoggedIn) {
+      this.resetMovies('recommended')
       this.getMovieRecommendation()
       this.getMovieRecommendation()
       this.getMovieRecommendation()

@@ -51,29 +51,6 @@ export default {
       groups: state => state.groups,
     })
   },
-  // watch: {
-  //   this.groupFilterId: function () {
-
-  //   }
-  // }
-  // filters: {
-  //   filterRelationshipList: function (relationshipList, groupFilterId) {
-  //     return relationshipList.filter(relationship => {
-  //       if (groupFilterId === '전체') {
-  //         return relationship
-  //       } else {
-  //         return relationship.id === groupFilterId
-  //       }
-  //     })
-  //   }
-  // }
-  // created: function () {
-  //   if (this.$store.getters.isLoggedIn) {
-  //     this.getGroups()
-  //   } else {
-  //     this.$router.push({ name: 'Login' })
-  //   }
-  // },
 }
 </script>
 

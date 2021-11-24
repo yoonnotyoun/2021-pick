@@ -7,7 +7,7 @@ import axios from 'axios'
 const basketStore = {
   namespaced: true,
   state: () => ({
-    userId: '',
+    // userId: '',
     authToken: localStorage.getItem('jwt'),
     searchedBaskets: [],
     recommendedBaskets: [],
@@ -22,21 +22,14 @@ const basketStore = {
     showSpoilerOption: false,
   }),
   getters: {
-    isLoggedIn: function (state) {
-      return state.authToken ? true: false
+    isLoggedIn: function (state, getters, rootState, rootGetters) {
+      return rootGetters.isLoggedIn
     },
-    config: function (state) {
-      return {
-        Authorization: `JWT ${state.authToken}`
-      }
+    config: function (state, getters, rootState, rootGetters) {
+      return rootGetters.config
     },
   },
   mutations: {
-    // 프로필
-    SET_USER_ID: function (state, userId) {
-      console.log('basket userId', userId)
-      state.userId = userId
-    },
     SET_SEARCHED_BASKET_LIST: function (state, baskets) {
       state.searchedBaskets = baskets
       state.recommendedBaskets = []
@@ -83,10 +76,6 @@ const basketStore = {
     },
   },
   actions: {
-    // 프로필
-    getBasketUserId: function ({ commit }, userId) {
-      commit('SET_USER_ID', userId)
-    },
     getBasketSearchResult: function ({ commit, getters }, event) {
       const headers = getters.config
       const query = event.target.value
@@ -139,14 +128,21 @@ const basketStore = {
       })
     },
     // 좋아요
-    getLikeButtonName: function ({ state, commit }) {
-      if (this.userId in state.selectedBasketDetail.like_users) {
-        commit('GET_LIKE_INFO', 'unlike')
-      } else {
+    getLikeButtonName: function ({ state, commit, rootState }) {
+      let flag = false
+      for (let like_user of state.selectedBasketDetail.like_users) {
+        if (rootState.userId === like_user['id']) {
+          commit('GET_LIKE_INFO', 'unlike')
+          flag = true
+        }
+      }
+      if (flag === false) {
         commit('GET_LIKE_INFO', 'like')
       }
     },
-    likeUnlike: function ({ state, commit, dispatch, getters }, basketId) {
+    likeUnlike: function ({ state, commit, dispatch, getters, rootGetters }, basketId) {
+      console.log(getters.config)
+      console.log(rootGetters.config)
       axios({
         method: 'post',
         url: `${SERVER.URL}/api/v1/baskets/${basketId}/like/`,

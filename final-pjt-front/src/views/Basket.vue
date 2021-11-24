@@ -25,6 +25,7 @@ export default {
   methods: {
     ...mapActions('basketStore', [
       'getBasketRecommendation',
+      'resetBaskets',
     ])
   },
   computed: {
@@ -35,6 +36,7 @@ export default {
   },
   created: function () {
     if (this.$store.getters.isLoggedIn) {
+      this.resetBaskets('recommended')
       this.getBasketRecommendation()
       this.getBasketRecommendation()
       this.getBasketRecommendation()

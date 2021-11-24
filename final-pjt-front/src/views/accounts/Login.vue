@@ -11,15 +11,15 @@
         type="password" 
         id="password" 
         v-model="credentials.password"
-        @keypress.enter="startLogin"
+        @keypress.enter="login(credentials)"
       >
     </div>
-    <button @click="startLogin">로그인</button>
+    <button @click="login(credentials)">로그인</button>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -32,28 +32,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('accountStore', [
+    ...mapActions([
       'login',
     ]),
-    ...mapActions('movieStore', [
-      // 'getMovieUserId',
-      // 'movieSetToken',
-    ]),
-    ...mapActions('basketStore', [
-      // 'getBasketUserId',
-    ]),
-    startLogin: function() {
-      this.login(this.credentials)
-      // this.getMovieUserId(this.userId)
-      // this.movieSetToken(this.authToken)
-      // this.getBasketUserId(this.userId)
-    }
-  },
-  computed: {
-    ...mapState('accountStore', {
-      // userId: state => state.userId,
-      // authToken: state => state.authToken,
-    })
   },
 }
 </script>

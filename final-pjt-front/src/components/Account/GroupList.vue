@@ -15,11 +15,6 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'groupList',
-  // data: function() {
-  //   return {
-
-  //   }
-  // },
   methods: {
     ...mapActions('accountStore', [
       'getGroups',

@@ -60,7 +60,7 @@ def movie_detail(request, movie_pk):
 @permission_classes([IsAuthenticated])
 def movie_like(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
-
+    print('userId', request.user.pk)
     # 테스트용
     # user = get_object_or_404(get_user_model(), pk=1)
     # if movie.like_users.filter(pk=user.pk).exists():
