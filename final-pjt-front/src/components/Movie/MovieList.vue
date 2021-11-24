@@ -45,10 +45,10 @@ export default {
 
 <style>
 
-.strong-text {
+/* .strong-text {
   font-family: 'Hahmlet', serif;
   font-weight: 600;
   color: #5a89cf;
-}
+} */
 
 </style>

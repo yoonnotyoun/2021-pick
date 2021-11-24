@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Signup</h1>
     <div class="input-signup">
       <label for="username">아이디</label>
@@ -62,7 +62,21 @@
       <label for="birthdate">생년월일</label>
       <b-form-datepicker id="birthdate" v-model="credentials.birthdate" class="mb-2"></b-form-datepicker>
     </div>
-    <div>
+    <!--  -->
+    <b-form-group label="성별" style="font-weight:600;">
+      <b-form-radio-group
+        v-model="credentials.gender"
+        buttons
+        button-variant="outline-secondary"
+        class="mx-n1"
+      ><template v-for="genderOption in genderOptions">
+          <b-form-radio :value="genderOption.value" :key="genderOption.text" class="rounded-pill mx-1">
+            {{ genderOption.text }}
+          </b-form-radio>
+        </template>
+      </b-form-radio-group>
+    </b-form-group>
+    <!-- <div>
       <label for="gender">성별: </label>
       <div>
         <label for="male">남</label>
@@ -72,8 +86,8 @@
         <label for="female">여</label>
         <input type="radio" id="female" name="gender" v-model="credentials.gender" value=2>
       </div>
-    </div>
-    <b-button class="action-button" @click="signup(credentials)">가입하기</b-button>
+    </div> -->
+    <b-button class="action-button mt-4" @click="signup(credentials)">가입하기</b-button>
   </div>
 </template>
 
@@ -84,6 +98,10 @@ export default {
   name: 'Signup',
   data: function () {
     return {
+      genderOptions: [
+        { text: '남', value: 1 },
+        { text: '여', value: 2 },
+      ],
       credentials: {
         username: '',
         password: '',
@@ -102,12 +120,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 .input-signup {
-  display: inline-block;
-  width: 40%;
+  display: block;
   padding: 35px;
+}
+
+.input-signup label {
+  font-weight: 600;
 }
 
 </style>
