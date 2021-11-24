@@ -4,7 +4,7 @@
       :movieListData="movieListData"
       :key="idx">
       <div align="left" class="mt-2">
-        <p class="d-inline-block strong-text">'{{ movieListData.recommended_name }}'</p>
+        <p class="d-inline-block strong-text" style="font-size:1.1em;">{{ movieListData.recommended_name }}</p>
         <p class="d-inline-block mx-1">{{ recommendedTail[idx] }}</p>
       </div>
       <b-card-group class="row row-cols-3 row-cols-lg-6">
@@ -13,28 +13,31 @@
           :key="idx"
         ></movie-list-item>
       </b-card-group>
-      <!-- <div class="movie-search-result row row-cols-3 row-cols-sm-6">
-        <movie-list-item v-for="(movie, idx) in movieListData.movies"
-          :movie="movie"
-          :key="idx"
-        ></movie-list-item>
-      </div> -->
     </div>
+    <b-modal id="modal-xl" size="xl" hide-footer="true" hide-header="true">
+      <movie-detail></movie-detail>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import MovieListItem from './MovieListItem.vue'
+import MovieDetail from '@/components/Movie/MovieDetail'
+
+import { mapState } from 'vuex'
 
 export default {
-  components: { MovieListItem },
   name: 'MovieList',
+  components: {
+    MovieDetail,
+    MovieListItem,
+  },
   computed: {
     ...mapState('movieStore', {
       recommendedMovies: state => state.recommendedMovies,
       recommendedMethod: state => state.recommendedMethod,
       recommendedTail: state => state.recommendedTail,
+      selectedMovieDetail: state => state.selectedMovieDetail,
     })
   }
 }

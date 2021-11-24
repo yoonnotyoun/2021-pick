@@ -1,15 +1,39 @@
 <template>
   <div>
     <h1>Signup</h1>
-    <div>
+    <div class="input-signup">
+      <label for="username">아이디</label>
+      <b-form-input
+        id="username"
+        type="text"
+        v-model="credentials.username"
+        placeholder="아이디를 입력해주세요."></b-form-input>
+    </div>
+    <!-- <div>
       <label for="username">아이디: </label>
       <input type="text" id="username" v-model="credentials.username">
+    </div> -->
+    <div class="input-signup">
+      <label for="password">비밀번호</label>
+      <b-form-input
+        id="password"
+        type="password"
+        v-model="credentials.password"
+        placeholder="비밀번호를 입력해주세요."></b-form-input>
     </div>
-    <div>
+    <!-- <div>
       <label for="password">비밀번호: </label>
       <input type="password" id="password" v-model="credentials.password">
+    </div> -->
+    <div class="input-signup">
+      <label for="passwordConfirmation">비밀번호 확인</label>
+      <b-form-input
+        id="passwordConfirmation"
+        type="password"
+        v-model="credentials.passwordConfirmation"
+        placeholder="비밀번호를 다시 입력해주세요."></b-form-input>
     </div>
-    <div>
+    <!-- <div>
       <label for="passwordConfirmation">비밀번호 확인: </label>
       <input 
         type="password"
@@ -17,14 +41,26 @@
         v-model="credentials.passwordConfirmation"
         @keypress.enter="signup(credentials)"
       >
+    </div> -->
+    <div class="input-signup">
+      <label for="nickname">닉네임</label>
+      <b-form-input
+        id="nickname"
+        type="text"
+        v-model="credentials.nickname"
+        placeholder="서비스 내에서 사용할 닉네임을 입력해주세요."></b-form-input>
     </div>
-    <div>
+    <!-- <div>
       <label for="nickname">닉네임: </label>
       <input type="text" id="nickname" v-model="credentials.nickname">
-    </div>
-    <div>
+    </div> -->
+    <!-- <div>
       <label for="birthdate">생년월일: </label>
       <input type="date" id="birthdate" v-model="credentials.birthdate">
+    </div> -->
+    <div class="input-signup">
+      <label for="birthdate">생년월일</label>
+      <b-form-datepicker id="birthdate" v-model="credentials.birthdate" class="mb-2"></b-form-datepicker>
     </div>
     <div>
       <label for="gender">성별: </label>
@@ -65,3 +101,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.input-signup {
+  display: inline-block;
+  width: 40%;
+  padding: 35px;
+}
+
+</style>

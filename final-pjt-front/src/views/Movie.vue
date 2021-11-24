@@ -11,7 +11,6 @@
 import MovieSearchBar from '@/components/Movie/MovieSearchBar.vue'
 import MovieList from '@/components/Movie/MovieList.vue'
 import MovieSearchResult from '@/components/Movie/MovieSearchResult.vue'
-// import MovieDetailModal from '@/components/Movie/MovieDetailModal.vue'
 
 import { mapState, mapActions } from 'vuex'
 
@@ -21,7 +20,6 @@ export default {
     MovieList,
     MovieSearchBar,
     MovieSearchResult,
-    // MovieDetailModal,
   },
   methods: {
     ...mapActions('movieStore', [

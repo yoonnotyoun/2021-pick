@@ -1,5 +1,5 @@
 import SERVER from '@/api/drf.js'
-import router from '@/router/index.js'
+// import router from '@/router/index.js'
 import axios from 'axios'
 import _ from 'lodash'
 
@@ -155,8 +155,6 @@ const movieStore = {
         console.log(location)
         if (location === 'basketform') {
           commit('ADD_TO_PICK') // like 해버리기?
-        } else {
-          router.push({ name: 'MovieDetail' })
         }
       })
       .catch((err) => {

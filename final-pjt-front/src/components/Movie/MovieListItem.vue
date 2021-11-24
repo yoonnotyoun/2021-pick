@@ -1,5 +1,5 @@
 <template>
-  <div class="col" @click="getMovieDetail(movie)" style="cursor:pointer">
+  <div v-b-modal.modal-xl class="col" @click="getMovieDetail(movie)" style="cursor:pointer">
     <div class="card border-0" style="background-color:#F9F9F9;">
       <img class="card-img-top" :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="poster">
       <!-- <h3 v-show="checked">p!cked</h3> -->
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+
 import { mapActions, mapState } from 'vuex'
 
 export default {
