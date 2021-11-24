@@ -40,7 +40,7 @@
           </div>
         </div>
       </nav>
-      <!-- <img id="line" src="@/assets/navbar.png" width="vw" alt="line" class="wave-line m-0 p-0"> -->
+      <img id="line" src="@/assets/navbar.png" width="vw" alt="line" class="wave-line m-0 p-0">
     <router-view/>
   </div>
 </template>
@@ -102,7 +102,7 @@ export default {
 
 #line {
   position: absolute;
-  top: 35px; left: 0px;
+  top: 50px; left: 0px;
   width: 100%;
   z-index: 10;
 }
@@ -131,6 +131,14 @@ export default {
   color: #c4c4c4;
   background-color: transparent !important;
   border-color: #c4c4c4 !important;
+}
+
+.mini-button {
+  font-family: 'Gothic A1', sans-serif;
+  font-weight: 500;
+  color: #5a89cf !important;
+  background-color: transparent !important;
+  border-color: #5a89cf !important;
 }
 
 .pick-button {

@@ -1,14 +1,20 @@
 <template>
-  <div class="container">
+  <div class="container mt-5">
     <div>
       <p class="d-inline-block"
       style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
       >{{ userInfo[userId].nickname }}</p>
       <p class="d-inline-block ms-1">님의 팔로잉 그룹 관리</p>
     </div>
-    <create-group></create-group>
-    <group-list></group-list>
-    <relationship-list></relationship-list>
+    <b-row class="mt-5">
+      <b-col md="5">
+        <create-group></create-group>
+        <group-list></group-list>
+      </b-col>
+      <b-col md="7">
+        <relationship-list></relationship-list>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
