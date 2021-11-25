@@ -11,6 +11,9 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item mx-2 mt-2">
+                <router-link class="nav-link" :to="{ name: 'Main' }">홈</router-link>
+              </li>
+              <li class="nav-item mx-2 mt-2">
                 <router-link class="nav-link" :to="{ name: 'Movie' }">영화</router-link>
               </li>
               <li class="nav-item mx-2 mt-2">
@@ -21,7 +24,7 @@
                 <!-- <router-link :to="{ name: 'Profile', params: { userId: userId } }" style="color:#5a89cf;">{{ userInfo[userId].nickname }}</router-link> 님, 환영합니다! -->
               </li>
               <li class="nav-item mx-2 mt-3" v-else>
-                [로그인 후 이용 부탁 드립니다.]
+                <router-link style="color:#5a89cf;" :to="{ name: 'MyProfile' }">[로그인 후 이용 부탁 드립니다.]</router-link>
               </li>
               <li class="nav-item dropdown mx-2">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">

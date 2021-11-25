@@ -128,8 +128,8 @@ const basketStore = {
       // 중복방지 처리 하기
       const recommend_tail = {
         'myinfo': '사용자들이 p!ck한 영화',
-        'movies': '를 포함해 당신이 p!ck한 영화가 들어있는 바스켓',
-        'tags': '를 포함해 당신이 p!ck한 태그가 들어있는 바스켓',
+        'movies': '영화가 들어있는 바스켓',
+        'tags': '태그가 들어있는 바스켓',
         'friends': '님이 p!ck한 바스켓',
       }
       const methodTail = {

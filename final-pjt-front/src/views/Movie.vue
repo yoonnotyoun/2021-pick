@@ -1,7 +1,19 @@
 <template>
   <div class="mt-5 container">
+    <div><br>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >p</p>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #5a89cf;"
+      >!</p>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >ck</p>
+      <p class="d-inline-block ms-2 fs-5 fw-bold">영화</p>
+    </div>
     <!-- <movie-detail-modal v-if="isModalViewed" @close-modal="isModalViewed=false"></movie-detail-modal> -->
-    <movie-search-bar class="mt-4"></movie-search-bar>
+    <movie-search-bar class="mt-3"></movie-search-bar>
     <movie-search-result v-if="searchedMovies"></movie-search-result>
     <movie-list v-if="recommendedMovies"></movie-list>
   </div>

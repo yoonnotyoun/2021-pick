@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div>
+  <div class="container mt-5">
+    <div><br>
       <p class="d-inline-block"
       style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
       >바스켓</p>

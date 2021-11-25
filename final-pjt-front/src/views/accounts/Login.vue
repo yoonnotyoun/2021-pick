@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div class="container">
-      <h1>Login</h1>
+    <div class="container mt-5">
+      <div><br>
+        <p class="d-inline-block"
+        style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+        >로그인</p>
+      </div>
       <div class="input-signup">
         <label for="username" class="d-flex">아이디</label>
         <b-form-input
@@ -20,11 +24,13 @@
           @keypress.enter="login(credentials)">
           </b-form-input>
       </div>
-      <b-button class="action-button" @click="login(credentials)">로그인</b-button>
     </div>
-    <b-button class="action-button-gray mt-2 mb-4">
-      <router-link class="text-decoration-none" style="color:#c4c4c4;" :to="{ name: 'Signup' }">회원가입</router-link>
-    </b-button>
+    <div class="">
+      <b-button class="action-button mx-1" @click="login(credentials)">로그인</b-button>
+      <b-button class="action-button-gray mx-1">
+        <router-link class="text-decoration-none" style="color:#c4c4c4;" :to="{ name: 'Signup' }">회원가입</router-link>
+      </b-button>
+    </div>
   </div>
 </template>
 

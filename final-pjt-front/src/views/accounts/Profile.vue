@@ -1,21 +1,33 @@
 <template>
-  <div class="mt-5"><br>
-    <b-row>
-      <b-col md="3">
+  <div class="mt-5 container"><br>
+    <div class="d-flex flex-column align-items-start container">
+      <div class="">
+        <!-- 태그 -->
+        <div class="d-flex my-3">
+          <div v-for="(tag, idx) in tags"
+            :key="'tags' + idx"
+            class="tag-button d-flex align-items-center justify-content-center px-3 me-2"
+          >{{ tag }}</div>
+        </div>
+      </div>
+      <div md="1" class="d-flex align-items-center mb-3">
         <b-avatar src="@/assets/profile-image.png"></b-avatar>
-      </b-col>
-      <b-col md="9">
-        
-      </b-col>
-    </b-row>
+        <span class="ms-3 fs-5">{{ profileInfo.nickname }}</span>
+      </div>
+      <div md="">
+        <span>팔로워</span>
+        <span class="pick-text">{{ profileInfo.fans.length }}</span>
+        <span class="ms-3">팔로잉</span>
+        <span class="pick-text me-3">{{ profileInfo.stars.length }}</span>
+        <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '팔로우'" class="action-button d-inline-block ms-2">{{ followButtonName }}</b-button>
+        <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '언팔로우'" class="action-button d-inline-block ms-2 unfollow">{{ followButtonName }}</b-button>
+      </div>
+    </div><br><hr>
+    <!-- <img :src="userInfo.image" alt="profile"> -->
     <div>
-      <!-- <img :src="userInfo.image" alt="profile"> -->
-      <p>{{ profileInfo.nickname }}</p>
-      <span v-for="(tag, idx) in tags" :key="idx">{{ tag }} </span>
-      <br>
-      <span>팔로워: {{ profileInfo.fans.length }} / </span>
-      <span>팔로잉: {{ profileInfo.stars.length }}</span>
-      <button @click="followUnfollow" v-if="userId !== profileInfo.id">{{ followButtonName }}</button>
+
+      <!-- <span v-for="(tag, idx) in tags" :key="idx">{{ tag }} </span>
+      <br> -->
       <div class="container">
         <div class="d-flex align-items-end">
           <h4 class="strong-text mb-2">{{ profileInfo.nickname }}</h4>
@@ -27,7 +39,7 @@
             :basket="basket"
           ></basket-list-item>
         </div>
-      </div>
+      </div><br><hr>
       <!-- <ul v-for="(author_basket, idx) in profileInfo.author_baskets" :key="'author_baskets2' + idx">{{ author_basket }}</ul> -->
       <div class="container">
         <div class="d-flex align-items-end">
@@ -40,7 +52,7 @@
             :basket="basket"
           ></basket-list-item>
         </div>
-      </div>
+      </div><br><hr>
       <!-- <ul v-for="(like_basktet, idx) in profileInfo.like_basktets" :key="'like_basktet' + idx">{{ like_basktet }}</ul> -->
       <div class="container">
         <div class="d-flex align-items-end">
