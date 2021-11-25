@@ -5,12 +5,16 @@
       <div v-for="(comment, idx) in comments" :comment="comment" :key="'spoilered' + idx" class="mb-1">
         <span class="d-flex justify-content-between">
           <div class="d-flex">
-            <p class="me-4 strong-text" @click="getProfile(comment.author)" style="cursor:pointer">{{ userInfo[comment.author].nickname }}</p>
+            <p class="me-4" @click="getProfile(comment.author)" style="cursor:pointer; font-weight:600;">{{ userInfo[comment.author].nickname }}</p>
             <p>{{ comment.content }}</p>
           </div>
-          <div class="d-flex align-items-center">
-            <p class="me-4">작성일 : {{ comment.created_at.split('T')[0] }}</p>
-            <button @click="deleteComment(comment)" v-show="comment.author === userId" class="mb-3">X</button>
+          <div class="d-flex">
+            <p class="me-3">{{ comment.created_at.split('T')[0] }}</p>
+            <button @click="deleteComment(comment)"
+              v-show="comment.author === userId"
+              class="mb-3 px-1 py-0"
+              style="border: none; background-color: transparent; color: #5a89cf;"
+            >x</button>
           </div>
         </span>
       </div>
@@ -20,21 +24,25 @@
         <div v-if="comment.spoiler === true && comment.author !== userId"> <!--  && comment.author !== userId -->
           <span class="d-flex justify-content-between">
             <div class="d-flex">
-              <p class="me-4 strong-text" @click="getProfile(comment.author)" style="cursor:pointer">{{ userInfo[comment.author].nickname }}</p>
+              <p class="me-4" @click="getProfile(comment.author)" style="cursor:pointer; font-weight:600;">{{ userInfo[comment.author].nickname }}</p>
               <p>이 댓글은 스포일러가 포함된 댓글입니다.</p>
             </div>
-            <p>작성일 : {{ comment.created_at.split('T')[0] }}</p>
+            <p>{{ comment.created_at.split('T')[0] }}</p>
           </span>
         </div>
         <div v-else>
           <span class="d-flex justify-content-between">
             <div class="d-flex">
-              <p class="me-4 strong-text" @click="getProfile(comment.author)" style="cursor:pointer">{{ userInfo[comment.author].nickname }}</p>
+              <p class="me-4" @click="getProfile(comment.author)" style="cursor:pointer; font-weight:600;">{{ userInfo[comment.author].nickname }}</p>
               <p>{{ comment.content }}</p>
             </div>
-            <div class="d-flex align-items-center">
-              <p class="me-4">작성일 : {{ comment.created_at.split('T')[0] }}</p>
-              <button @click="deleteComment(comment)" v-show="comment.author === userId" class="mb-3">X</button>
+            <div class="d-flex">
+              <p class="me-3">{{ comment.created_at.split('T')[0] }}</p>
+              <button @click="deleteComment(comment)"
+                v-show="comment.author === userId"
+                class="mb-3 px-1 py-0"
+                style="border: none; background-color: transparent; color: #5a89cf;"
+              >x</button>
             </div>
           </span>
         </div>

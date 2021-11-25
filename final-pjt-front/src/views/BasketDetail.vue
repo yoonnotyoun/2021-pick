@@ -2,6 +2,22 @@
   <div class="container my-5">
     <!-- 바스켓 소개 -->
     <div class="card border-light">
+      <div class="d-flex justify-content-between">
+        <div class="container d-flex align-items-center">
+          <b-avatar src="https://placekitten.com/300/300" size="4rem;"></b-avatar>
+          <div class="ms-2" align="left">
+            <p @click="getProfile(selectedBasketDetail.author)"
+              class="mb-1"
+              style="cursor:pointer; font-family:'Hahmlet', serif; font-weight:600; font-size: 1.1rem;"
+            >{{ userInfo[selectedBasketDetail.author].nickname }}</p>
+            <p class="mb-0" style="font-size: 0.9rem;">팔로워 {{ userInfo[selectedBasketDetail.author].fans.length }}명</p>
+          </div>
+        </div>
+        <b-button @click="deleteBasket(selectedBasketDetail)"
+          v-if="userId === selectedBasketDetail.author"
+          style="width:10vw; font-size:0.95rem; border:none; color:#5a89cf; background-color:transparent; text-decoration:underline;"
+        >바스켓 삭제</b-button>
+      </div>
       <div class="row">
         <div class="card col-6 border-light" style="max-width: 400px;">
           <div v-if="selectedBasketDetail.movies.length > 3">
@@ -15,11 +31,9 @@
           </div>
         </div>
         <div class="card col border-light" align="left">
-          <p @click="getProfile(selectedBasketDetail.author)" style="cursor:pointer">닉네임: {{ userInfo[selectedBasketDetail.author].nickname }}</p>
-          <p class="">팔로워 {{ userInfo[selectedBasketDetail.author].fans.length }}명</p>
           <div v-if="selectedBasketDetail.public === true" class="public-button d-flex align-items-center justify-content-center">공개</div>
           <div v-else class="public-button d-flex align-items-center justify-content-center">비공개</div>
-          <p style="font-weight:600; font-size:1.4em;">{{ selectedBasketDetail.title }}</p>
+          <p class="my-2" style="font-weight:600; font-size:1.4em;">{{ selectedBasketDetail.title }}</p>
           <!-- 태그 -->
           <div class="d-flex">
             <div v-for="(basket_tag, idx) in selectedBasketDetail.baskets_tags"
@@ -27,9 +41,9 @@
               class="tag-button d-flex align-items-center justify-content-center px-3 me-2"
             >{{ basket_tag.name }}</div>
           </div>
-          <p>설명 : {{ selectedBasketDetail.explanation }}</p>
-          <p>좋아요 개수: {{ likeCnt }}</p>
-          <div v-if="selectedBasketDetail.public === true">
+          <!-- 설명 -->
+          <p class="my-3">{{ selectedBasketDetail.explanation }}</p>
+          <!-- <div v-if="selectedBasketDetail.public === true">
             <p>이 바스켓을 좋아하는 {{ selectedBasketDetail.like_users.length }}명</p>
             <span v-for="(like_user, idx) in selectedBasketDetail.like_users" :key="'like_user' + idx">{{ userInfo[like_user.id].nickname }} </span>
           </div>
@@ -38,12 +52,16 @@
             <div>
               <span v-for="(participant, idx) in selectedBasketDetail.participants" :key="'participant' + idx">{{ userInfo[participant.id].nickname }} </span>
             </div>
+          </div> -->
+          <div align="right">
+            <div class="me-2">
+              <p class="strong-text d-inline-block me-1 mb-1">{{ likeCnt }}</p>
+              <p class="d-inline-block mb-1">p!cks</p>
+            </div>
+            <button class="pick-button" v-if="likeButtonName === 'like'" @click="likeUnlike(selectedBasketDetail.id)">p!ck</button>
+            <button class="unpick-button" v-if="likeButtonName === 'unlike'" @click="likeUnlike(selectedBasketDetail.id)">p!ck</button>
           </div>
-          <!-- <button @click="likeUnlike(selectedBasketDetail.id)">{{ likeButtonName }}</button> -->
-          <button class="pick-button" v-if="likeButtonName === 'like'" @click="likeUnlike(selectedBasketDetail.id)">p!ck</button>
-          <button class="unpick-button" v-if="likeButtonName === 'unlike'" @click="likeUnlike(selectedBasketDetail.id)">p!ck</button>
           <!-- <button @click="updateBasket(selectedBasketDetail)" v-if="userId === selectedBasketDetail.author">수정</button> -->
-          <button @click="deleteBasket(selectedBasketDetail)" v-if="userId === selectedBasketDetail.author">삭제</button>
         </div>
       </div>
     </div>
