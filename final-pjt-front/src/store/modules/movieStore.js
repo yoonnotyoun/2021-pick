@@ -86,6 +86,7 @@ const movieStore = {
       let checkDuplication = state.pickedMovieIdList.findIndex(item => item === movie.id)
       // if (!(movie.id in state.pickedMovies)) {
       console.log(checkDuplication)
+      console.log(movie)
       if (checkDuplication === -1) {
         // console.log(movie)
         state.pickedMovie = movie

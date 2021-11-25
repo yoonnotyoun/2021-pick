@@ -15,8 +15,8 @@
         </div>
         <div class="card col d-flex d-column justify-content-between me-1 border-light bg-light px-3" align="left">
           <div class="ms-2">
-            <span @click="getBasketDetail(basket)" style="cursor:pointer" class="fw-bold fs-5">{{ basket.title }}</span><br>
-            <span @click="getProfile(basket.author)" style="cursor:pointer" class="">{{ userInfo[basket.author].nickname }}</span>
+            <span @click="getBasketDetail(basket)" style="cursor:pointer; font-size:1.1rem;" class="fw-bold">{{ basket.title }}</span><br>
+            <span @click="getProfile(basket.author)" style="cursor:pointer; color:grey;">{{ userInfo[basket.author].nickname }}</span>
             <!-- 태그 -->
             <!-- <div class="d-flex">
               <div v-for="(basket_tag, idx) in basket.baskets_tags"  :key="'basket' + idx" class="">{{ basket_tag.name }}</div>

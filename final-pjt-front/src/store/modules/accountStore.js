@@ -64,10 +64,11 @@ const accountStore = {
   },
 
   actions: {
-    getProfile: function ({ commit, getters, dispatch }, userId) {
+    getProfile: function ({ state, commit, getters, dispatch }, userId) {
       console.log('getProfile', userId)
       dispatch('getProfileTags', userId)
       dispatch('addProfileInfo', userId)
+      
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/accounts/profile/${userId}/`,
@@ -76,6 +77,7 @@ const accountStore = {
       .then((res) => {
         const userData = res.data
         commit('GET_PROFILE', userData)
+        dispatch('getFollowButtonName', state.profileInfo)
         console.log('name: Profile, userId: ', userId)
         router.push({ name: 'Profile', params: { userId: userId } })
       })
