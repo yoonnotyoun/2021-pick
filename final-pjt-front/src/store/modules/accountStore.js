@@ -7,9 +7,6 @@ const accountStore = {
 
   state: () => ({
     // 로그인
-    // authToken: localStorage.getItem('jwt'),
-    // // 프로필
-    // userId: '',
     profileInfo: '',
     tags: [],
     followButtonName: '',
@@ -19,21 +16,11 @@ const accountStore = {
     likeMovies: [],
     // 그룹
     groups: [],
-    // relationship (그룹관리)
     relationshipList: [],
     groupFilterId: '전체',
   }),
 
   getters: {
-    // 로그인
-    // isLoggedIn: function (state) {
-    //   return state.authToken ? true: false
-    // },
-    // config: function (state) {
-    //   return {
-    //     Authorization: `JWT ${state.authToken}`
-    //   }
-    // },
     isLoggedIn: function (state, getters, rootState, rootGetters) {
       return rootGetters.isLoggedIn
     },
@@ -43,20 +30,6 @@ const accountStore = {
   },
 
   mutations: {
-    // 로그인
-    // SET_TOKEN: function (state, token) {
-    //   state.authToken = token
-    //   localStorage.setItem('jwt', token)
-    // },
-    // REMOVE_TOKEN: function (state) {
-    //   localStorage.removeItem('jwt')
-    //   state.authToken = ''
-    // },
-    // // 프로필
-    // SET_USER_ID: function (state, userId) {
-    //   state.userId = userId
-    //   console.log(state.userId)
-    // },
     GET_PROFILE: function (state, userData) {
       state.profileInfo = userData
     },

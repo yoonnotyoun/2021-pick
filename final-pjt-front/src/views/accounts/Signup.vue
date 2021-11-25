@@ -1,6 +1,10 @@
 <template>
-  <div class="container">
-    <h1>Signup</h1>
+  <div class="container mt-5">
+    <div><br>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >회원가입</p>
+    </div>
     <div class="input-signup">
       <label for="username" class="d-flex">아이디</label>
       <b-form-input

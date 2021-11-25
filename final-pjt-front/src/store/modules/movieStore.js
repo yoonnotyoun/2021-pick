@@ -179,6 +179,7 @@ const movieStore = {
       })
       .then((res) => {
         commit('SET_MOVIE_DETAIL', res.data)
+        commit('GET_LIKE_CNT', res.data.like_users.length)
         dispatch('addMovieInfo', movie_pk)
         console.log(location)
         if (location === 'basketform') {
@@ -244,6 +245,9 @@ const movieStore = {
         console.log(err)
       })
     },
+    // getLikeCnt: function ({ commit }, likeCnt) {
+    //   commit('GET_LIKE_CNT', likeCnt)
+    // }
     // getMovieBaskets: function ({ commit, getters }, movieId) {
     //   const headers = getters.config
     //   axios({

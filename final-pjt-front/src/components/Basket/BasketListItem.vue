@@ -1,6 +1,6 @@
 <template>
-  <div class="container mb-4">
-    <div class="card p-3 bg-light">
+  <div class="container mb-4 col">
+    <div class="card p-3 bg-light h-100">
       <div class="row">
         <div class="card col-6 border-light bg-light p-0" style="max-width: 230px; cursor:pointer;" @click="getBasketDetail(basket)">
           <div v-if="basket.movies.length > 3">

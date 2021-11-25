@@ -1,5 +1,5 @@
 <template>
-  <div id="detail-modal" class="container">
+  <div id="detail-modal" class="container" style="background-color: white;">
     <b-card no-body class="overflow-hidden my-3" style="max-width:100vmax; background-color:#F9F9F9;" border-variant="light">
       <b-row g-1>
         <b-col md="3">
@@ -15,17 +15,20 @@
             <p style="font-weight:400; font-size:1.1em;">{{ actor.name }}</p>
           </div>
         </b-col>
-        <b-col md="5" class="mt-3">
-          <p style="font-weight:500; font-size:1.2em;">⭐ {{ selectedMovieDetail.vote_average }}</p>
-          <p style="font-weight:400; font-size:1em;">{{ selectedMovieDetail.overview }}</p>
-          <div align="right">
-            <div class="me-2">
-              <p class="strong-text d-inline-block me-1">{{ likeCnt }}</p>
-              <p class="d-inline-block">p!cks</p>
+        <b-col md="5" class="mt-3 d-flex flex-column justify-content-between">
+          <div>
+            <p style="font-weight:500; font-size:1.2em;">⭐ {{ selectedMovieDetail.vote_average }}</p>
+            <p style="font-weight:400; font-size:1em;">{{ selectedMovieDetail.overview }}</p>
+          </div>
+          <div>
+            <div align="right">
+              <div class="me-2">
+                <p class="strong-text d-inline-block me-1">{{ likeCnt }}</p>
+                <p class="d-inline-block">p!cks</p>
+              </div>
+              <button class="pick-button" v-if="likeButtonName === 'like'" @click="likeUnlike(selectedMovieDetail.id)">p!ck</button>
+              <button class="unpick-button" v-if="likeButtonName === 'unlike'" @click="likeUnlike(selectedMovieDetail.id)">p!ck</button>
             </div>
-            <button class="pick-button" v-if="likeButtonName === 'like'" @click="likeUnlike(selectedMovieDetail.id)">p!ck</button>
-            <button class="unpick-button" v-if="likeButtonName === 'unlike'" @click="likeUnlike(selectedMovieDetail.id)">p!ck</button>
-            <!-- <button class="pick-button" @click="likeUnlike(selectedMovieDetail.id)">{{ likeButtonName }}</button> -->
           </div>
         </b-col>
       </b-row>
@@ -72,6 +75,7 @@ export default {
   created: function () {
     console.log('Movie getLikeButtonName')
     this.getLikeButtonName(this.selectedMovieDetail)
+    console.log(this.LikeButtonName)
   }
 }
 </script>

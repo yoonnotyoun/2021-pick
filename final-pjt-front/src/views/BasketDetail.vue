@@ -66,7 +66,6 @@
             <button class="pick-button" v-if="likeButtonName === 'like'" @click="likeUnlike(selectedBasketDetail.id)">p!ck</button>
             <button class="unpick-button" v-if="likeButtonName === 'unlike'" @click="likeUnlike(selectedBasketDetail.id)">p!ck</button>
           </div>
-          <!-- <button @click="updateBasket(selectedBasketDetail)" v-if="userId === selectedBasketDetail.author">수정</button> -->
         </div>
       </div>
     </div>

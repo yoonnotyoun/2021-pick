@@ -2,14 +2,12 @@
   <div v-b-modal.modal-xl class="col" @click="getMovieDetail(movie)" style="cursor:pointer">
     <div class="card border-0" style="background-color:#F9F9F9;">
       <img class="card-img-top" :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="poster">
-      <!-- <h3 v-show="checked">p!cked</h3> -->
       <div class="card-body px-0">
         <p class="fw-bold" align="left">{{ movie.title }}</p>
         <div class="d-flex justify-content-between">
           <p>{{ year }}</p>
           <p>⭐ {{ movie.vote_average }}</p>
         </div>
-        <!-- <p>{{ movie.like_users }}</p> -->
       </div>
     </div>
   </div>
