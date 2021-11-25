@@ -14,7 +14,7 @@
         ></movie-list-item>
       </b-card-group>
     </div>
-    <b-modal id="modal-xl" size="xl" hide-footer="true" hide-header="true">
+    <b-modal id="modal-xl" size="xl" hide-footer="true">
       <movie-detail></movie-detail>
     </b-modal>
   </div>
@@ -42,11 +42,5 @@ export default {
 </script>
 
 <style>
-
-/* .strong-text {
-  font-family: 'Hahmlet', serif;
-  font-weight: 600;
-  color: #5a89cf;
-} */
 
 </style>

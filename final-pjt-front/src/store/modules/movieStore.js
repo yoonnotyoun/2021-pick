@@ -180,9 +180,6 @@ const movieStore = {
       .then((res) => {
         commit('SET_MOVIE_DETAIL', res.data)
         dispatch('addMovieInfo', movie_pk)
-        // if (location === 'accounts/setmovietaste') {
-        //   commit('ADD_TO_PICK') // like 해버리기?
-        // }
         console.log(location)
         if (location === 'basketform') {
           commit('ADD_TO_PICK')

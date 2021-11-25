@@ -80,11 +80,15 @@
         >영화 리스트</p>
       </div>
       <b-card-group class="row row-cols-3 row-cols-lg-6">
-        <movie-list-item v-for="(movie, idx) in selectedBasketDetail.movies"
+        <movie-list-item
+          v-for="(movie, idx) in selectedBasketDetail.movies"
           :movie="movie"
           :key="'movie' + idx"
         ></movie-list-item>
       </b-card-group>
+      <b-modal id="modal-xl" size="xl" hide-footer="true">
+        <movie-detail></movie-detail>
+      </b-modal>
     </div>
     <!-- 테이스팅 홀 -->
     <br><hr class="mt-0">
@@ -108,7 +112,9 @@
 <script>
 import CommentList from '@/components/Basket/CommentList.vue'
 
+
 import { mapState, mapActions } from 'vuex'
+import MovieDetail from '@/components/Movie/MovieDetail'
 import MovieListItem from '../components/Movie/MovieListItem.vue'
 
 export default {
@@ -120,6 +126,7 @@ export default {
   },
   components: {
     CommentList,
+    MovieDetail,
     MovieListItem,
   },
   methods: {
