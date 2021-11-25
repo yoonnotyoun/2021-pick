@@ -30,6 +30,10 @@ const accountStore = {
   },
 
   mutations: {
+    RESET_PROFILE: function (state) {
+      state.profileInfo = ''
+      // state.followButtonName = ''
+    },
     GET_PROFILE: function (state, userData) {
       state.profileInfo = userData
     },
@@ -64,10 +68,12 @@ const accountStore = {
   },
 
   actions: {
-    getProfile: function ({ commit, getters, dispatch }, userId) {
-      console.log('getProfile', userId)
-      dispatch('getProfileTags', userId)
-      dispatch('addProfileInfo', userId)
+    // 초기화
+    resetProfile: function ({ commit }) {
+      commit('RESET_PROFILE')
+    },
+    getProfile: function ({ state, commit, getters, dispatch }, userId) {
+      // dispatch('resetProfile')
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/accounts/profile/${userId}/`,
@@ -82,6 +88,9 @@ const accountStore = {
       .catch((err) => {
         console.log(err)
       })
+      dispatch('getProfileTags', userId)
+      dispatch('addProfileInfo', userId)
+      dispatch('getFollowButtonName', state.profileInfo)
     },
     getProfileTags: function ({ commit, getters }, userId) {
       console.log('getProfileTags', userId)
@@ -138,15 +147,15 @@ const accountStore = {
     },
     //팔로우
     getFollowButtonName: function ({ commit, rootState }, profileInfo) {
-      console.log(profileInfo)
-      console.log(rootState.userId in profileInfo.fans)
+      console.log('profileInfo', profileInfo)
+      console.log('rootState.userId in profileInfo.fans', rootState.userId in profileInfo.fans)
       if (rootState.userId in profileInfo.fans) {
         commit('GET_FOLLOW_INFO', '언팔로우')
       } else {
         commit('GET_FOLLOW_INFO', '팔로우')
       }
     },
-    follow: function ({ commit, dispatch, getters }, starId) {
+    follow: function ({ dispatch, commit, getters }, starId) {
       axios({
         method: 'post',
         url: `${SERVER.URL}/api/v1/accounts/relationship/star/${starId}/`,
@@ -160,7 +169,7 @@ const accountStore = {
         console.log(err)
       })
     },
-    unfollow: function ({ commit, dispatch, getters }, starId) {
+    unfollow: function ({ dispatch, commit, getters }, starId) {
       axios({
         method: 'delete',
         url: `${SERVER.URL}/api/v1/accounts/relationship/star/${starId}/`,
