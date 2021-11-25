@@ -79,8 +79,6 @@ const movieStore = {
     SET_RECOMMENDED_METHOD_TAIL: function (state, methodTail) {
       state.recommendedMethod.push(methodTail.method)
       state.recommendedTail.push(methodTail.tail)
-      console.log(state.recommendedMethod)
-      console.log(state.recommendedTail)
     },
     ADD_TO_PICK: function (state) {
       const movie = state.selectedMovieDetail
@@ -146,7 +144,7 @@ const movieStore = {
       const recommend_tail = {
         'myinfo': '사용자들이 p!ck한 영화',
         'genre': '장르의 영화',
-        'baskets': '바스켓을 포함해 당신이 p!ck한 바스켓의 영화',
+        'baskets': '을 포함해 당신이 p!ck한 바스켓의 영화',
         'friends': '님이 p!ck한 바스켓',
       }
       const methodTail = {

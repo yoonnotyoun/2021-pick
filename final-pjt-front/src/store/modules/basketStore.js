@@ -1,7 +1,7 @@
 import SERVER from '@/api/drf.js'
 import router from '@/router/index.js'
 import axios from 'axios'
-// import _ from 'lodash'
+import _ from 'lodash'
 
 
 const basketStore = {
@@ -12,6 +12,8 @@ const basketStore = {
     searchedBaskets: [],
     query: '',
     recommendedBaskets: [],
+    recommendedMethod: [],
+    recommendedTail: [],
     // 디테일
     selectedBasketDetail: '',
     // 좋아요
@@ -42,12 +44,22 @@ const basketStore = {
       state.query = query
     },
     SET_RECOMMENDED_BASKET_LIST: function (state, recommendedData) {
-      console.log(recommendedData)
-      state.recommendedBaskets.push({
-        recommended_name: recommendedData.pop(3).recommended_name,
-        baskets: recommendedData
-      })
+      if (recommendedData.length === 4) {
+        state.recommendedBaskets.push({
+          recommended_name: recommendedData.pop(3).recommended_name,
+          baskets: recommendedData
+        }) 
+      } else {
+        state.recommendedBaskets.push({
+          recommended_name: '당신 또래의 같은 성별',
+          baskets: recommendedData
+        })
+      }
       state.searchedBaskets = []
+    },
+    SET_RECOMMENDED_METHOD_TAIL: function (state, methodTail) {
+      state.recommendedMethod.push(methodTail.method)
+      state.recommendedTail.push(methodTail.tail)
     },
     // 디테일
     SET_BASKET_DETAIL: function (state, basketDetail) {
@@ -63,11 +75,12 @@ const basketStore = {
     RESET_BASKETS: function (state, type) {
       if (type === 'recommended') {
         state.recommendedBaskets = []
-        state.query = ''
       } if (type === 'searched') {
         state.searchedBaskets = []
-        state.query = ''
       }
+      state.query = ''
+      state.recommendedTail = []
+      state.recommendedMethod = []
     },
     // COMMENT
     SET_COMMENTS: function (state, comments) {
@@ -110,9 +123,19 @@ const basketStore = {
     },
     getBasketRecommendation: function ({ commit, getters }) {
       const headers = getters.config
-      // const recommend_method = _.sample(['myinfo', 'movies', 'tags', 'friends'])
-      const recommend_method = 'movies'
+      const recommend_method = _.sample(['myinfo', 'movies', 'tags', 'friends'])
+      // const recommend_method = 'movies'
       // 중복방지 처리 하기
+      const recommend_tail = {
+        'myinfo': '사용자들이 p!ck한 영화',
+        'movies': '를 포함해 당신이 p!ck한 영화가 들어있는 바스켓',
+        'tags': '를 포함해 당신이 p!ck한 태그가 들어있는 바스켓',
+        'friends': '님이 p!ck한 바스켓',
+      }
+      const methodTail = {
+        method: recommend_method,
+        tail: recommend_tail[recommend_method],
+      }
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/baskets/recommend/${recommend_method}`,
@@ -121,6 +144,7 @@ const basketStore = {
       .then((res) => {
         console.log(recommend_method)
         commit('SET_RECOMMENDED_BASKET_LIST', res.data)
+        commit('SET_RECOMMENDED_METHOD_TAIL', methodTail)
       })
       .catch((err) => {
         console.log(err)

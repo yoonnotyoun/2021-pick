@@ -1,8 +1,9 @@
 <template>
   <div class="container my-5">
     <!-- 바스켓 소개 -->
-    <div class="card border-light">
-      <div class="d-flex justify-content-between">
+    <div class="card border-light bg-light">
+      <!-- 프로필, 바스켓삭제 -->
+      <div class="d-flex justify-content-between mb-3">
         <div class="container d-flex align-items-center">
           <b-avatar src="@/assets/profile-image.png" size="4rem;"></b-avatar>
           <div class="ms-2" align="left">
@@ -18,8 +19,9 @@
           style="width:10vw; font-size:0.95rem; border:none; color:#5a89cf; background-color:transparent; text-decoration:underline;"
         >바스켓 삭제</b-button>
       </div>
+      <!-- 이미지 -->
       <div class="row">
-        <div class="card col-6 border-light" style="max-width: 400px;">
+        <div class="card col-6 border-light  bg-light" style="max-width: 400px;">
           <div v-if="selectedBasketDetail.movies.length > 3">
             <div class="container">
               <div class="row row-cols-2 m-0 p-0">
@@ -30,29 +32,32 @@
             </div>
           </div>
         </div>
-        <div class="card col border-light" align="left">
-          <div v-if="selectedBasketDetail.public === true" class="public-button d-flex align-items-center justify-content-center">공개</div>
-          <div v-else class="public-button d-flex align-items-center justify-content-center">비공개</div>
-          <p class="my-2" style="font-weight:600; font-size:1.4em;">{{ selectedBasketDetail.title }}</p>
-          <!-- 태그 -->
-          <div class="d-flex">
-            <div v-for="(basket_tag, idx) in selectedBasketDetail.baskets_tags"
-              :key="'basket' + idx"
-              class="tag-button d-flex align-items-center justify-content-center px-3 me-2"
-            >{{ basket_tag.name }}</div>
-          </div>
-          <!-- 설명 -->
-          <p class="my-3">{{ selectedBasketDetail.explanation }}</p>
-          <!-- <div v-if="selectedBasketDetail.public === true">
-            <p>이 바스켓을 좋아하는 {{ selectedBasketDetail.like_users.length }}명</p>
-            <span v-for="(like_user, idx) in selectedBasketDetail.like_users" :key="'like_user' + idx">{{ userInfo[like_user.id].nickname }} </span>
-          </div>
-          <div v-else>
-            <p>이 바스켓에 참여중인 {{ selectedBasketDetail.participants.length }}명</p>
-            <div>
-              <span v-for="(participant, idx) in selectedBasketDetail.participants" :key="'participant' + idx">{{ userInfo[participant.id].nickname }} </span>
+        <div class="card col border-light bg-light d-flex justify-content-between" align="left">
+          <div>
+            <div v-if="selectedBasketDetail.public === true" class="public-button d-flex align-items-center justify-content-center">공개</div>
+            <div v-else class="public-button d-flex align-items-center justify-content-center">비공개</div>
+            <p class="my-2" style="font-weight:600; font-size:1.4em;">{{ selectedBasketDetail.title }}</p>
+            <!-- 태그 -->
+            <div class="d-flex">
+              <div v-for="(basket_tag, idx) in selectedBasketDetail.baskets_tags"
+                :key="'basket' + idx"
+                class="tag-button d-flex align-items-center justify-content-center px-3 me-2"
+              >{{ basket_tag.name }}</div>
             </div>
-          </div> -->
+            <!-- 설명 -->
+            <p class="my-3">{{ selectedBasketDetail.explanation }}</p>
+            <!-- <div v-if="selectedBasketDetail.public === true">
+              <p>이 바스켓을 좋아하는 {{ selectedBasketDetail.like_users.length }}명</p>
+              <span v-for="(like_user, idx) in selectedBasketDetail.like_users" :key="'like_user' + idx">{{ userInfo[like_user.id].nickname }} </span>
+            </div>
+            <div v-else>
+              <p>이 바스켓에 참여중인 {{ selectedBasketDetail.participants.length }}명</p>
+              <div>
+                <span v-for="(participant, idx) in selectedBasketDetail.participants" :key="'participant' + idx">{{ userInfo[participant.id].nickname }} </span>
+              </div>
+            </div> -->
+          </div>
+          <!-- p!ck 버튼 -->
           <div align="right">
             <div class="me-2">
               <p class="strong-text d-inline-block me-1 mb-1">{{ likeCnt }}</p>
@@ -66,7 +71,8 @@
       </div>
     </div>
     <!-- 영화 -->
-    <div class="container mt-5">
+    <br><hr>
+    <div class="container mt-4">
       <div align="left">
         <p class="d-inline-block" style="font-size: 1.2rem;">이 바스켓의</p>
         <p class="d-inline-block ms-1"
@@ -81,6 +87,7 @@
       </b-card-group>
     </div>
     <!-- 테이스팅 홀 -->
+    <br><hr class="mt-0">
     <div class="d-flex justify-content-between align-items-center">
       <div align="left">
         <p class="d-inline-block pt-3" style="font-size: 1.2rem;">영화와 취향 이야기를 나누는</p>
@@ -146,6 +153,12 @@ export default {
 </script>
 
 <style>
+hr {
+  height: 5px;
+  background-color:#5a89cf;
+  border: 0px;
+}
+
 .imgContainer2 {
   width: 200px;
   height: 200px;

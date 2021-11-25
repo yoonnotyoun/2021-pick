@@ -35,9 +35,7 @@ export default {
   computed: {
     ...mapState('movieStore', {
       recommendedMovies: state => state.recommendedMovies,
-      recommendedMethod: state => state.recommendedMethod,
       recommendedTail: state => state.recommendedTail,
-      selectedMovieDetail: state => state.selectedMovieDetail,
     })
   }
 }

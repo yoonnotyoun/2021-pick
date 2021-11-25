@@ -1,9 +1,13 @@
 <template>
-  <div>
+  <div class="container">
     <div v-for="(basketListData, idx) in recommendedBaskets"
       :basketListData="basketListData"
-      :key="idx">{{ basketListData.recommended_name }}
-      <div class="container">
+      :key="idx">
+      <div align="left" class="mt-2">
+        <p class="d-inline-block strong-text" style="font-size:1.1em;">{{ basketListData.recommended_name }}</p>
+        <p class="d-inline-block mx-1">{{ recommendedTail[idx] }}</p>
+      </div>
+      <div>
         <div class="basket-search-result row row-cols-1 row-cols-md-2 row-cols-xl-3">
           <basket-list-item v-for="(basket, idx) in basketListData.baskets"
             :basket="basket"
@@ -25,7 +29,8 @@ export default {
   name: 'BasketList',
   computed: {
     ...mapState('basketStore', {
-      recommendedBaskets: state => state.recommendedBaskets
+      recommendedBaskets: state => state.recommendedBaskets,
+      recommendedTail: state => state.recommendedTail,
     })
   }
 }
