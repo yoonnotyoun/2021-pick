@@ -234,7 +234,6 @@ def movie_recommend_friends(request):
     return Response(new_serializer_data, status=status.HTTP_201_CREATED)
 
 
-# [TMDB API 영화 데이터 받아오기]
 @api_view(['POST'])
 def tmdb_movie(request):
     TMDB_API_KEY = config("TMDB_API_KEY")
@@ -255,7 +254,6 @@ def tmdb_movie(request):
                     overview = result.get('overview'),
                     poster_path = result.get('poster_path'),
                     vote_average = result.get('vote_average'),
-                    release_date = result.get('release_date'),
                     adult = result.get('adult'),
                     runtime = detail_result.get('runtime'),
                 )
@@ -265,6 +263,7 @@ def tmdb_movie(request):
                     overview = result.get('overview'),
                     poster_path = result.get('poster_path'),
                     vote_average = result.get('vote_average'),
+                    release_date = result.get('release_date'),
                     adult = result.get('adult'),
                     runtime = detail_result.get('runtime'),
                 )

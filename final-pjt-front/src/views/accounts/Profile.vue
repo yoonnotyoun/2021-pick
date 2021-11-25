@@ -50,7 +50,6 @@
           ></basket-list-item>
         </div>
       </div><br><hr>
-      <!-- <ul v-for="(author_basket, idx) in profileInfo.author_baskets" :key="'author_baskets2' + idx">{{ author_basket }}</ul> -->
       <div class="container">
         <div align="left">
           <p class="d-inline-block ms-1"
@@ -65,7 +64,6 @@
           ></basket-list-item>
         </div>
       </div><br><hr>
-      <!-- <ul v-for="(like_basktet, idx) in profileInfo.like_basktets" :key="'like_basktet' + idx">{{ like_basktet }}</ul> -->
       <div class="container">
         <div align="left">
           <p class="d-inline-block ms-1"
@@ -83,7 +81,6 @@
           <movie-detail></movie-detail>
         </b-modal>
       </div>
-      <!-- <ul v-for="(like_movie, idx) in profileInfo.like_movies" :key="'like_movie' + idx">{{ like_movie }}</ul> -->
     </div>
   </div>
 </template>
