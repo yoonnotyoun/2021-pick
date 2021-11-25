@@ -1,5 +1,17 @@
 <template>
-  <div class="mt-5 container"><br>
+  <div class="mt-5 container">
+    <div><br>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >p</p>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #5a89cf;"
+      >!</p>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >cker</p>
+      <p class="d-inline-block ms-2 fs-5 fw-bold">{{ profileInfo.nickname }}</p>
+    </div>
     <div class="d-flex flex-column align-items-start container">
       <div class="">
         <!-- 태그 -->
@@ -15,9 +27,9 @@
         <span class="ms-3 fs-5">{{ profileInfo.nickname }}</span>
       </div>
       <div md="">
-        <span>팔로워</span>
+        <span class="me-1">팔로워</span>
         <span class="pick-text">{{ profileInfo.fans.length }}</span>
-        <span class="ms-3">팔로잉</span>
+        <span class="ms-3 me-1">팔로잉</span>
         <span class="pick-text me-3">{{ profileInfo.stars.length }}</span>
         <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '팔로우'" class="action-button d-inline-block ms-2">{{ followButtonName }}</b-button>
         <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '언팔로우'" class="action-button d-inline-block ms-2 unfollow">{{ followButtonName }}</b-button>

@@ -4,7 +4,7 @@
       <b-row>
         <b-col md="7"></b-col>
         <b-col md="3" class="px-0">
-          <b-form-select v-model="selected" :options="options">
+          <b-form-select v-model="selectedGroup" :options="options">
             <option disabled value="">선택</option>
             <option v-for="(group, idx) in groups" :key="idx" :value="group.id">{{ group.name }}</option>
           </b-form-select>

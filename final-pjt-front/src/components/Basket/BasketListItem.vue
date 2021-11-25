@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mb-4">
     <div class="card p-3 bg-light">
       <div class="row">
         <div class="card col-6 border-light bg-light p-0" style="max-width: 230px; cursor:pointer;" @click="getBasketDetail(basket)">

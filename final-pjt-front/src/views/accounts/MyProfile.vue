@@ -1,5 +1,17 @@
 <template>
-  <div>
+  <div class="container mt-5">
+    <div><br>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >p</p>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #5a89cf;"
+      >!</p>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >cker</p>
+      <p class="d-inline-block ms-2 fs-5 fw-bold">{{ profileInfo.nickname }}</p>
+    </div>
     <header>
       <!-- <img :src="userInfo.image" alt="profile"> -->
       <p>{{ profileInfo.nickname }}</p>

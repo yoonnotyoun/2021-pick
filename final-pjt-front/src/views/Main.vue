@@ -1,5 +1,17 @@
 <template>
-  <div class="mt-5">
+  <div class="mt-5 container">
+    <div><br>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >p</p>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #5a89cf;"
+      >!</p>
+      <p class="d-inline-block"
+      style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
+      >ck</p>
+      <p class="d-inline-block ms-2 fs-5 fw-bold">your taste</p>
+    </div>
     <br><br>
     <basket-list></basket-list>
     <movie-list></movie-list>
