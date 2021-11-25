@@ -1,6 +1,14 @@
 <template>
-  <div>
-    <header>
+  <div class="mt-5"><br>
+    <b-row>
+      <b-col md="3">
+        <b-avatar src="@/assets/profile-image.png"></b-avatar>
+      </b-col>
+      <b-col md="9">
+        
+      </b-col>
+    </b-row>
+    <div>
       <!-- <img :src="userInfo.image" alt="profile"> -->
       <p>{{ profileInfo.nickname }}</p>
       <span v-for="(tag, idx) in tags" :key="idx">{{ tag }} </span>
@@ -47,7 +55,7 @@
         </b-card-group>
       </div>
       <!-- <ul v-for="(like_movie, idx) in profileInfo.like_movies" :key="'like_movie' + idx">{{ like_movie }}</ul> -->
-    </header>
+    </div>
   </div>
 </template>
 

@@ -4,7 +4,7 @@
     <div class="card border-light">
       <div class="d-flex justify-content-between">
         <div class="container d-flex align-items-center">
-          <b-avatar src="https://placekitten.com/300/300" size="4rem;"></b-avatar>
+          <b-avatar src="@/assets/profile-image.png" size="4rem;"></b-avatar>
           <div class="ms-2" align="left">
             <p @click="getProfile(selectedBasketDetail.author)"
               class="mb-1"

@@ -25,7 +25,7 @@
               </li>
               <li class="nav-item dropdown mx-2">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
+                  <b-avatar src="@/assets/profile-image.png"></b-avatar>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" v-if="isLoggedIn">
                   <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'MyProfile' }">내 프로필</router-link></li>
