@@ -7,6 +7,7 @@ import BasketDetail from '@/views/BasketDetail'
 import BasketForm from '@/views/BasketForm'
 import Login from '@/views/accounts/Login'
 import Profile from '@/views/accounts/Profile'
+import MyProfile from '@/views/accounts/MyProfile'
 import Signup from '@/views/accounts/Signup'
 import SetMovieTaste from '@/views/accounts/SetMovieTaste'
 import Group from '@/views/accounts/Group'
@@ -48,6 +49,11 @@ const routes = [
     path: '/accounts/profile/:userId',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/accounts/profile/',
+    name: 'MyProfile',
+    component: MyProfile
   },
   {
     path: '/accounts/signup',

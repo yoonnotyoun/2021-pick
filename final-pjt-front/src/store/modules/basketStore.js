@@ -10,6 +10,7 @@ const basketStore = {
     // userId: '',
     authToken: localStorage.getItem('jwt'),
     searchedBaskets: [],
+    query: '',
     recommendedBaskets: [],
     // 디테일
     selectedBasketDetail: '',
@@ -37,6 +38,9 @@ const basketStore = {
       state.searchedBaskets = baskets
       state.recommendedBaskets = []
     },
+    SET_SEARCHED_QUERY: function (state, query) {
+      state.query = query
+    },
     SET_RECOMMENDED_BASKET_LIST: function (state, recommendedData) {
       console.log(recommendedData)
       state.recommendedBaskets.push({
@@ -59,8 +63,10 @@ const basketStore = {
     RESET_BASKETS: function (state, type) {
       if (type === 'recommended') {
         state.recommendedBaskets = []
+        state.query = ''
       } if (type === 'searched') {
         state.searchedBaskets = []
+        state.query = ''
       }
     },
     // COMMENT
@@ -96,6 +102,7 @@ const basketStore = {
       })
       .then((res) => {
         commit('SET_SEARCHED_BASKET_LIST', res.data)
+        commit('SET_SEARCHED_QUERY', query)
       })
       .catch((err) => {
         console.log(err)

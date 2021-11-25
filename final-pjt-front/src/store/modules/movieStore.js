@@ -15,6 +15,7 @@ const movieStore = {
     pickedMovieTitleList: [],
     // 리스트 검색, 추천
     searchedMovies: [],
+    query: '',
     recommendedMovies: [],
     recommendedMethod: [],
     recommendedTail: [],
@@ -50,11 +51,15 @@ const movieStore = {
       } if (type === 'tail') {
         state.recommendedTail = []
       }
+      state.query = ''
     },
     // 리스트 검색, 추천
     SET_SEARCHED_MOVIE_LIST: function (state, movies) {
       state.searchedMovies = movies
       state.recommendedMovies = []
+    },
+    SET_SEARCHED_QUERY: function (state, query) {
+      state.query = query
     },
     SET_RECOMMENDED_MOVIE_LIST: function (state, recommendedData) {
       if (recommendedData.length === 7) {
@@ -128,6 +133,7 @@ const movieStore = {
       })
       .then((res) => {
         commit('SET_SEARCHED_MOVIE_LIST', res.data)
+        commit('SET_SEARCHED_QUERY', query)
       })
       .catch((err) => {
         console.log(err)

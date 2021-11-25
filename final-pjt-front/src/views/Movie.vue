@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="mt-5 container">
     <!-- <movie-detail-modal v-if="isModalViewed" @close-modal="isModalViewed=false"></movie-detail-modal> -->
-    <movie-search-bar></movie-search-bar>
+    <movie-search-bar class="mt-4"></movie-search-bar>
     <movie-search-result v-if="searchedMovies"></movie-search-result>
     <movie-list v-if="recommendedMovies"></movie-list>
   </div>

@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="mt-5 container">
+    <basket-search-bar class="mt-4"></basket-search-bar>
     <div align="right" class="mx-3">
-      <b-button class="action-button" @click="showBasketForm">새 바스켓 생성</b-button>
+      <b-button class="action-button mb-3" @click="showBasketForm">새 바스켓 생성</b-button>
     </div>
-    <basket-search-bar></basket-search-bar>
     <basket-search-result v-if="searchedBaskets"></basket-search-result>
     <basket-list v-if="recommendedBaskets"></basket-list>
   </div>

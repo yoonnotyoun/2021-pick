@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <div class="card p-3">
+    <div class="card p-3 bg-light">
       <div class="row">
-        <div class="card col-6 border-light" style="max-width: 230px; cursor:pointer;" @click="getBasketDetail(basket)">
+        <div class="card col-6 border-light bg-light p-0" style="max-width: 230px; cursor:pointer;" @click="getBasketDetail(basket)">
           <div v-if="basket.movies.length > 3">
-            <div class="container">
+            <div class="container pe-0">
               <div class="row row-cols-2 m-0 p-0">
                 <div class="imgContainer col m-0 p-0" v-for="(movie, idx) in basket.movies.slice(0,4)" :key="idx">
                   <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="poster" class="image">
@@ -13,14 +13,29 @@
             </div>
           </div>
         </div>
-        <div class="card col me-3 border-light">
-          <p @click="getBasketDetail(basket)" style="cursor:pointer">제목: {{ basket.title }}</p>
-          <p @click="getProfile(basket.author)" style="cursor:pointer">닉네임: {{ userInfo[basket.author].nickname }}</p>
-          <span>태그: </span>
-          <div class="d-flex">
-            <div v-for="(basket_tag, idx) in basket.baskets_tags"  :key="'basket' + idx" class="">{{ basket_tag.name }}</div>
+        <div class="card col d-flex d-column justify-content-between me-1 border-light bg-light px-3" align="left">
+          <div class="ms-2">
+            <span @click="getBasketDetail(basket)" style="cursor:pointer" class="fw-bold fs-5">{{ basket.title }}</span><br>
+            <span @click="getProfile(basket.author)" style="cursor:pointer" class="">{{ userInfo[basket.author].nickname }}</span>
+            <!-- 태그 -->
+            <!-- <div class="d-flex">
+              <div v-for="(basket_tag, idx) in basket.baskets_tags"  :key="'basket' + idx" class="">{{ basket_tag.name }}</div>
+            </div> -->
+            <div class="container">
+              <div class="card row border-light bg-light pick-text">
+                <div v-for="(basket_tag, idx) in basket.baskets_tags"
+                  :key="'basket' + idx"
+                  class="col p-0"
+                >#{{ basket_tag.name }}</div>
+              </div>
+            </div>
           </div>
-          <p>좋아요개수: {{ basket.like_users.length }}</p>
+          <div align="right">
+            <div class="">
+              <span class="strong-text d-inline-block me-1">{{ basket.like_users.length }}</span>
+              <span class="d-inline-block">p!cks</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -3,11 +3,14 @@
     <div v-for="(basketListData, idx) in recommendedBaskets"
       :basketListData="basketListData"
       :key="idx">{{ basketListData.recommended_name }}
-      <div class="basket-search-result row row-cols-3">
-        <basket-list-item v-for="(basket, idx) in basketListData.baskets"
-          :basket="basket"
-          :key="idx"
-        ></basket-list-item>
+      <div class="container">
+        <div class="basket-search-result row row-cols-1 row-cols-md-2 row-cols-xl-3">
+          <basket-list-item v-for="(basket, idx) in basketListData.baskets"
+            :basket="basket"
+            :key="idx"
+            class=""
+          ></basket-list-item>
+        </div>
       </div>
     </div>
   </div>
