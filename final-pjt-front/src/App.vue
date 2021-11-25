@@ -132,11 +132,19 @@ export default {
   border-color: #5a89cf !important;
 }
 
-.action-button-gray {
+.action-button-transparent {
   font-family: 'Hahmlet', serif;
   font-weight: 500;
   color: #c4c4c4;
   background-color: transparent !important;
+  border-color: #c4c4c4 !important;
+}
+
+.action-button-gray {
+  font-family: 'Hahmlet', serif;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #c4c4c4 !important;
   border-color: #c4c4c4 !important;
 }
 
@@ -178,6 +186,10 @@ export default {
   margin:0 auto;
   vertical-align:middle;
   border: none;
+}
+
+b-modal {
+  background-color: #ffffff;
 }
 
 </style>

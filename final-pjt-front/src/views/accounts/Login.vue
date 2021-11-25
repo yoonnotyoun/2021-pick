@@ -26,10 +26,10 @@
       </div>
     </div>
     <div class="">
-      <b-button class="action-button mx-1" @click="login(credentials)">로그인</b-button>
-      <b-button class="action-button-gray mx-1">
+      <b-button class="action-button-transparent mx-1">
         <router-link class="text-decoration-none" style="color:#c4c4c4;" :to="{ name: 'Signup' }">회원가입</router-link>
       </b-button>
+      <b-button class="action-button mx-1" @click="login(credentials)">로그인</b-button>
     </div>
   </div>
 </template>

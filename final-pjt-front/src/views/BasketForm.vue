@@ -58,17 +58,8 @@
         </b-form-radio-group>
       </b-form-group>
     </div>
-
-    <!-- <div>
-      <b-form-group label="public" v-slot="{ ariaDescribedby }">
-        <b-form-radio v-model="info.public" :aria-describedby="ariaDescribedby" name="public" value="True">공개</b-form-radio>
-        <b-form-radio v-model="info.public" :aria-describedby="ariaDescribedby" name="public" value="False">비공개</b-form-radio>
-      </b-form-group>
-    </div> -->
     <!-- public 비공개 선택 시 친구 선택 창 나타내기 -->
     <div class="input-signup">
-    <!-- <b-button v-b-toggle.collapse-1 variant="primary" v-if="info.public === false">친구 초대</b-button> -->
-    <!-- <b-collapse id="collapse-1" class="mt-2"> -->
       <b-card v-if="info.public === 'False'" align="left">
         <p style="font-weight: 600;">친구 그룹 초대</p>
         <ul>
@@ -83,7 +74,10 @@
     <!-- 영화 선택 -->
     <div>
       <div class="input-signup">
-        <label for="pickedMovies" class="d-flex" align="left">선택 영화 목록</label>
+        <div class="d-flex" align="left">
+          <label for="pickedMovies" class="d-inline-block">선택 영화 목록</label>
+          <p class="d-inline-block ms-2 mt-1 mb-0" style="font-size:0.8rem; color:#c4c4c4">아래 검색창을 통해 4개 이상의 영화를 추가해주세요.</p>
+        </div>
         <b-form-tags
           input-id="pickedMovies"
           v-model="pickedMovieTitleList"

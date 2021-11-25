@@ -25,7 +25,7 @@
           <div v-if="selectedBasketDetail.movies.length > 3">
             <div class="container">
               <div class="row row-cols-2 m-0 p-0">
-                <div class="imgContainer2 col m-0 p-0" v-for="(movie, idx) in selectedBasketDetail.movies.slice(0,4)" :key="idx">
+                <div class="imgContainer2 col m-0 p-0" v-for="(movie, idx) in selectedBasketDetail.movies.slice(0,4)" :key="'selectedMovie' + idx">
                   <img :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="poster" class="image">
                 </div>
               </div>
@@ -86,7 +86,7 @@
           :key="'movie' + idx"
         ></movie-list-item>
       </b-card-group>
-      <b-modal id="modal-xl" size="xl" hide-footer="true">
+      <b-modal id="modal-xl" size="xl" hide-footer>
         <movie-detail></movie-detail>
       </b-modal>
     </div>

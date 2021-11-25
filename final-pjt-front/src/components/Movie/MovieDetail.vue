@@ -8,10 +8,10 @@
         <b-col md="4">
           <p style="font-weight:600; font-size:1.8em;">{{ selectedMovieDetail.title }} ({{ selectedMovieDetail.release_date.split('-')[0] }})</p>
           <p style="font-weight:400; font-size:1.1em;">{{ selectedMovieDetail.runtime }}분</p>
-          <div class="d-inline-block me-2" v-for="(genre, idx) in selectedMovieDetail.genres" :key="idx">
+          <div class="d-inline-block me-2" v-for="(genre, idx) in selectedMovieDetail.genres" :key="'genre' + idx">
             <p style="font-weight:400; font-size:1.1em;">{{ genre.name }}</p>
           </div><br>
-          <div class="d-inline-block me-2" v-for="(actor, idx) in selectedMovieDetail.actors" :key="idx">
+          <div class="d-inline-block me-2" v-for="(actor, idx) in selectedMovieDetail.actors" :key="'actor' + idx">
             <p style="font-weight:400; font-size:1.1em;">{{ actor.name }}</p>
           </div>
         </b-col>
@@ -72,7 +72,6 @@ export default {
   created: function () {
     console.log('Movie getLikeButtonName')
     this.getLikeButtonName(this.selectedMovieDetail)
-    this.getGenreNames()
   }
 }
 </script>

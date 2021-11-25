@@ -12,26 +12,24 @@
       </div>
       <div md="1" class="d-flex align-items-center mb-3">
         <b-avatar src="@/assets/profile-image.png"></b-avatar>
-        <span class="ms-3 fs-5">{{ profileInfo.nickname }}</span>
+        <span class="ms-3 fs-5" style="font-weight:600;">{{ profileInfo.nickname }}</span>
       </div>
-      <div md="">
+      <div>
         <span>팔로워</span>
-        <span class="pick-text">{{ profileInfo.fans.length }}</span>
+        <span class="pick-text ms-1">{{ profileInfo.fans.length }}</span>
         <span class="ms-3">팔로잉</span>
-        <span class="pick-text me-3">{{ profileInfo.stars.length }}</span>
+        <span class="pick-text ms-1 me-3">{{ profileInfo.stars.length }}</span>
         <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '팔로우'" class="action-button d-inline-block ms-2">{{ followButtonName }}</b-button>
-        <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '언팔로우'" class="action-button d-inline-block ms-2 unfollow">{{ followButtonName }}</b-button>
+        <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '언팔로우'" class="action-button-gray d-inline-block ms-2 unfollow">{{ followButtonName }}</b-button>
       </div>
     </div><br><hr>
-    <!-- <img :src="userInfo.image" alt="profile"> -->
     <div>
-
-      <!-- <span v-for="(tag, idx) in tags" :key="idx">{{ tag }} </span>
-      <br> -->
       <div class="container">
-        <div class="d-flex align-items-end">
-          <h4 class="strong-text mb-2">{{ profileInfo.nickname }}</h4>
-          <h5 class="d-inline-block ms-2">님이 작성한 바스켓</h5>
+        <div align="left">
+          <p class="d-inline-block ms-1"
+          style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.2rem; color: #5a89cf;"
+          >{{ profileInfo.nickname }}</p>
+          <p class="d-inline-block" style="font-size: 1.2rem;">님이 생성한 바스켓</p>
         </div>
         <div class="basket-search-result row row-cols-1 row-cols-md-2 row-cols-xl-3">
           <basket-list-item v-for="(basket, idx) in authorBaskets"       
@@ -42,9 +40,11 @@
       </div><br><hr>
       <!-- <ul v-for="(author_basket, idx) in profileInfo.author_baskets" :key="'author_baskets2' + idx">{{ author_basket }}</ul> -->
       <div class="container">
-        <div class="d-flex align-items-end">
-          <h4 class="strong-text mb-2">{{ profileInfo.nickname }}</h4>
-          <h5 class="d-inline-block ms-2">님이 좋아하는 바스켓</h5>
+        <div align="left">
+          <p class="d-inline-block ms-1"
+          style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.2rem; color: #5a89cf;"
+          >{{ profileInfo.nickname }}</p>
+          <p class="d-inline-block" style="font-size: 1.2rem;">님이 좋아하는 바스켓</p>
         </div>
         <div class="basket-search-result row row-cols-1 row-cols-md-2 row-cols-xl-3">
           <basket-list-item v-for="(basket, idx) in likeBaskets"       
@@ -55,9 +55,11 @@
       </div><br><hr>
       <!-- <ul v-for="(like_basktet, idx) in profileInfo.like_basktets" :key="'like_basktet' + idx">{{ like_basktet }}</ul> -->
       <div class="container">
-        <div class="d-flex align-items-end">
-          <h4 class="strong-text mb-2">{{ profileInfo.nickname }}</h4>
-          <h5 class="d-inline-block ms-2">님이 좋아하는 영화</h5>
+        <div align="left">
+          <p class="d-inline-block ms-1"
+          style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.2rem; color: #5a89cf;"
+          >{{ profileInfo.nickname }}</p>
+          <p class="d-inline-block" style="font-size: 1.2rem;">님이 좋아하는 영화</p>
         </div>
         <b-card-group class="row row-cols-3 row-cols-lg-6">
           <movie-list-item v-for="(movie, idx) in likeMovies"
@@ -65,7 +67,7 @@
             :key="'movie' + idx"
           ></movie-list-item>
         </b-card-group>
-        <b-modal id="modal-xl" size="xl" hide-footer="true">
+        <b-modal id="modal-xl" size="xl" hide-footer>
           <movie-detail></movie-detail>
         </b-modal>
       </div>

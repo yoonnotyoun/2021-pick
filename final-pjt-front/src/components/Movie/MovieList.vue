@@ -2,7 +2,7 @@
   <div class="container">
     <div v-for="(movieListData, idx) in recommendedMovies"
       :movieListData="movieListData"
-      :key="idx">
+      :key="'movies' + idx">
       <div align="left" class="mt-2">
         <p class="d-inline-block strong-text" style="font-size:1.1em;">{{ movieListData.recommended_name }}</p>
         <p class="d-inline-block mx-1">{{ recommendedTail[idx] }}</p>
@@ -10,11 +10,11 @@
       <b-card-group class="row row-cols-3 row-cols-lg-6">
         <movie-list-item v-for="(movie, idx) in movieListData.movies"
           :movie="movie"
-          :key="idx"
+          :key="'movie' + idx"
         ></movie-list-item>
       </b-card-group>
     </div>
-    <b-modal id="modal-xl" size="xl" hide-footer="true">
+    <b-modal id="modal-xl" size="xl" hide-footer>
       <movie-detail></movie-detail>
     </b-modal>
   </div>
