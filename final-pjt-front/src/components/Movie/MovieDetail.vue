@@ -26,8 +26,8 @@
                 <p class="strong-text d-inline-block me-1">{{ likeCnt }}</p>
                 <p class="d-inline-block">p!cks</p>
               </div>
-              <button class="pick-button" v-if="likeButtonName === 'like'" @click="likeUnlike(selectedMovieDetail.id)">p!ck</button>
-              <button class="unpick-button" v-if="likeButtonName === 'unlike'" @click="likeUnlike(selectedMovieDetail.id)">p!ck</button>
+              <button class="pick-button" v-show="likeButtonName === 'like'" @click="likeUnlike(selectedMovieDetail.id)">p!ck</button>
+              <button class="unpick-button" v-show="likeButtonName === 'unlike'" @click="likeUnlike(selectedMovieDetail.id)">p!ck</button>
             </div>
           </div>
         </b-col>

@@ -208,6 +208,9 @@ const movieStore = {
       let flag = false
       for (let like_user of state.selectedMovieDetail.like_users) {
         if (rootState.userId === like_user['id']) {
+          console.log(state.selectedMovieDetail)
+          console.log(state.selectedMovieDetail.like_users)
+
           commit('GET_LIKE_INFO', 'unlike')
           flag = true
         }

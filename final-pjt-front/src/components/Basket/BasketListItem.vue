@@ -23,10 +23,12 @@
             </div> -->
             <div class="container">
               <div class="card row border-light bg-light pick-text">
-                <div v-for="(basket_tag, idx) in basket.baskets_tags"
+                <div v-for="(basket_tag, idx) in basket.baskets_tags.slice(0,3)"
                   :key="'basket' + idx"
                   class="col p-0"
-                >#{{ basket_tag.name }}</div>
+                >
+                #{{ basket_tag.name }}
+                </div>
               </div>
             </div>
           </div>
