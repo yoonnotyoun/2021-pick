@@ -181,6 +181,7 @@ const movieStore = {
         commit('SET_MOVIE_DETAIL', res.data)
         commit('GET_LIKE_CNT', res.data.like_users.length)
         dispatch('addMovieInfo', movie_pk)
+        dispatch('getLikeButtonName')
         console.log(location)
         if (location === 'basketform') {
           commit('ADD_TO_PICK')
@@ -208,9 +209,6 @@ const movieStore = {
       let flag = false
       for (let like_user of state.selectedMovieDetail.like_users) {
         if (rootState.userId === like_user['id']) {
-          console.log(state.selectedMovieDetail)
-          console.log(state.selectedMovieDetail.like_users)
-
           commit('GET_LIKE_INFO', 'unlike')
           flag = true
         }
