@@ -1,7 +1,7 @@
 <template>
   <div class="container my-5">
     <!-- 바스켓 소개 -->
-    <div class="card p-3 border-light">
+    <div class="card border-light">
       <div class="row">
         <div class="card col-6 border-light" style="max-width: 400px;">
           <div v-if="selectedBasketDetail.movies.length > 3">
@@ -14,14 +14,19 @@
             </div>
           </div>
         </div>
-        <div class="card col border-light">
-          <p v-if="selectedBasketDetail.public === true">공개</p>
-          <p v-else>비공개</p>
-          <p>제목 : {{ selectedBasketDetail.title }}</p>
-          <p @click="getProfile(selectedBasketDetail.author)" class="" style="cursor:pointer">닉네임: {{ userInfo[selectedBasketDetail.author].nickname }}</p>
+        <div class="card col border-light" align="left">
+          <p @click="getProfile(selectedBasketDetail.author)" style="cursor:pointer">닉네임: {{ userInfo[selectedBasketDetail.author].nickname }}</p>
           <p class="">팔로워 {{ userInfo[selectedBasketDetail.author].fans.length }}명</p>
+          <div v-if="selectedBasketDetail.public === true" class="public-button d-flex align-items-center justify-content-center">공개</div>
+          <div v-else class="public-button d-flex align-items-center justify-content-center">비공개</div>
+          <p style="font-weight:600; font-size:1.4em;">{{ selectedBasketDetail.title }}</p>
           <!-- 태그 -->
-          <span v-for="(basket_tag, idx) in selectedBasketDetail.baskets_tags" :key="'basket' + idx">{{ basket_tag.name }} </span>
+          <div class="d-flex">
+            <div v-for="(basket_tag, idx) in selectedBasketDetail.baskets_tags"
+              :key="'basket' + idx"
+              class="tag-button d-flex align-items-center justify-content-center px-3 me-2"
+            >{{ basket_tag.name }}</div>
+          </div>
           <p>설명 : {{ selectedBasketDetail.explanation }}</p>
           <p>좋아요 개수: {{ likeCnt }}</p>
           <div v-if="selectedBasketDetail.public === true">
@@ -34,18 +39,22 @@
               <span v-for="(participant, idx) in selectedBasketDetail.participants" :key="'participant' + idx">{{ userInfo[participant.id].nickname }} </span>
             </div>
           </div>
-          <button @click="likeUnlike(selectedBasketDetail.id)">{{ likeButtonName }}</button>
-          <button @click="updateBasket(selectedBasketDetail)" v-if="userId === selectedBasketDetail.author">수정</button>
+          <!-- <button @click="likeUnlike(selectedBasketDetail.id)">{{ likeButtonName }}</button> -->
+          <button class="pick-button" v-if="likeButtonName === 'like'" @click="likeUnlike(selectedBasketDetail.id)">p!ck</button>
+          <button class="unpick-button" v-if="likeButtonName === 'unlike'" @click="likeUnlike(selectedBasketDetail.id)">p!ck</button>
+          <!-- <button @click="updateBasket(selectedBasketDetail)" v-if="userId === selectedBasketDetail.author">수정</button> -->
           <button @click="deleteBasket(selectedBasketDetail)" v-if="userId === selectedBasketDetail.author">삭제</button>
         </div>
       </div>
     </div>
     <!-- 영화 -->
-      <div class="d-flex align-items-end">
-        <h5 class="d-inline-block me-2">이 바스켓의</h5>
-        <h4 class="strong-text mb-2">영화 리스트</h4>
+    <div class="container mt-5">
+      <div align="left">
+        <p class="d-inline-block" style="font-size: 1.2rem;">이 바스켓의</p>
+        <p class="d-inline-block ms-1"
+        style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.2rem; color: #5a89cf;"
+        >영화 리스트</p>
       </div>
-    <div class="container">
       <b-card-group class="row row-cols-3 row-cols-lg-6">
         <movie-list-item v-for="(movie, idx) in selectedBasketDetail.movies"
           :movie="movie"
@@ -55,9 +64,11 @@
     </div>
     <!-- 테이스팅 홀 -->
     <div class="d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-end">
-        <h5 class="d-inline-block me-2">영화에 대해 이야기 나누는</h5>
-        <h4 class="strong-text mb-2">테이스팅 홀</h4>
+      <div align="left">
+        <p class="d-inline-block pt-3" style="font-size: 1.2rem;">영화와 취향 이야기를 나누는</p>
+        <p class="d-inline-block ms-1"
+        style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.2rem; color: #5a89cf;"
+        >테이스팅 홀</p>
       </div>
       <b-form-checkbox @change="setSpoilerFilter(showSpoiler)" v-model="showSpoiler" name="spoiler-button" switch class="d-inline-block">
       스포일러 보기
@@ -127,4 +138,31 @@ export default {
   object-fit: fill;
   /* height: 200px; */
 }
+
+.public-button {
+  width: 65px;
+  height: 25px;
+  color: #ffffff;
+  background-color: #5a89cf;
+  border-color: #5a89cf;
+  font-weight: 600;
+  font-size: 0.8rem;
+  /* text-align: center;
+  vertical-align:middle; */
+  border-radius: 75px;
+}
+
+.tag-button {
+  height: 25px;
+  color: #5a89cf;
+  display: inline-block;
+  background-color: transparent;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #5a89cf;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-radius: 75px;
+}
+
 </style>
