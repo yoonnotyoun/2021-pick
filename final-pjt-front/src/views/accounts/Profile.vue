@@ -53,6 +53,9 @@
             :key="'movie' + idx"
           ></movie-list-item>
         </b-card-group>
+        <b-modal id="modal-xl" size="xl" hide-footer="true">
+          <movie-detail></movie-detail>
+        </b-modal>
       </div>
       <!-- <ul v-for="(like_movie, idx) in profileInfo.like_movies" :key="'like_movie' + idx">{{ like_movie }}</ul> -->
     </div>
@@ -61,14 +64,19 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import BasketListItem from '../../components/Basket/BasketListItem.vue'
+import MovieDetail from '@/components/Movie/MovieDetail'
 import MovieListItem from '../../components/Movie/MovieListItem.vue'
+import BasketListItem from '../../components/Basket/BasketListItem.vue'
 // import axios from 'axios'
 // import SERVER from '@/api/drf.js'
 // import SERVER from '@/api/drf.js'
 
 export default {
-  components: { BasketListItem, MovieListItem },
+  components: {
+    MovieDetail,
+    MovieListItem,
+    BasketListItem,
+  },
   name: 'Profile',
   data: function() {
     return {

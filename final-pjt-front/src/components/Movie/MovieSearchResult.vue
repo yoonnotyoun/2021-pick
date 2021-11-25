@@ -6,7 +6,7 @@
       <span class="strong-text fs-5">{{ searchedMovies.length }}</span>
       <span class="fs-6">개의 영화가 있습니다.</span>
     </div>
-    <div class="movie-search-result row row-cols-3 row-cols-sm-6">
+    <div class="row row-cols-3 row-cols-sm-6">
       <movie-list-item
         v-for="(movie, idx) in searchedMovies"
         :movie="movie"
