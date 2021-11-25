@@ -127,7 +127,7 @@ const basketStore = {
       // const recommend_method = 'movies'
       // 중복방지 처리 하기
       const recommend_tail = {
-        'myinfo': '사용자들이 p!ck한 영화',
+        'myinfo': '사용자들이 p!ck한 바스켓',
         'movies': '영화가 들어있는 바스켓',
         'tags': '태그가 들어있는 바스켓',
         'friends': '님이 p!ck한 바스켓',
