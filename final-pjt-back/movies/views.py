@@ -234,11 +234,10 @@ def movie_recommend_friends(request):
     return Response(new_serializer_data, status=status.HTTP_201_CREATED)
 
 
-# [TMDB API 영화 데이터 받아오기]
 @api_view(['POST'])
 def tmdb_movie(request):
     TMDB_API_KEY = config("TMDB_API_KEY")
-    for page in range(1, 11):
+    for page in range(1, 101):
         url = f'https://api.themoviedb.org/3/movie/popular?api_key={TMDB_API_KEY}&language=ko&page={page}'
         request = requests.get(url).json()
         for result in request.get('results'):
@@ -249,15 +248,25 @@ def tmdb_movie(request):
             # actors
             credit_url = f'https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={TMDB_API_KEY}&language=ko'
             credit_result = requests.get(credit_url).json()
-            movie = Movie.objects.create(
-                title = result.get('title'),
-                overview = result.get('overview'),
-                poster_path = result.get('poster_path'),
-                vote_average = result.get('vote_average'),
-                release_date = result.get('release_date'),
-                adult = result.get('adult'),
-                runtime = detail_result.get('runtime'),
-            )
+            if result.get('release_date') == '':
+                movie = Movie.objects.create(
+                    title = result.get('title'),
+                    overview = result.get('overview'),
+                    poster_path = result.get('poster_path'),
+                    vote_average = result.get('vote_average'),
+                    adult = result.get('adult'),
+                    runtime = detail_result.get('runtime'),
+                )
+            else:
+                movie = Movie.objects.create(
+                    title = result.get('title'),
+                    overview = result.get('overview'),
+                    poster_path = result.get('poster_path'),
+                    vote_average = result.get('vote_average'),
+                    release_date = result.get('release_date'),
+                    adult = result.get('adult'),
+                    runtime = detail_result.get('runtime'),
+                )
             # 장르 처리
             for genre_name in detail_result.get('genres'):
                 if Genre.objects.filter(name=genre_name.get('name')).exists():
@@ -268,11 +277,15 @@ def tmdb_movie(request):
                 genre.movies.add(movie)
             # 배우 처리
             casts = credit_result.get('cast')
-            for i in range(6):
+            count_actors = 0
+            for i in range(len(casts)):
                 if casts[i].get('known_for_department') == 'Acting':
                     if Actor.objects.filter(name=casts[i].get('name')).exists():
                         actor = get_object_or_404(Actor, name=casts[i].get('name'))
                     else:
                         actor = Actor.objects.create(name=casts[i].get('name'))
                     movie.actors.add(actor)
+                    count_actors += 1
+                    if count_actors == 6:
+                        break
     return Response({ 'db': '가져왔습니다.' })
