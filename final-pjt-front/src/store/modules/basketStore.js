@@ -21,8 +21,8 @@ const basketStore = {
     noSpoilerComments: [],
     showSpoilerOption: false,
     // 유저, 영화별 바스켓
-    authorBaskets: [],
-    movieBaskets: [],
+    // authorBaskets: [],
+    // movieBaskets: [],
   }),
   getters: {
     isLoggedIn: function (state, getters, rootState, rootGetters) {
@@ -78,12 +78,12 @@ const basketStore = {
       state.showSpoilerOption = showSpoiler
     },
     // 유저, 영화별 바스켓
-    GET_AUTHOR_BASKETS: function (state, authorBaskets) {
-      state.authorBaskets = authorBaskets
-    },
-    GET_MOVIE_BASKETS: function (state, movieBaskets) {
-      state.movieBaskets = movieBaskets
-    },
+    // GET_AUTHOR_BASKETS: function (state, authorBaskets) {
+    //   state.authorBaskets = authorBaskets
+    // },
+    // GET_MOVIE_BASKETS: function (state, movieBaskets) {
+    //   state.movieBaskets = movieBaskets
+    // },
   },
   actions: {
     getBasketSearchResult: function ({ commit, getters }, event) {
@@ -266,36 +266,6 @@ const basketStore = {
       .then(() => {
         alert('해당 바스켓이 삭제되었습니다.')
         router.push({ name: 'Main' })
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
-    // 유저, 영화별로 바스켓 가져오기
-    getAuthorBaskets: function ({ commit, getters }, userId) {
-      const headers = getters.config
-      axios({
-        url: `${SERVER.URL}/api/v1/baskets/user/${userId}/`,
-        method: 'get',
-        headers,
-      })
-      .then((res) => {
-        console.log()
-        commit('GET_AUTHOR_BASKETS', res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    },
-    getMovieBaskets: function ({ commit, getters }, movieId) {
-      const headers = getters.config
-      axios({
-        url: `${SERVER.URL}/api/v1/baskets/movie/${movieId}/`,
-        method: 'get',
-        headers,
-      })
-      .then((res) => {
-        commit('GET_MOVIE_BASKETS', res.data)
       })
       .catch((err) => {
         console.log(err)

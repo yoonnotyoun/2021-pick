@@ -13,6 +13,10 @@ const accountStore = {
     profileInfo: '',
     tags: [],
     followButtonName: '',
+    // 유저, 영화별 바스켓
+    authorBaskets: [],
+    likeBaskets: [],
+    likeMovies: [],
     // 그룹
     groups: [],
     // relationship (그룹관리)
@@ -59,6 +63,16 @@ const accountStore = {
     GET_TAGS: function (state, userData) {
       state.tags = userData.liked_baskets_tags
     },
+    // 유저, 영화별 바스켓
+    GET_AUTHOR_BASKETS: function (state, authorBaskets) {
+      state.authorBaskets = authorBaskets
+    },
+    GET_LIKE_BASKETS: function (state, likeBaskets) {
+      state.likeBaskets = likeBaskets
+    },
+    GET_LIKE_MOVIES: function (state, likeMovies) {
+      state.likeMovies = likeMovies
+    },
     // 팔로우
     GET_FOLLOW_INFO: function (state, followButtonName) {
       state.followButtonName = followButtonName
@@ -77,8 +91,10 @@ const accountStore = {
   },
 
   actions: {
-    getProfile: function ({ commit, getters }, userId) {
+    getProfile: function ({ commit, getters, dispatch }, userId) {
       console.log('getProfile', userId)
+      dispatch('getProfileTags', userId)
+      dispatch('addProfileInfo', userId)
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/accounts/profile/${userId}/`,
@@ -87,11 +103,15 @@ const accountStore = {
       .then((res) => {
         const userData = res.data
         commit('GET_PROFILE', userData)
-        router.push({ name: 'Profile', userId: userId })
+        console.log('name: Profile, userId: ', userId)
+        router.push({ name: 'Profile', params: { userId: userId } })
       })
       .catch((err) => {
         console.log(err)
       })
+    },
+    getProfileTags: function ({ commit, getters }, userId) {
+      console.log('getProfileTags', userId)
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/accounts/liked_baskets_tags/${userId}/`,
@@ -105,9 +125,48 @@ const accountStore = {
         console.log(err)
       })
     },
+    // 유저별로 작성한 바스켓, 좋아요한 바스켓, 좋아요한 영화 가져오기
+    addProfileInfo: function ({ commit, getters }, userId) {
+      const headers = getters.config
+      axios({
+        url: `${SERVER.URL}/api/v1/accounts/add_profile_info/${userId}/write/basket/`,
+        method: 'get',
+        headers,
+      })
+      .then((res) => {
+        // console.log('유저 바스켓', res.data)
+        commit('GET_AUTHOR_BASKETS', res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      axios({
+        url: `${SERVER.URL}/api/v1/accounts/add_profile_info/${userId}/like/basket/`,
+        method: 'get',
+        headers,
+      })
+      .then((res) => {
+        commit('GET_LIKE_BASKETS', res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      axios({
+        url: `${SERVER.URL}/api/v1/accounts/add_profile_info/${userId}/like/movie/`,
+        method: 'get',
+        headers,
+      })
+      .then((res) => {
+        commit('GET_LIKE_MOVIES', res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
     //팔로우
     getFollowButtonName: function ({ commit, rootState }, profileInfo) {
       console.log(profileInfo)
+      console.log(rootState.userId in profileInfo.fans)
       if (rootState.userId in profileInfo.fans) {
         commit('GET_FOLLOW_INFO', '언팔로우')
       } else {

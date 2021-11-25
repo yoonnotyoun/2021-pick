@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.http.response import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404
 
 # REST framework
@@ -13,6 +14,7 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from baskets.models import Basket
 from .models import Movie, Genre, Actor
 from .serializers import MovieDetailSerializer, MovieListSerializer
+from baskets.serializers import BasketListSerializer
 
 # orm
 from django.db.models import Q, Count
@@ -51,6 +53,16 @@ def movie_search(request, query):
 def movie_detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     serializer = MovieDetailSerializer(movie)
+    return Response(serializer.data)
+
+
+# 이 영화가 포함된 바스켓 리스트
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def add_movie_info(request, movie_pk):
+    baskets = Basket.objects.filter(movies=movie_pk)
+    serializer = BasketListSerializer(baskets, many=True)
     return Response(serializer.data)
 
 

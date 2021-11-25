@@ -5,6 +5,7 @@ urlpatterns = [
     # 영화 기본 기능
     path('search/<query>/', views.movie_search),
     path('<int:movie_pk>/', views.movie_detail),
+    path('add_movie_info/<int:movie_pk>/', views.add_movie_info),
     path('<int:movie_pk>/like/', views.movie_like),
 
     # 추천로직

@@ -24,12 +24,26 @@
         <h4 class="strong-text mb-2">{{ profileInfo.nickname }}</h4>
         <h5 class="d-inline-block ms-2">님이 좋아하는 바스켓</h5>
       </div>
-      <ul v-for="(like_basktet, idx) in profileInfo.like_basktets" :key="'like_basktet' + idx">{{ like_basktet }}</ul>
+      <div class="basket-search-result row row-cols-3">
+        <basket-list-item v-for="(basket, idx) in likeBaskets"       
+          :key="'like_baskets' + idx"
+          :basket="basket"
+        ></basket-list-item>
+      </div>
+      <!-- <ul v-for="(like_basktet, idx) in profileInfo.like_basktets" :key="'like_basktet' + idx">{{ like_basktet }}</ul> -->
       <div class="d-flex align-items-end">
         <h4 class="strong-text mb-2">{{ profileInfo.nickname }}</h4>
         <h5 class="d-inline-block ms-2">님이 좋아하는 영화</h5>
       </div>
-      <ul v-for="(like_movie, idx) in profileInfo.like_movies" :key="'like_movie' + idx">{{ like_movie }}</ul>
+      <div class="container">
+        <b-card-group class="row row-cols-3 row-cols-lg-6">
+          <movie-list-item v-for="(movie, idx) in likeMovies"
+            :movie="movie"
+            :key="'movie' + idx"
+          ></movie-list-item>
+        </b-card-group>
+      </div>
+      <!-- <ul v-for="(like_movie, idx) in profileInfo.like_movies" :key="'like_movie' + idx">{{ like_movie }}</ul> -->
     </header>
   </div>
 </template>
@@ -37,12 +51,13 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import BasketListItem from '../../components/Basket/BasketListItem.vue'
+import MovieListItem from '../../components/Movie/MovieListItem.vue'
 // import axios from 'axios'
 // import SERVER from '@/api/drf.js'
 // import SERVER from '@/api/drf.js'
 
 export default {
-  components: { BasketListItem },
+  components: { BasketListItem, MovieListItem },
   name: 'Profile',
   data: function() {
     return {
@@ -56,9 +71,6 @@ export default {
       'unfollow',
       'getFollowButtonName',
     ]),
-    ...mapActions('basketStore', [
-      'getAuthorBaskets',
-    ]),
     // ...mapGetters([
     //   'config'
     // ]),
@@ -68,8 +80,8 @@ export default {
       } else {
         this.unfollow(this.profileInfo.id)
       }
-      console.log(this.profileInfo.id)
-      this.getFollowButtonName(this.profileInfo.id)
+      console.log('getFollowButtonName', this.profileInfo)
+      this.getFollowButtonName(this.profileInfo)
     },
   },
   computed: {
@@ -77,9 +89,9 @@ export default {
       profileInfo: state => state.profileInfo,
       tags: state => state.tags,
       followButtonName: state => state.followButtonName,
-    }),
-    ...mapState('basketStore', {
       authorBaskets: state => state.authorBaskets,
+      likeBaskets: state => state.likeBaskets,
+      likeMovies: state => state.likeMovies,
     }),
     ...mapState({
       userId: state => state.userId,
@@ -88,9 +100,13 @@ export default {
   created: function () {
     // this.getProfile(this.userId) // 나중에 다른 회원 정보랑 분리해야됨
     // this.getFollowButtonName(this.profileInfo)
-    this.getProfile(this.$route.userId)
+    console.log(this.$route.params.userId)
+    console.log(this.userId)
+    if (this.$route.params.userId === this.userId) {
+      this.getProfile(this.$route.params.userId)
+    }
     this.profileId = this.$route.userId
-    this.getAuthorBaskets(this.$route.userId)
+    // this.getAuthorBaskets(this.$route.userId)
   }
 }
 </script>

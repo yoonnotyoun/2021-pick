@@ -17,7 +17,9 @@
           <p @click="getBasketDetail(basket)" style="cursor:pointer">제목: {{ basket.title }}</p>
           <p @click="getProfile(basket.author)" style="cursor:pointer">닉네임: {{ userInfo[basket.author].nickname }}</p>
           <span>태그: </span>
-          <span v-for="(basket_tag, idx) in basket.baskets_tags" :key="'basket' + idx" class="">{{ basket_tag.name }}</span>
+          <div class="d-flex">
+            <div v-for="(basket_tag, idx) in basket.baskets_tags"  :key="'basket' + idx" class="">{{ basket_tag.name }}</div>
+          </div>
           <p>좋아요개수: {{ basket.like_users.length }}</p>
         </div>
       </div>

@@ -6,9 +6,12 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth import get_user_model
 from accounts.models import Group, Relationship
 from baskets.models import Basket, BasketTag
+from movies.models import Movie
 
 # serializer
 from .serializers import GroupListSerialzier, GroupSerialzier, RelationshipListSerializer, RelationshipSerializer, UserListSerializer, UserSerializer
+from baskets.serializers import BasketListSerializer
+from movies.serializers import MovieListSerializer
 
 # REST framework
 from rest_framework.decorators import authentication_classes, permission_classes
@@ -79,6 +82,27 @@ def profile(request, user_pk):
         user_pk = request.user.pk
         request.user.delete()
         return Response({ 'delete': f'{user_pk} 회원이 탈퇴했습니다.' }, status=status.HTTP_204_NO_CONTENT)
+
+
+# 유저가 쓴 바스켓 리스트, 유저가 좋아요한 바스켓 리스트, 유저가 좋아요한 영화 리스트
+@api_view(['GET'])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
+def add_profile_info(request, user_pk, content_type, content):
+    if content_type == 'like':
+        if content == 'basket':
+            baskets = Basket.objects.filter(like_users=user_pk)
+            serializer = BasketListSerializer(baskets, many=True)
+            return Response(serializer.data)
+        elif content == 'movie':
+            movies = Movie.objects.filter(like_users=user_pk)
+            serializer = MovieListSerializer(movies, many=True)
+            return Response(serializer.data)
+    elif content_type == 'write':
+        if content == 'basket':
+            baskets = Basket.objects.filter(author=user_pk)
+            serializer = BasketListSerializer(baskets, many=True)
+            return Response(serializer.data)
 
 
 @api_view(['GET'])

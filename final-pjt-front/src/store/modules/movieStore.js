@@ -20,6 +20,7 @@ const movieStore = {
     recommendedTail: [],
     // 디테일, 좋아요
     selectedMovieDetail: '',
+    movieBaskets: '',
     likeButtonName: '',
     likeCnt: '',
   }),
@@ -100,6 +101,10 @@ const movieStore = {
     SET_MOVIE_DETAIL: function (state, MovieDetail) {
       state.selectedMovieDetail = MovieDetail
     },
+    // 유저, 영화별 바스켓
+    GET_MOVIE_BASKETS: function (state, movieBaskets) {
+      state.movieBaskets = movieBaskets
+    },
     GET_LIKE_INFO: function (state, likeButtonName) {
       state.likeButtonName = likeButtonName
     },
@@ -158,7 +163,7 @@ const movieStore = {
       })
     },
     // 디테일, 좋아요
-    getMovieDetail: function ({ commit, getters }, selectedMovie) {
+    getMovieDetail: function ({ commit, getters, dispatch }, selectedMovie) {
       // console.log(document.location.href.split("0/"))
       const headers = getters.config
       const movie_pk = selectedMovie.id
@@ -170,6 +175,7 @@ const movieStore = {
       })
       .then((res) => {
         commit('SET_MOVIE_DETAIL', res.data)
+        dispatch('addMovieInfo', movie_pk)
         // if (location === 'accounts/setmovietaste') {
         //   commit('ADD_TO_PICK') // like 해버리기?
         // }
@@ -177,6 +183,20 @@ const movieStore = {
         if (location === 'basketform') {
           commit('ADD_TO_PICK')
         }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+    addMovieInfo: function ({ commit, getters }, movieId) {
+      const headers = getters.config
+      axios({
+        url: `${SERVER.URL}/api/v1/movies/add_movie_info/${movieId}`,
+        method: 'get',
+        headers,
+      })
+      .then((res) => {
+        commit('GET_MOVIE_BASKETS', res.data)
       })
       .catch((err) => {
         console.log(err)
@@ -223,6 +243,20 @@ const movieStore = {
         console.log(err)
       })
     },
+    // getMovieBaskets: function ({ commit, getters }, movieId) {
+    //   const headers = getters.config
+    //   axios({
+    //     url: `${SERVER.URL}/api/v1/baskets/movie/${movieId}/`,
+    //     method: 'get',
+    //     headers,
+    //   })
+    //   .then((res) => {
+    //     commit('GET_MOVIE_BASKETS', res.data)
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //   })
+    // },
   },
 }
 export default movieStore

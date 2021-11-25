@@ -10,6 +10,7 @@ urlpatterns = [
     path('login/', views.login),
     path('user_info/', views.user_info),
     path('profile/<int:user_pk>/', views.profile),
+    path('add_profile_info/<int:user_pk>/<content_type>/<content>/', views.add_profile_info),
     path('liked_baskets_tags/<int:user_pk>/', views.liked_baskets_tags),
 
     # 그룹 관리

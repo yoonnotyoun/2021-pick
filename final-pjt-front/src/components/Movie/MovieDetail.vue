@@ -30,16 +30,16 @@
         </b-col>
       </b-row>
     </b-card>
+    <hr>
     <p align="left" class="mt-2" style="font-weight:500; font-size:1.2em;">이 영화를 담고 있는 바스켓</p>
     <div class="row row-cols-3">
-      <basket-list-item v-for="(basket, idx) in selectedMovieDetail.movies_baskets"
+      <basket-list-item v-for="(basket, idx) in movieBaskets"
       :basket="basket"
-      :key="idx"
+      :key="'movieBaskets' + idx"
       class="mt-2"
       ></basket-list-item>
     </div>
-  <hr>
-    <p>{{ selectedMovieDetail }}</p>
+    <!-- <p>{{ selectedMovieDetail }}</p> -->
     <!-- <p>좋아요 개수: {{ likeCnt }}</p>
     <button @click="likeUnlike(selectedMovieDetail.id)">{{ likeButtonName }}</button> -->
   </div>
@@ -66,6 +66,7 @@ export default {
       selectedMovieDetail: state => state.selectedMovieDetail,
       likeButtonName: state => state.likeButtonName,
       likeCnt: state => state.likeCnt,
+      movieBaskets: state => state.movieBaskets,
     })
   },
   created: function () {

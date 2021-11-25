@@ -17,7 +17,7 @@
                 <router-link class="nav-link" :to="{ name: 'Basket' }">바스켓</router-link>
               </li>
               <li class="nav-item mx-2 mt-3" v-if="isLoggedIn">
-                <router-link :to="{ name: 'Profile', userId: userId }" style="color:#5a89cf;">{{ userInfo[userId].nickname }}</router-link> 님, 환영합니다!
+                <router-link :to="{ name: 'Profile', params: { userId: userId } }" style="color:#5a89cf;">{{ userInfo[userId].nickname }}</router-link> 님, 환영합니다!
               </li>
               <li class="nav-item mx-2 mt-3" v-else>
                 [로그인 후 이용 부탁 드립니다.]
@@ -27,7 +27,7 @@
                   <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" v-if="isLoggedIn">
-                  <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'Profile', userId: userId }">내 프로필</router-link></li>
+                  <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'Profile', params: { userId: userId } }">내 프로필</router-link></li>
                   <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'Group' }">그룹 관리</router-link></li>
                   <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" @click.native="logout" to="#">로그아웃</router-link></li>
                 </ul>
@@ -66,7 +66,7 @@ export default {
       'isLoggedIn',
     ]),
    ...mapState({
-      userId: state => state.userId,
+      userId: state => state.userId, // 얘가 왜 계속 사라지는건가??
       userInfo: state => state.userInfo,
     })
   },

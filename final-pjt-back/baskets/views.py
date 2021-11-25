@@ -40,24 +40,24 @@ def basket_create(request):
 
 
 # Basket (R) - 바스켓 리스트(유저)
-@api_view(['GET'])
+# @api_view(['GET'])
 # @authentication_classes([JSONWebTokenAuthentication])
 # @permission_classes([IsAuthenticated])
-def user_basket_list(request, user_pk):
-    baskets = Basket.objects.filter(author=1)
-    # baskets = Basket.objects.filter(author=user_pk)
-    serializer = BasketListSerializer(baskets, many=True)
-    return Response(serializer.data)
+# def user_basket_list(request, user_pk, type, contents):
+#     # baskets = Basket.objects.filter(author=1)
+#     baskets = Basket.objects.filter(author=user_pk)
+#     serializer = BasketListSerializer(baskets, many=True)
+#     return Response(serializer.data)
 
 
-# Basket (R) - 바스켓 리스트(영화)
-@api_view(['GET'])
-@authentication_classes([JSONWebTokenAuthentication])
-@permission_classes([IsAuthenticated])
-def movie_basket_list(request, movie_pk):
-    baskets = Basket.objects.filter(movies__in=movie_pk)
-    serializer = BasketListSerializer(baskets, many=True)
-    return Response(serializer.data)
+# # Basket (R) - 바스켓 리스트(영화)
+# @api_view(['GET'])
+# @authentication_classes([JSONWebTokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def movie_basket_list(request, movie_pk):
+#     baskets = Basket.objects.filter(movies__in=movie_pk)
+#     serializer = BasketListSerializer(baskets, many=True)
+#     return Response(serializer.data)
 
 
 # Basket (RUD) - 바스켓 디테일 조회, 수정, 삭제
