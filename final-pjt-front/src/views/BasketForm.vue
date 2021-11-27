@@ -15,6 +15,9 @@
         type="text"
         v-model="info.title"
         placeholder="바스켓 이름을 입력해주세요."></b-form-input>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="isInvalid && info.title === ''">
+        바스켓 이름은 필수 값입니다.</b-alert>
     </div>
     <!-- <div>
       <label for="title">바스켓 이름: </label>
@@ -32,10 +35,6 @@
         rows="3"
       ></b-form-textarea>
     </div>
-    <!-- <div>
-      <label for="explanation">바스켓 설명: </label>
-      <input type="text" id="explanation" v-model="info.explanation">
-    </div> -->
     <div class="input-signup">
       <div class="d-flex" align="left">
         <label for="explanation" class="d-inline-block">바스켓 태그</label>
@@ -63,6 +62,9 @@
           </template>
         </b-form-radio-group>
       </b-form-group>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="isInvalid && info.public === ''">
+        공개 설정은 필수 값입니다.</b-alert>
     </div>
     <!-- public 비공개 선택 시 친구 선택 창 나타내기 -->
     <div class="input-signup">
@@ -75,7 +77,6 @@
           </span>
         </ul>
       </b-card>
-    <!-- </b-collapse> -->
     </div>
     <!-- 영화 선택 -->
     <div>
@@ -95,6 +96,9 @@
           placeholder=""
           style="background-color:#ffffff;"
         ></b-form-tags>
+        <b-alert show variant="warning" style="text-align:start;"
+          v-if="isInvalid && (info.movies_ids.length < 4)">
+          4개 이상의 영화를 선택해 주세요.</b-alert>
       </div>
       <div align="right" class="input-signup" >
         <p class="d-inline-block">{{ pickedMovieList.length }}개의 영화로 바스켓</p>
@@ -128,7 +132,8 @@ export default {
         public: '',
         groups_ids: [],
         movies_ids: [],
-      }
+      },
+      isInvalid: false,
     }
   },
   components: {
@@ -138,10 +143,18 @@ export default {
   methods: {
     beforeCreate: function () {
       this.info.movies_ids = this.pickedMovieIdList
+      this.BasketFormCheck()
+      // this.createBasket(this.info)
+      // this.resetMovies('picked')
+      // this.resetMovies('pickedId')
+      // this.resetMovies('pickedTitle')
+    },
+    BasketFormCheck: function () {
       this.createBasket(this.info)
       this.resetMovies('picked')
       this.resetMovies('pickedId')
       this.resetMovies('pickedTitle')
+      this.isInvalid = true
     },
     ...mapActions('movieStore', [
       'resetMovies',

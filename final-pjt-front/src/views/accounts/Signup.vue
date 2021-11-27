@@ -12,8 +12,12 @@
         type="text"
         v-model="credentials.username"
         placeholder="아이디를 입력해주세요."></b-form-input>
-      <p v-if="isInvalid && isDuplicatedId && credentials.username === duplicatedId">이 아이디는 중복된 아이디입니다.</p>
-      <p v-if="isInvalid && credentials.username === ''">아이디는 필수 값입니다.</p>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="isInvalid && isDuplicatedId && credentials.username === duplicatedId">
+        이 아이디는 중복된 아이디입니다.</b-alert>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="isInvalid && credentials.username === ''">
+        아이디는 필수 값입니다.</b-alert>
     </div>
     <div class="input-signup">
       <label for="password" class="d-flex">비밀번호</label>
@@ -41,14 +45,20 @@
         type="text"
         v-model="credentials.nickname"
         placeholder="서비스 내에서 사용할 닉네임을 입력해주세요."></b-form-input>
-        <p v-if="isInvalid && isDuplicatedNickname && credentials.nickname === duplicatedNickname">이 닉네임은 중복된 닉네임입니다.</p>
-        <p v-if="isInvalid && credentials.nickname === ''">닉네임은 필수 값입니다.</p>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="isInvalid && isDuplicatedNickname && credentials.nickname === duplicatedNickname">
+        이 아이디는 중복된 닉네임입니다.</b-alert>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="isInvalid && credentials.nickname === ''">
+        닉네임은 필수 값입니다.</b-alert>
     </div>
     <div class="input-signup">
       <label for="birthdate" class="d-flex">생년월일</label>
       <b-form-input id="birthdate" type="date" v-model="credentials.birthdate" class="mb-2"></b-form-input>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="isInvalid && credentials.birthdate === ''">
+        생년월일은 필수 값입니다.</b-alert>
     </div>
-    <p v-if="isInvalid && credentials.birthdate === ''">생년월일은 필수 값입니다.</p>
     <div class="input-signup">
       <b-form-group label="성별" align="left" style="font-weight:600;">
         <b-form-radio-group
@@ -64,7 +74,9 @@
           </template>
         </b-form-radio-group>
       </b-form-group>
-      <p v-if="isInvalid && credentials.gender === ''">성별은 필수 값입니다.</p>
+      <b-alert show variant="warning" style="text-align:start;"
+       v-if="isInvalid && credentials.gender === ''">
+        성별은 필수 값입니다.</b-alert>
     </div>
     <b-button class="action-button m-4" @click="check">가입하기</b-button>
   </div>
