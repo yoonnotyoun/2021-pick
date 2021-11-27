@@ -10,7 +10,7 @@ class User(AbstractUser):
     ]
 
     stars = models.ManyToManyField('self', symmetrical=False, related_name='fans', through='Relationship')
-    nickname = models.CharField(max_length=20, null=False, default='nickname')
+    nickname = models.CharField(max_length=20, null=False, default='nickname', unique=True)
     birthdate = models.DateField(null=False)
     gender = models.IntegerField(choices=GENDER_CHOICES, default=1, null=False)
     image = models.ImageField(blank=True)

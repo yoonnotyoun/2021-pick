@@ -16,7 +16,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/main',
     name: 'Main',
     component: Main
   },
@@ -41,7 +41,7 @@ const routes = [
     component: BasketForm
   },
   {
-    path: '/accounts/login',
+    path: '/',
     name: 'Login',
     component: Login
   },
