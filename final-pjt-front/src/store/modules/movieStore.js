@@ -91,9 +91,10 @@ const movieStore = {
         state.pickedMovieTitleList.push(movie.title)
         // console.log(state.pickedMovies)
       } else {
-        state.pickedMovieList.pop(movie)
-        state.pickedMovieIdList.pop(movie.id)
-        state.pickedMovieTitleList.pop(movie.title)
+        const removeIdx = state.pickedMovieIdList.indexOf(movie.id)
+        state.pickedMovieList.splice(removeIdx, 1)
+        state.pickedMovieIdList.splice(removeIdx, 1)
+        state.pickedMovieTitleList.splice(removeIdx, 1)
       }
       state.selectedMovieDetail = ''
     },

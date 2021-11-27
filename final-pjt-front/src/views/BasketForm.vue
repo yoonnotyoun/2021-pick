@@ -179,6 +179,10 @@ export default {
   },
   created: function () {
     this.getGroups()
+    this.resetMovies('picked')
+    this.resetMovies('pickedId')
+    this.resetMovies('pickedTitle')
+    this.resetMovies('searched')
   }
 }
 </script>
