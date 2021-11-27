@@ -28,6 +28,9 @@
         type="password"
         v-model="credentials.passwordConfirmation"
         placeholder="비밀번호를 다시 입력해주세요."></b-form-input>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="credentials.passwordConfirmation && (credentials.password != credentials.passwordConfirmation)">
+        비밀번호가 일치하지 않습니다. 다시 입력해주세요.</b-alert>
     </div>
     <div class="input-signup">
       <label for="nickname" class="d-flex">닉네임</label>
@@ -39,7 +42,7 @@
     </div>
     <div class="input-signup">
       <label for="birthdate" class="d-flex">생년월일</label>
-      <b-form-datepicker id="birthdate" v-model="credentials.birthdate" class="mb-2"></b-form-datepicker>
+      <b-form-input id="birthdate" type="date" v-model="credentials.birthdate" class="mb-2"></b-form-input>
     </div>
     <div class="input-signup">
       <b-form-group label="성별" align="left" style="font-weight:600;">
@@ -79,7 +82,8 @@ export default {
         nickname: '',
         birthdate: '',
         gender: '',
-      }
+      },
+      isInvalid: false,
     }
   },
   methods: {

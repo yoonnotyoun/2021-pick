@@ -21,7 +21,10 @@
       <input type="text" id="title" v-model="info.title">
     </div> -->
     <div class="input-signup">
-      <label for="explanation" class="d-flex">바스켓 설명</label>
+      <div class="d-flex" align="left">
+        <label for="explanation" class="d-inline-block">바스켓 설명</label>
+        <p class="d-inline-block ms-2 mt-1 mb-0" style="font-size:0.8rem;">(선택)</p>
+      </div>
       <b-form-textarea
         id="explanation"
         v-model="info.explanation"
@@ -34,7 +37,10 @@
       <input type="text" id="explanation" v-model="info.explanation">
     </div> -->
     <div class="input-signup">
-      <label for="basket_tags_names" class="d-flex">바스켓 태그 </label>
+      <div class="d-flex" align="left">
+        <label for="explanation" class="d-inline-block">바스켓 태그</label>
+        <p class="d-inline-block ms-2 mt-1 mb-0" style="font-size:0.8rem;">(선택)</p>
+      </div>
       <b-form-tags
         input-id="basket_tags_names"
         v-model="info.basket_tags_names"
@@ -76,7 +82,7 @@
       <div class="input-signup">
         <div class="d-flex" align="left">
           <label for="pickedMovies" class="d-inline-block">선택 영화 목록</label>
-          <p class="d-inline-block ms-2 mt-1 mb-0" style="font-size:0.8rem; color:#c4c4c4">아래 검색창을 통해 4개 이상의 영화를 추가해주세요.</p>
+          <p class="d-inline-block ms-2 mt-1 mb-0" style="font-size:0.8rem; color:#999999;">아래 검색창을 통해 4개 이상의 영화를 추가해주세요.</p>
         </div>
         <b-form-tags
           input-id="pickedMovies"
