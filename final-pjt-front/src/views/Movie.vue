@@ -47,16 +47,13 @@ export default {
     })
   },
   created: function () {
-  // console.log(this.recommendedMovies)
     if (this.$store.getters.isLoggedIn) {
       this.resetMovies('recommended')
       this.resetMovies('method')
       this.resetMovies('tail')
-      this.getMovieRecommendation()
-      this.getMovieRecommendation()
-      this.getMovieRecommendation()
-      this.getMovieRecommendation()
-      this.getMovieRecommendation()
+      for (let i = 0; i < 5; i++) {
+        this.getMovieRecommendation()
+      }
     }
   }
 }

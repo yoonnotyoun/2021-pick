@@ -28,11 +28,13 @@
       </div>
       <div>
         <span>팔로워</span>
-        <span class="pick-text ms-1">{{ profileInfo.fans.length }}</span>
+        <span class="pick-text ms-1">{{ follower_cnt }}</span>
         <span class="ms-3">팔로잉</span>
         <span class="pick-text ms-1 me-3">{{ profileInfo.stars.length }}</span>
-        <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '팔로우'" class="action-button d-inline-block ms-2">{{ followButtonName }}</b-button>
-        <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '언팔로우'" class="action-button-gray d-inline-block ms-2 unfollow">{{ followButtonName }}</b-button>
+        <span v-if="userId !== profileInfo.id">
+          <b-button @click="followUnfollow" v-if="followButtonName === '팔로우'" class="action-button d-inline-block ms-2">{{ followButtonName }}</b-button>
+          <b-button @click="followUnfollow" v-if="followButtonName === '언팔로우'" class="action-button-gray d-inline-block ms-2 unfollow">{{ followButtonName }}</b-button>
+        </span>
       </div>
     </div><br><hr>
     <div>
@@ -104,6 +106,7 @@ export default {
   data: function() {
     return {
       profileId: '',
+      follower_cnt: 0,
     }
   },
   methods: {
@@ -118,12 +121,16 @@ export default {
     // ]),
     followUnfollow: function() {
       if (this.followButtonName === '팔로우') {
+        console.log('followUnfollow, 팔로우')
         this.follow(this.profileInfo.id)
+        this.follower_cnt++
       } else {
+        console.log('followUnfollow, 언팔로우')
         this.unfollow(this.profileInfo.id)
+        this.follower_cnt--
       }
       console.log('getFollowButtonName', this.profileInfo)
-      this.getFollowButtonName(this.profileInfo)
+      // this.getFollowButtonName(this.profileInfo)
     },
   },
   computed: {
@@ -142,8 +149,10 @@ export default {
   created: function () {
     // this.getProfile(this.userId) // 나중에 다른 회원 정보랑 분리해야됨
     // this.getFollowButtonName(this.profileInfo)
-    console.log(this.$route.params.userId)
-    console.log(this.userId)
+    // console.log(this.$route.params.userId)
+    // console.log(this.userId)
+    this.getFollowButtonName(this.profileInfo)
+    this.follower_cnt = this.profileInfo.fans.length
     if (this.$route.params.userId === this.userId) {
       this.getProfile(this.$route.params.userId)
     }

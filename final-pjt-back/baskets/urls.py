@@ -13,7 +13,7 @@ urlpatterns = [
     path('recommend/myinfo/', views.basket_recommend_myinfo),
     path('recommend/movies/', views.basket_recommend_movies),
     path('recommend/tags/', views.basket_recommend_tags),
-    path('recommend/friend/', views.basket_recommend_friends),
+    path('recommend/friends/', views.basket_recommend_friends),
 
     # 검색
     path('search/<query>/', views.basket_search),

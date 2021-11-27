@@ -52,11 +52,9 @@ export default {
   created: function () {
     if (this.$store.getters.isLoggedIn) {
       this.resetBaskets('recommended')
-      this.getBasketRecommendation()
-      this.getBasketRecommendation()
-      this.getBasketRecommendation()
-      this.getBasketRecommendation()
-      this.getBasketRecommendation()
+      for (let i = 0; i < 5; i++) {
+        this.getBasketRecommendation()
+      }
     }
   }
 }

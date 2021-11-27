@@ -30,6 +30,10 @@ const accountStore = {
   },
 
   mutations: {
+    RESET_PROFILE: function (state) {
+      state.profileInfo = ''
+      // state.followButtonName = ''
+    },
     GET_PROFILE: function (state, userData) {
       state.profileInfo = userData
     },
@@ -64,7 +68,7 @@ const accountStore = {
   },
 
   actions: {
-    getProfile: function ({ state, commit, getters, dispatch }, userId) {
+    getProfile: function ({ commit, getters, dispatch }, userId) {
       console.log('getProfile', userId)
       dispatch('getProfileTags', userId)
       dispatch('addProfileInfo', userId)
@@ -77,13 +81,16 @@ const accountStore = {
       .then((res) => {
         const userData = res.data
         commit('GET_PROFILE', userData)
-        dispatch('getFollowButtonName', state.profileInfo)
+        // dispatch('getFollowButtonName')
         console.log('name: Profile, userId: ', userId)
         router.push({ name: 'Profile', params: { userId: userId } })
       })
       .catch((err) => {
         console.log(err)
       })
+      dispatch('getProfileTags', userId)
+      dispatch('addProfileInfo', userId)
+      // dispatch('getFollowButtonName', state.profileInfo)
     },
     getProfileTags: function ({ commit, getters }, userId) {
       console.log('getProfileTags', userId)
@@ -139,37 +146,52 @@ const accountStore = {
       })
     },
     //팔로우
-    getFollowButtonName: function ({ commit, rootState }, profileInfo) {
-      console.log(profileInfo)
-      console.log(rootState.userId in profileInfo.fans)
-      if (rootState.userId in profileInfo.fans) {
-        commit('GET_FOLLOW_INFO', '언팔로우')
-      } else {
+    getFollowButtonName: function ({ state, commit, rootState }) {
+      // console.log('profileInfo', profileInfo)
+      // console.log('rootState.userId in profileInfo.fans', rootState.userId in state.profileInfo.fans)
+      // console.log('getFollowButtonName', rootState.userId)
+      // console.log(typeof(rootState.userId))
+      // console.log('getFollowButtonName', state.profileInfo.fans)
+      // console.log(typeof(state.profileInfo.fans))
+      // console.log(rootState.userId in state.profileInfo.fans)
+      // if (rootState.userId in state.profileInfo.fans) {
+      //   commit('GET_FOLLOW_INFO', '언팔로우')
+      // } else {
+      //   commit('GET_FOLLOW_INFO', '팔로우')
+      // }
+      let flag = false
+      for (let fan of state.profileInfo.fans) {
+        if (fan === rootState.userId) {
+          commit('GET_FOLLOW_INFO', '언팔로우')
+          flag = true
+        }
+      }
+      if (flag === false) {
         commit('GET_FOLLOW_INFO', '팔로우')
       }
     },
-    follow: function ({ commit, dispatch, getters }, starId) {
+    follow: function ({ commit, getters }, starId) {
       axios({
         method: 'post',
         url: `${SERVER.URL}/api/v1/accounts/relationship/star/${starId}/`,
         headers: getters.config
       })
       .then(() => {
-        dispatch('getProfile', starId)
+        // dispatch('getFollowButtonName', starId)
         commit('GET_FOLLOW_INFO', '언팔로우')
       })
       .catch((err) => {
         console.log(err)
       })
     },
-    unfollow: function ({ commit, dispatch, getters }, starId) {
+    unfollow: function ({ commit, getters }, starId) {
       axios({
         method: 'delete',
         url: `${SERVER.URL}/api/v1/accounts/relationship/star/${starId}/`,
         headers: getters.config
       })
       .then(() => {
-        dispatch('getProfile', starId)
+        // dispatch('getProfile', starId)
         commit('GET_FOLLOW_INFO', '팔로우')
       })
       .catch((err) => {

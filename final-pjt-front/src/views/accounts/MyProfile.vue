@@ -31,8 +31,8 @@
         <span class="pick-text ms-1">{{ profileInfo.fans.length }}</span>
         <span class="ms-3">팔로잉</span>
         <span class="pick-text ms-1 me-3">{{ profileInfo.stars.length }}</span>
-        <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '팔로우'" class="action-button d-inline-block ms-2">{{ followButtonName }}</b-button>
-        <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '언팔로우'" class="action-button-gray d-inline-block ms-2 unfollow">{{ followButtonName }}</b-button>
+        <!-- <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '팔로우'" class="action-button d-inline-block ms-2">{{ followButtonName }}</b-button>
+        <b-button @click="followUnfollow" v-if="userId !== profileInfo.id && followButtonName == '언팔로우'" class="action-button-gray d-inline-block ms-2 unfollow">{{ followButtonName }}</b-button> -->
       </div>
     </div><br><hr>
     <div>
@@ -111,15 +111,15 @@ export default {
     // ...mapGetters([
     //   'config'
     // ]),
-    followUnfollow: function() {
-      if (this.followButtonName === '팔로우') {
-        this.follow(this.profileInfo.id)
-      } else {
-        this.unfollow(this.profileInfo.id)
-      }
-      console.log('getFollowButtonName', this.profileInfo)
-      this.getFollowButtonName(this.profileInfo)
-    },
+    // followUnfollow: function() {
+    //   if (this.followButtonName === '팔로우') {
+    //     this.follow(this.profileInfo.id)
+    //   } else {
+    //     this.unfollow(this.profileInfo.id)
+    //   }
+    //   console.log('getFollowButtonName', this.profileInfo)
+    //   this.getFollowButtonName(this.profileInfo)
+    // },
   },
   computed: {
     ...mapState('accountStore', {

@@ -52,6 +52,8 @@ const movieStore = {
         state.recommendedTail = []
       }
       state.query = ''
+      state.recommendedTail = []
+      state.recommendedMethod = []
     },
     // 리스트 검색, 추천
     SET_SEARCHED_MOVIE_LIST: function (state, movies) {
@@ -62,17 +64,11 @@ const movieStore = {
       state.query = query
     },
     SET_RECOMMENDED_MOVIE_LIST: function (state, recommendedData) {
-      if (recommendedData.length === 7) {
-        state.recommendedMovies.push({
-          recommended_name: recommendedData.pop(6).recommended_name,
-          movies: recommendedData
-        })
-      } else {
-        state.recommendedMovies.push({
-          recommended_name: '당신 또래의 같은 성별',
-          movies: recommendedData
-        })
-      }
+      state.recommendedMovies.push({
+        recommended_name: recommendedData.pop(6).recommended_name,
+        movies: recommendedData
+      })
+
       state.searchedMovies = []
       // console.log(state.recommendedMovies)
     },
@@ -141,27 +137,37 @@ const movieStore = {
     getMovieRecommendation: function ({ commit, getters }) {
       const headers = getters.config
       const recommend_method = _.sample(['myinfo', 'genre', 'baskets', 'friends'])
-      // const recommend_method = 'genre'
+ 
       const recommend_tail = {
         'myinfo': '사용자들이 p!ck한 영화',
         'genre': '장르의 영화',
         'baskets': '바스켓에 들어있는 영화',
         'friends': '님이 p!ck한 바스켓',
       }
-      const methodTail = {
-        method: recommend_method,
-        tail: recommend_tail[recommend_method],
-      }
-      // 중복방지 처리 하기
+      const methodTail = []
+      
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/movies/recommend/${recommend_method}`,
         headers,
       })
       .then((res) => {
+        if (res.data[6].recommended_name === '지금 핫한') {
+          const methodTailItem = {
+            method: recommend_method,
+            tail: '영화',
+          }
+          methodTail.push(methodTailItem)
+        } else {
+          const methodTailItem = {
+            method: recommend_method,
+            tail: recommend_tail[recommend_method],
+          }
+          methodTail.push(methodTailItem)
+        }
         console.log(recommend_method)
         commit('SET_RECOMMENDED_MOVIE_LIST', res.data)
-        commit('SET_RECOMMENDED_METHOD_TAIL', methodTail)
+        commit('SET_RECOMMENDED_METHOD_TAIL', methodTail[0])
       })
       .catch((err) => {
         console.log(err)
