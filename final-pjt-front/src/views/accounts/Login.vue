@@ -24,12 +24,15 @@
           @keypress.enter="login(credentials)">
           </b-form-input>
       </div>
+      <div class="input-signup" v-if="isInvalid">
+        <b-alert show variant="warning" style="text-align:start;">로그인에 실패했습니다. 아이디와 비밀번호를 정확히 입력해주세요.</b-alert>
+      </div>
     </div>
-    <div class="">
+    <div class="mt-3">
       <b-button class="action-button-transparent mx-1">
         <router-link class="text-decoration-none" style="color:#c4c4c4;" :to="{ name: 'Signup' }">회원가입</router-link>
       </b-button>
-      <b-button class="action-button mx-1" @click="login(credentials)">로그인</b-button>
+      <b-button class="action-button mx-1" @click="loginCheck">로그인</b-button>
     </div>
   </div>
 </template>
@@ -44,10 +47,15 @@ export default {
       credentials: {
         username: '',
         password: '',
-      }
+      },
+      isInvalid: false,
     }
   },
   methods: {
+    loginCheck: function () {
+      this.login(this.credentials)
+      this.isInvalid = true
+    },
     ...mapActions([
       'login',
     ]),

@@ -10,7 +10,7 @@
       <p class="d-inline-block"
       style="font-family: 'Hahmlet', serif; font-weight: 600; font-size: 1.6rem; color: #222222;"
       >ck</p>
-      <p class="d-inline-block ms-2 fs-5 fw-bold">your taste</p>
+      <p class="d-inline-block ms-2">your taste</p>
     </div>
     <br><br>
     <basket-list></basket-list>

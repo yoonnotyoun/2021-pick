@@ -15,13 +15,19 @@
         type="text"
         v-model="info.title"
         placeholder="바스켓 이름을 입력해주세요."></b-form-input>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="isInvalid && info.title === ''">
+        바스켓 이름은 필수 값입니다.</b-alert>
     </div>
     <!-- <div>
       <label for="title">바스켓 이름: </label>
       <input type="text" id="title" v-model="info.title">
     </div> -->
     <div class="input-signup">
-      <label for="explanation" class="d-flex">바스켓 설명</label>
+      <div class="d-flex" align="left">
+        <label for="explanation" class="d-inline-block">바스켓 설명</label>
+        <p class="d-inline-block ms-2 mt-1 mb-0" style="font-size:0.8rem;">(선택)</p>
+      </div>
       <b-form-textarea
         id="explanation"
         v-model="info.explanation"
@@ -29,12 +35,11 @@
         rows="3"
       ></b-form-textarea>
     </div>
-    <!-- <div>
-      <label for="explanation">바스켓 설명: </label>
-      <input type="text" id="explanation" v-model="info.explanation">
-    </div> -->
     <div class="input-signup">
-      <label for="basket_tags_names" class="d-flex">바스켓 태그 </label>
+      <div class="d-flex" align="left">
+        <label for="explanation" class="d-inline-block">바스켓 태그</label>
+        <p class="d-inline-block ms-2 mt-1 mb-0" style="font-size:0.8rem;">(선택)</p>
+      </div>
       <b-form-tags
         input-id="basket_tags_names"
         v-model="info.basket_tags_names"
@@ -57,6 +62,9 @@
           </template>
         </b-form-radio-group>
       </b-form-group>
+      <b-alert show variant="warning" style="text-align:start;"
+        v-if="isInvalid && info.public === ''">
+        공개 설정은 필수 값입니다.</b-alert>
     </div>
     <!-- public 비공개 선택 시 친구 선택 창 나타내기 -->
     <div class="input-signup">
@@ -69,14 +77,13 @@
           </span>
         </ul>
       </b-card>
-    <!-- </b-collapse> -->
     </div>
     <!-- 영화 선택 -->
     <div>
       <div class="input-signup">
         <div class="d-flex" align="left">
           <label for="pickedMovies" class="d-inline-block">선택 영화 목록</label>
-          <p class="d-inline-block ms-2 mt-1 mb-0" style="font-size:0.8rem; color:#c4c4c4">아래 검색창을 통해 4개 이상의 영화를 추가해주세요.</p>
+          <p class="d-inline-block ms-2 mt-1 mb-0" style="font-size:0.8rem; color:#999999;">아래 검색창을 통해 4개 이상의 영화를 추가해주세요.</p>
         </div>
         <b-form-tags
           input-id="pickedMovies"
@@ -89,6 +96,9 @@
           placeholder=""
           style="background-color:#ffffff;"
         ></b-form-tags>
+        <b-alert show variant="warning" style="text-align:start;"
+          v-if="isInvalid && (info.movies_ids.length < 4)">
+          4개 이상의 영화를 선택해 주세요.</b-alert>
       </div>
       <div align="right" class="input-signup" >
         <p class="d-inline-block">{{ pickedMovieList.length }}개의 영화로 바스켓</p>
@@ -122,7 +132,8 @@ export default {
         public: '',
         groups_ids: [],
         movies_ids: [],
-      }
+      },
+      isInvalid: false,
     }
   },
   components: {
@@ -139,6 +150,7 @@ export default {
       // this.resetMovies('pickedTitle')
     },
     BasketFormCheck: function () {
+      console.log('this.info.movies_ids.length', this.info.movies_ids.length)
       if (this.info.movies_ids.length >= 4) {
         this.createBasket(this.info)
         this.resetMovies('picked')
