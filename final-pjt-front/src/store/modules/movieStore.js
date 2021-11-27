@@ -141,7 +141,7 @@ const movieStore = {
       const recommend_tail = {
         'myinfo': '사용자들이 p!ck한 영화',
         'genre': '장르의 영화',
-        'baskets': '바스켓에 들어있는 영화',
+        'baskets': '외 유저님이 좋아한 바스켓의 영화 추천',
         'friends': '님이 p!ck한 바스켓',
       }
       const methodTail = []

@@ -189,9 +189,9 @@ def movie_recommend_genre(request):
 @permission_classes([IsAuthenticated])
 def movie_recommend_baskets(request):
     # liked_baskets = list(Basket.objects.filter(like_users__pk=1).values('id')) # 테스트용
-    liked_baskets = list(Basket.objects.filter(like_users__pk=request.user.pk).values('id').annotate(movies_count=Count('movies')).filter(movies_count__gte=6))
+    liked_baskets = list(Basket.objects.filter(like_users__pk=request.user.pk).values('id'))
 
-    if len(liked_baskets) > 0:
+    if len(liked_baskets) > 5:
         random_ids_obj = random.sample(liked_baskets, 6)
         random_ids = [obj['id'] for obj in random_ids_obj]
         filtered_movies_ids = list(Movie.objects.filter(movies_baskets__pk__in=random_ids).distinct().values('id')) ### Population must be a sequence.  For dicts or sets, use sorted(d).

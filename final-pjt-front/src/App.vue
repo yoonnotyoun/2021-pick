@@ -9,7 +9,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto" v-if="isLoggedIn">
               <li class="nav-item mx-2 mt-2">
                 <router-link class="nav-link" :to="{ name: 'Main' }">홈</router-link>
               </li>
@@ -19,22 +19,29 @@
               <li class="nav-item mx-2 mt-2">
                 <router-link class="nav-link" :to="{ name: 'Basket' }">바스켓</router-link>
               </li>
-              <li class="nav-item mx-2 mt-3" v-if="isLoggedIn">
+              <li class="nav-item mx-2 mt-3">
                 <router-link :to="{ name: 'MyProfile' }" style="color:#5a89cf;">{{ userInfo[userId].nickname }}</router-link> 님, 환영합니다!
               </li>
-              <li class="nav-item mx-2 mt-3" v-else>
+              <li class="nav-item dropdown mx-2">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <b-avatar src="@/assets/profile-image.png"></b-avatar>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                  <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'MyProfile' }">내 프로필</router-link></li>
+                  <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'Group' }">그룹 관리</router-link></li>
+                  <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" @click.native="logout" to="#">로그아웃</router-link></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="navbar-nav ms-auto" v-else>
+              <li class="nav-item mx-2 mt-3">
                 <router-link style="color:#5a89cf;" :to="{ name: 'Login' }">[로그인 후 이용 부탁 드립니다.]</router-link>
               </li>
               <li class="nav-item dropdown mx-2">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <b-avatar src="@/assets/profile-image.png"></b-avatar>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" v-if="isLoggedIn">
-                  <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'MyProfile' }">내 프로필</router-link></li>
-                  <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'Group' }">그룹 관리</router-link></li>
-                  <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" @click.native="logout" to="#">로그아웃</router-link></li>
-                </ul>
-                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" v-else>
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                   <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'Signup' }">회원가입</router-link></li>
                   <li class="nav-item mx-3 my-2"><router-link style="color:#5a89cf;" :to="{ name: 'Login' }">로그인</router-link></li>
                 </ul>
