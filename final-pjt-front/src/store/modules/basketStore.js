@@ -44,17 +44,10 @@ const basketStore = {
       state.query = query
     },
     SET_RECOMMENDED_BASKET_LIST: function (state, recommendedData) {
-      if (recommendedData.length === 4) {
-        state.recommendedBaskets.push({
-          recommended_name: recommendedData.pop(3).recommended_name,
-          baskets: recommendedData
-        }) 
-      } else {
-        state.recommendedBaskets.push({
-          recommended_name: '당신 또래의 같은 성별',
-          baskets: recommendedData
-        })
-      }
+      state.recommendedBaskets.push({
+        recommended_name: recommendedData.pop(3).recommended_name,
+        baskets: recommendedData
+      }) 
       state.searchedBaskets = []
     },
     SET_RECOMMENDED_METHOD_TAIL: function (state, methodTail) {
@@ -124,27 +117,38 @@ const basketStore = {
     getBasketRecommendation: function ({ commit, getters }) {
       const headers = getters.config
       const recommend_method = _.sample(['myinfo', 'movies', 'tags', 'friends'])
-      // const recommend_method = 'movies'
-      // 중복방지 처리 하기
+
       const recommend_tail = {
-        'myinfo': '사용자들이 p!ck한 영화',
+        'myinfo': '사용자들이 p!ck한 바스켓',
         'movies': '영화가 들어있는 바스켓',
         'tags': '태그가 들어있는 바스켓',
         'friends': '님이 p!ck한 바스켓',
       }
-      const methodTail = {
-        method: recommend_method,
-        tail: recommend_tail[recommend_method],
-      }
+      const methodTail = []
+
       axios({
         method: 'get',
         url: `${SERVER.URL}/api/v1/baskets/recommend/${recommend_method}`,
         headers,
       })
       .then((res) => {
+        console.log(res.data[3])
+        if (res.data[3].recommended_name === '지금 핫한') {
+          const methodTailItem = {
+            method: recommend_method,
+            tail: '바스켓',
+          }
+          methodTail.push(methodTailItem)
+        } else {
+          const methodTailItem = {
+            method: recommend_method,
+            tail: recommend_tail[recommend_method],
+          }
+          methodTail.push(methodTailItem)
+        }
         console.log(recommend_method)
         commit('SET_RECOMMENDED_BASKET_LIST', res.data)
-        commit('SET_RECOMMENDED_METHOD_TAIL', methodTail)
+        commit('SET_RECOMMENDED_METHOD_TAIL', methodTail[0])
       })
       .catch((err) => {
         console.log(err)

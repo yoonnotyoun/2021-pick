@@ -177,15 +177,23 @@ def basket_recommend_myinfo(request):
 
     if len(filtered_basket_ids) >= 3:
         picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
+        picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj] ### obj형식으로 도는거라 따로 추출해줘야 함
+        picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
+
+        serializer = BasketListSerializer(picked_baskets, many=True)
+        recommended_name = '당신 또래의 같은 성별'
+        
+        new_serializer_data = list(serializer.data)
+        new_serializer_data.append({ 'recommended_name': recommended_name })
+        return Response(new_serializer_data, status=status.HTTP_200_OK)
     else: # 3개 이하일때는 그냥 전체 랜덤으로
-        picked_basket_ids_obj = random.sample(list(Basket.objects.all().values('id')), 3) ### 리스트 필수
-
-    picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj] ### obj형식으로 도는거라 따로 추출해줘야 함
-    picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
-
-    serializer = BasketListSerializer(picked_baskets, many=True)
-
-    return Response(serializer.data)
+        picked_baskets = Basket.objects.all().annotate(like_users_count=Count('like_users')).order_by('-like_users_count')[:3]
+        serializer = BasketListSerializer(picked_baskets, many=True)
+        recommended_name = '지금 핫한'
+        
+        new_serializer_data = list(serializer.data)
+        new_serializer_data.append({ 'recommended_name': recommended_name })
+        return Response(new_serializer_data, status=status.HTTP_200_OK)
 
 
 # 추천 : 선호 영화가 들어있는 바스켓
@@ -193,7 +201,7 @@ def basket_recommend_myinfo(request):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def basket_recommend_movies(request):
-    # user = get_object_or_404(get_user_model(), pk=2) 테스트용
+    # user = get_object_or_404(get_user_model(), pk=2) # 테스트용
     # like_movies = list(user.like_movies.values('id').annotate(baskets_count=Count('movies_baskets')).filter(baskets_count__gte=3)) # 테스트용
 
     like_movies = list(request.user.like_movies.values('id').annotate(baskets_count=Count('movies_baskets')).filter(baskets_count__gte=3)) # basket 개수가 3개이상인 것만 필터링
@@ -214,8 +222,17 @@ def basket_recommend_movies(request):
         picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
     else: # 좋아한 태그가 없는 경우, 랜덤으로 태그 뽑아서 보여줌
         like_movies = list(Movie.objects.values('id').annotate(baskets_count=Count('movies_baskets')).filter(baskets_count__gte=3))
-        random_id = random.sample(like_movies, 1)
-        picked_basket_ids_obj = random.sample(list(Basket.objects.filter(movies__pk=random_id[0]['id']).values('id')), 3)
+        if like_movies:
+            random_id = random.sample(like_movies, 1)
+            picked_basket_ids_obj = random.sample(list(Basket.objects.filter(movies__pk=random_id[0]['id']).annotate(like_users_count=Count('like_users')).values('id')), 3)
+        else:
+            picked_baskets = Basket.objects.all().annotate(like_users_count=Count('like_users')).order_by('-like_users_count')[:3]
+            serializer = BasketListSerializer(picked_baskets, many=True)
+            recommended_name = '지금 핫한'
+            
+            new_serializer_data = list(serializer.data)
+            new_serializer_data.append({ 'recommended_name': recommended_name })
+            return Response(new_serializer_data, status=status.HTTP_200_OK)
 
     picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj]
     picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
@@ -252,8 +269,17 @@ def basket_recommend_tags(request):
         picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
     else: # 좋아한 태그가 없는 경우, 랜덤으로 태그 뽑아서 보여줌
         baskets_tags = list(BasketTag.objects.values('id').annotate(baskets_count=Count('baskets')).filter(baskets_count__gte=3))
-        random_id = random.sample(baskets_tags, 1)
-        picked_basket_ids_obj = random.sample(list(Basket.objects.filter(baskets_tags__pk=random_id[0]['id']).values('id')), 3)
+        if baskets_tags:
+            random_id = random.sample(baskets_tags, 1)
+            picked_basket_ids_obj = random.sample(list(Basket.objects.filter(baskets_tags__pk=random_id[0]['id']).values('id')), 3)
+        else:
+            picked_baskets = Basket.objects.all().annotate(like_users_count=Count('like_users')).order_by('-like_users_count')[:3]
+            serializer = BasketListSerializer(picked_baskets, many=True)
+            recommended_name = '지금 핫한'
+            
+            new_serializer_data = list(serializer.data)
+            new_serializer_data.append({ 'recommended_name': recommended_name })
+            return Response(new_serializer_data, status=status.HTTP_200_OK)
 
     picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj]
     picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')
@@ -270,7 +296,7 @@ def basket_recommend_tags(request):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def basket_recommend_friends(request):
-    # user = get_object_or_404(get_user_model(), pk=3) # 테스트용
+    # user = get_object_or_404(get_user_model(), pk=7) # 테스트용
     # stars = list(user.stars.values('id').annotate(baskets_count=Count('like_baskets')).filter(baskets_count__gte=3)) # 테스트용
     stars = list(request.user.stars.values('id').annotate(baskets_count=Count('like_baskets')).filter(baskets_count__gte=3)) # basket 개수가 3개이상인 것만 필터링
 
@@ -290,8 +316,17 @@ def basket_recommend_friends(request):
         picked_basket_ids_obj = random.sample(filtered_basket_ids, 3)
     else: # 좋아한 태그가 없는 경우, 랜덤으로 태그 뽑아서 보여줌
         stars = list(get_user_model().objects.values('id').annotate(baskets_count=Count('like_baskets')).filter(baskets_count__gte=3))
-        random_id = random.sample(stars, 1)
-        picked_basket_ids_obj = random.sample(list(Basket.objects.filter(like_users__pk=random_id[0]['id']).values('id')), 3)
+        if stars:
+            random_id = random.sample(stars, 1)
+            picked_basket_ids_obj = random.sample(list(Basket.objects.filter(like_users__pk=random_id[0]['id']).values('id')), 3)
+        else:
+            picked_baskets = Basket.objects.all().annotate(like_users_count=Count('like_users')).order_by('-like_users_count')[:3]
+            serializer = BasketListSerializer(picked_baskets, many=True)
+            recommended_name = '지금 핫한'
+            
+            new_serializer_data = list(serializer.data)
+            new_serializer_data.append({ 'recommended_name': recommended_name })
+            return Response(new_serializer_data, status=status.HTTP_200_OK)
 
     picked_basket_ids = [obj['id'] for obj in picked_basket_ids_obj]
     picked_baskets = Basket.objects.filter(pk__in=picked_basket_ids).annotate(like_users_count=Count('like_users')).order_by('-like_users_count')

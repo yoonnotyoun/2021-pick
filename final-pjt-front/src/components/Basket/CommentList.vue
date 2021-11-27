@@ -27,7 +27,12 @@
               <p class="me-4" @click="getProfile(comment.author)" style="cursor:pointer; font-weight:600;">{{ userInfo[comment.author].nickname }}</p>
               <p>이 댓글은 스포일러가 포함된 댓글입니다.</p>
             </div>
-            <p>{{ comment.created_at.split('T')[0] }}</p>
+            <div class="d-flex justify-content-end">
+              <p class="me-0">{{ comment.created_at.split('T')[0] }}</p>
+              <button class="mb-3 px-1 py-0"
+                  style="border: none; background-color: transparent; color: transparent;"
+                >x</button>
+            </div>
           </span>
         </div>
         <div v-else>

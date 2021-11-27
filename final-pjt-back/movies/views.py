@@ -133,20 +133,32 @@ def movie_recommend_myinfo(request):
 
     if len(filtered_movie_ids) >= 6:
         picked_movie_ids_obj = random.sample(filtered_movie_ids, 6)
+
+        picked_movie_ids = [obj['id'] for obj in picked_movie_ids_obj] 
+        picked_movies = Movie.objects.filter(pk__in=picked_movie_ids).order_by('-vote_average')
+
+        serializer = MovieListSerializer(picked_movies, many=True)
+        recommended_name = '당신 또래의 같은 성별'
+        
+        new_serializer_data = list(serializer.data)
+        new_serializer_data.append({ 'recommended_name': recommended_name })
+        return Response(new_serializer_data, status=status.HTTP_200_OK)
     else:
-        picked_movie_ids_obj = random.sample(list(Movie.objects.all().values('id')), 6)
+        picked_movies = Movie.objects.all().annotate(like_users_count=Count('like_users')).order_by('-like_users_count')[:6]
+        serializer = MovieListSerializer(picked_movies, many=True)
+        recommended_name = '지금 핫한'
+        
+        new_serializer_data = list(serializer.data)
+        new_serializer_data.append({ 'recommended_name': recommended_name })
+        return Response(new_serializer_data, status=status.HTTP_200_OK)
 
-    picked_movie_ids = [obj['id'] for obj in picked_movie_ids_obj] 
-    picked_movies = Movie.objects.filter(pk__in=picked_movie_ids).order_by('-vote_average')
 
-    serializer = MovieListSerializer(picked_movies, many=True)
-    return Response(serializer.data)
 
 
 # 추천 : 좋아하는 장르 TOP3 중 1개 랜덤으로 뽑아 영화 추천
 @api_view(['GET'])
-# @authentication_classes([JSONWebTokenAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([JSONWebTokenAuthentication])
+@permission_classes([IsAuthenticated])
 def movie_recommend_genre(request):
     # favorite_genres = list(Movie.objects.filter(like_users__pk=6).values('genres').annotate(genres_count=Count('genres')).order_by('-genres_count'))[:3] # 테스트용
     favorite_genres = list(Movie.objects.filter(like_users__pk=request.user.pk).values('genres').annotate(genres_count=Count('genres')).order_by('-genres_count'))[:3]
@@ -177,9 +189,9 @@ def movie_recommend_genre(request):
 @permission_classes([IsAuthenticated])
 def movie_recommend_baskets(request):
     # liked_baskets = list(Basket.objects.filter(like_users__pk=1).values('id')) # 테스트용
-    liked_baskets = list(Basket.objects.filter(like_users__pk=request.user.pk).values('id'))
+    liked_baskets = list(Basket.objects.filter(like_users__pk=request.user.pk).values('id').annotate(movies_count=Count('movies')).filter(movies_count__gte=6))
 
-    if len(liked_baskets) > 5:
+    if len(liked_baskets) > 0:
         random_ids_obj = random.sample(liked_baskets, 6)
         random_ids = [obj['id'] for obj in random_ids_obj]
         filtered_movies_ids = list(Movie.objects.filter(movies_baskets__pk__in=random_ids).distinct().values('id')) ### Population must be a sequence.  For dicts or sets, use sorted(d).
@@ -187,9 +199,18 @@ def movie_recommend_baskets(request):
     else: # 좋아하는 바스켓이 6개 미만인 경우
         baskets = list(Basket.objects.values('id'))
         random_ids_obj = random.sample(baskets, 6)
-        random_ids = [obj['id'] for obj in random_ids_obj]
-        filtered_movies_ids = list(Movie.objects.filter(movies_baskets__pk__in=random_ids).distinct().values('id'))
-        picked_movies_ids_obj = random.sample(filtered_movies_ids, 6)
+        if baskets:
+            random_ids = [obj['id'] for obj in random_ids_obj]
+            filtered_movies_ids = list(Movie.objects.filter(movies_baskets__pk__in=random_ids).distinct().values('id'))
+            picked_movies_ids_obj = random.sample(filtered_movies_ids, 6)
+        else:
+            picked_movies = Movie.objects.all().annotate(like_users_count=Count('like_users')).order_by('-like_users_count')[:6]
+            serializer = MovieListSerializer(picked_movies, many=True)
+            recommended_name = '지금 핫한'
+            
+            new_serializer_data = list(serializer.data)
+            new_serializer_data.append({ 'recommended_name': recommended_name })
+            return Response(new_serializer_data, status=status.HTTP_200_OK)
 
     picked_movies_ids = [obj['id'] for obj in picked_movies_ids_obj]
     picked_movies = Movie.objects.filter(pk__in=picked_movies_ids).order_by('-vote_average')
@@ -207,7 +228,7 @@ def movie_recommend_baskets(request):
 def movie_recommend_friends(request):
     # user = get_object_or_404(get_user_model(), pk=3) # 테스트용
     # stars = list(user.stars.values('id').annotate(movies_count=Count('like_movies')).filter(movies_count__gte=6)) # 테스트용
-    stars = list(request.user.stars.values('id').annotate(movies_count=Count('like_movies')).filter(movies_count__gte=3)) # movie 개수가 3개이상인 것만 필터링
+    stars = list(request.user.stars.values('id').annotate(movies_count=Count('like_movies')).filter(movies_count__gte=6)) # movie 개수가 6개이상인 것만 필터링
 
     if len(stars) > 0:
         random_id = random.sample(stars, 1)
@@ -220,8 +241,17 @@ def movie_recommend_friends(request):
         picked_movie_ids_obj = random.sample(filtered_movie_ids, 6)
     else: # 팔로우하는 유저가 없거나, 팔로우하는 유저들이 전부 영화 좋아하는 개수가 6개 미만인 경우
         stars = list(get_user_model().objects.values('id').annotate(movies_count=Count('like_movies')).filter(movies_count__gte=6))
-        random_id = random.sample(stars, 1)
-        picked_movie_ids_obj = random.sample(list(Movie.objects.filter(like_users__pk=random_id[0]['id']).values('id')), 6)
+        if stars:
+            random_id = random.sample(stars, 1)
+            picked_movie_ids_obj = random.sample(list(Movie.objects.filter(like_users__pk=random_id[0]['id']).values('id')), 6)
+        else:
+            picked_movies = Movie.objects.all().annotate(like_users_count=Count('like_users')).order_by('-like_users_count')[:6]
+            serializer = MovieListSerializer(picked_movies, many=True)
+            recommended_name = '지금 핫한'
+            
+            new_serializer_data = list(serializer.data)
+            new_serializer_data.append({ 'recommended_name': recommended_name })
+            return Response(new_serializer_data, status=status.HTTP_200_OK)
 
     picked_movie_ids = [obj['id'] for obj in picked_movie_ids_obj]
     picked_movies = Movie.objects.filter(pk__in=picked_movie_ids).order_by('-vote_average')

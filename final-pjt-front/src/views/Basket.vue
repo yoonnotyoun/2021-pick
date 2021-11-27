@@ -52,7 +52,9 @@ export default {
   created: function () {
     if (this.$store.getters.isLoggedIn) {
       this.resetBaskets('recommended')
-      this.getBasketRecommendation(4)
+      for (let i = 0; i < 5; i++) {
+        this.getBasketRecommendation()
+      }
     }
   }
 }

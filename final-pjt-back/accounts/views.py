@@ -192,7 +192,7 @@ def relationship_update(request, relationship_pk, group_pk):
 @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def relationship_create_delete(request, star_pk):
-    # fan = get_object_or_404(get_user_model(), pk=3)  # 테스트용
+    # fan = get_object_or_404(get_user_model(), pk=2)  # 테스트용
     fan = request.user
     star = get_object_or_404(get_user_model(), pk=star_pk)
     if request.method == 'POST':
@@ -211,7 +211,7 @@ def relationship_create_delete(request, star_pk):
     elif request.method == 'DELETE':
         # print('언팔로우')
         relationship = get_object_or_404(Relationship, fan=fan, star=star)
-        # relationship = get_object_or_404(Relationship, pk=33)
+        # relationship = get_object_or_404(Relationship, pk=15)
         relationship.delete()
         data = {
             'delete': '언팔로우 처리되었습니다.'
