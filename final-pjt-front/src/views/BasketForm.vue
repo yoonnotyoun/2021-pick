@@ -132,10 +132,20 @@ export default {
   methods: {
     beforeCreate: function () {
       this.info.movies_ids = this.pickedMovieIdList
-      this.createBasket(this.info)
-      this.resetMovies('picked')
-      this.resetMovies('pickedId')
-      this.resetMovies('pickedTitle')
+      this.BasketFormCheck()
+      // this.createBasket(this.info)
+      // this.resetMovies('picked')
+      // this.resetMovies('pickedId')
+      // this.resetMovies('pickedTitle')
+    },
+    BasketFormCheck: function () {
+      if (this.info.movies_ids.length >= 4) {
+        this.createBasket(this.info)
+        this.resetMovies('picked')
+        this.resetMovies('pickedId')
+        this.resetMovies('pickedTitle')
+      }
+      this.isInvalid = true
     },
     ...mapActions('movieStore', [
       'resetMovies',

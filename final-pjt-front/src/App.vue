@@ -70,6 +70,12 @@ export default {
     ...mapActions('accountStore', [
       'getProfile',
     ]),
+    unLoadEvent: function (event) {
+      if (this.canLeaveSite) return
+      this.logout()
+      event.preventDefault()
+      event.returnValue = ''
+    },
   },
   computed: {
     ...mapGetters([
@@ -83,7 +89,13 @@ export default {
   created: function () {
     this.getUserId()
     this.setUserInfo()
-  }
+  },
+  mounted() {
+    window.addEventListener('beforeunload', this.unLoadEvent);
+  },
+  beforeUnmount() {
+    window.removeEventListener('beforeunload', this.unLoadEvent);
+  },
 }
 </script>
 
