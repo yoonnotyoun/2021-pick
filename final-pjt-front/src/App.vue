@@ -2,7 +2,7 @@
   <div id="app" class="container-fluid">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <router-link class="text-decoration-none" style="color:#222222;" :to="{ name: 'Main' }" v-if="isLoggedInd">
+          <router-link class="text-decoration-none" style="color:#222222;" :to="{ name: 'Main' }" v-if="isLoggedIn">
             <img src="@/assets/logo.png" alt="p!ck logo" width="75px" class="d-inline-block" style="vertical-align:-0.6em;"/> your taste
           </router-link>
           <router-link class="text-decoration-none" style="color:#222222;" v-else>
