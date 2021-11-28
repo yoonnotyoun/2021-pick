@@ -5,7 +5,7 @@
           <router-link class="text-decoration-none" style="color:#222222;" :to="{ name: 'Main' }" v-if="isLoggedIn">
             <img src="@/assets/logo.png" alt="p!ck logo" width="75px" class="d-inline-block" style="vertical-align:-0.6em;"/> your taste
           </router-link>
-          <router-link class="text-decoration-none" style="color:#222222;" v-else>
+          <router-link class="text-decoration-none" style="color:#222222;" to="#" v-if="!isLoggedIn">
             <img src="@/assets/logo.png" alt="p!ck logo" width="75px" class="d-inline-block" style="vertical-align:-0.6em;"/> your taste
           </router-link>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,9 +75,9 @@ export default {
     ]),
     unLoadEvent: function (event) {
       if (this.canLeaveSite) return
-      this.logout()
       event.preventDefault()
       event.returnValue = ''
+      this.logout()
     },
   },
   computed: {
@@ -93,9 +93,9 @@ export default {
     this.getUserId()
     this.setUserInfo()
   },
-  mounted() {
-    window.addEventListener('unload', this.unLoadEvent);
-  },
+  // mounted() {
+  //   window.addEventListener('unload', this.unLoadEvent);
+  // },
   // beforeUnmount() {
   //   window.removeEventListener('beforeunload', this.unLoadEvent);
   // },
